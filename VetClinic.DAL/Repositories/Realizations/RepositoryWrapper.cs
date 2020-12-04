@@ -1,4 +1,5 @@
-﻿using VetClinic.DAL.Repositories.Interfaces;
+﻿using System.Threading.Tasks;
+using VetClinic.DAL.Repositories.Interfaces;
 
 namespace VetClinic.DAL.Repositories.Realizations
 {
@@ -70,6 +71,11 @@ namespace VetClinic.DAL.Repositories.Realizations
         public IStatusRepository StatusRepository
         {
             get { return _statusRepository ??= new StatusRepository(_context); }
+        }
+
+        public async Task SaveAsync()
+        {
+            await _context.SaveChangesAsync();
         }
     }
 }

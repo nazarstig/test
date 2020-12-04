@@ -1,4 +1,6 @@
-﻿namespace VetClinic.DAL.Repositories.Interfaces
+﻿using System.Threading.Tasks;
+
+namespace VetClinic.DAL.Repositories.Interfaces
 {
     public interface IRepositoryWrapper
     {
@@ -12,5 +14,6 @@
         IProcedureRepository ProcedureRepository { get; }
         IServiceRepository ServiceRepository { get; }
         IStatusRepository StatusRepository { get; }
+        Task SaveAsync();
     }
 }
