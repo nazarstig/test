@@ -14,27 +14,27 @@ namespace VetClinic.DAL.Repositories.Realizations
             Context = context;
         }
 
-        public IQueryable<TEntity> GetAsync()
+        public virtual IQueryable<TEntity> GetAsync()
         {
             return Context.Set<TEntity>().AsQueryable();
         }
 
-        public async Task<TEntity> GetAsync(int id)
+        public virtual async Task<TEntity> GetAsync(int id)
         {
             return await Context.Set<TEntity>().FindAsync(id);
         }
 
-        public void Add(TEntity entity)
+        public virtual void Add(TEntity entity)
         {
             Context.Set<TEntity>().Add(entity);
         }
 
-        public void Remove(TEntity entity)
+        public virtual void Remove(TEntity entity)
         {
             Context.Set<TEntity>().Remove(entity);
         }
 
-        public void Update(TEntity entity)
+        public virtual void Update(TEntity entity)
         {
             Context.Set<TEntity>().Update(entity);
         }
