@@ -7,6 +7,7 @@ using VetClinic.ExtensionMethods;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using VetClinic.DAL;
+using AutoMapper;
 
 namespace VetClinic.API
 {
@@ -24,6 +25,7 @@ namespace VetClinic.API
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<ApplicationContext>(options =>
                 options.UseSqlServer(connection, b => b.MigrationsAssembly("VetClinic.API")));
+            services.AddAutoMapper(typeof(Startup));
             services.AddControllers();
             services.AddSwaggerConfig();
         }
