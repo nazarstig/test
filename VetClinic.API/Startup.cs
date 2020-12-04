@@ -25,11 +25,10 @@ namespace VetClinic.API
         public IConfiguration Configuration { get; }
         public void ConfigureServices(IServiceCollection services)
         {
-            string connection = Configuration.GetConnectionString("DefaultConnection");
-            services.AddDbContext<ApplicationContext>(options =>
-                options.UseSqlServer(connection));
+            string connection = Configuration.GetConnectionString("DefaultConnection");            
             services.AddControllersWithViews();
             services.AddSwaggerConfig();
+            services.AddControllers();
         }
 
        
@@ -44,10 +43,7 @@ namespace VetClinic.API
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("Hello World!");
-                });
+                endpoints.MapControllers();
             });
 
             app.UseCustomSwaggerConfig();
