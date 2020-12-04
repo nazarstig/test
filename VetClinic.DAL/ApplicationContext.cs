@@ -1,11 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using VetClinic.DAL.Entities;
 
 namespace VetClinic.DAL
 {
-   public class ApplicationContext : DbContext
+    public class ApplicationContext : DbContext
     {
+        public virtual DbSet<Animal> Animals { get; set; }
+        public virtual DbSet<AnimalType> AnimalTypes { get; set; }
+        public virtual DbSet<Appointment> Appointments { get; set; }
+        public virtual DbSet<Client> Clients { get; set; }
+        public virtual DbSet<Doctor> Doctors { get; set; }
+        public virtual DbSet<Position> Positions { get; set; }
+        public virtual DbSet<Procedure> Procedures { get; set; }
+        public virtual DbSet<Service> Services { get; set; }
+        public virtual DbSet<Status> Statuses { get; set; }
+        public virtual DbSet<User> Users { get; set; }
+
+        public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options) { }
     }
 }

@@ -2,11 +2,10 @@
 
 namespace VetClinic.DAL.Entities
 {
-    public class Service : IBaseEntity
+    public class AppointmentProcedures : IBaseEntity
     {
         public int Id { get; set; }
-        public string ServiceName { get; set; }
-
         public ICollection<Appointment> Appointments { get; set; }
+        public ICollection<Procedure> Procedures { get; set; }
     }
 }

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace VetClinic.DAL.Entities
+﻿namespace VetClinic.DAL.Entities
 {
     public class Procedure : IBaseEntity
     {
@@ -10,6 +8,7 @@ namespace VetClinic.DAL.Entities
         public decimal Price { get; set; }
         public bool IsSelectable { get; set; }
 
-        public ICollection<Appointment> Appointments { get; set; }
+        public int AppointmentProceduresId { get; set; }
+        public AppointmentProcedures AppointmentProcedures { get; set; }
     }
 }
