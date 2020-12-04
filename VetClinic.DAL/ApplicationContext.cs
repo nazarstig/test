@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace VetClinic.DAL
 {
-    class ApplicationContext : DbContext
+   public class ApplicationContext : DbContext
     {
     }
 }
