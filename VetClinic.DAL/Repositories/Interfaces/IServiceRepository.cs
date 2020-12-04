@@ -2,7 +2,7 @@
 
 namespace VetClinic.DAL.Repositories.Interfaces
 {
-    interface IServiceRepository : IRepositoryBase<Service>
+    public interface IServiceRepository : IRepositoryBase<Service>
     {
     }
 }
