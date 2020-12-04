@@ -24,7 +24,7 @@ namespace VetClinic.API
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<ApplicationContext>(options =>
                 options.UseSqlServer(connection, b => b.MigrationsAssembly("VetClinic.API")));
-            services.AddControllersWithViews();
+            services.AddControllers();
             services.AddSwaggerConfig();
         }
 
@@ -40,10 +40,7 @@ namespace VetClinic.API
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("Hello World!");
-                });
+                endpoints.MapControllers();
             });
 
             app.UseCustomSwaggerConfig();
