@@ -1,9 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using VetClinic.DAL.Entities;
 
 namespace VetClinic.DAL
 {
-    public class ApplicationContext : DbContext
+    public class ApplicationContext : IdentityDbContext
     {
         public virtual DbSet<Animal> Animals { get; set; }
         public virtual DbSet<AnimalType> AnimalTypes { get; set; }
@@ -20,6 +21,8 @@ namespace VetClinic.DAL
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<Doctor>()
                 .HasMany(d => d.Appointments)
                 .WithOne(d => d.Doctor)
