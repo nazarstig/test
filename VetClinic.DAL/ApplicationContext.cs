@@ -17,5 +17,13 @@ namespace VetClinic.DAL
         public virtual DbSet<User> Users { get; set; }
 
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options) { }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Doctor>()
+                .HasMany(d => d.Appointments)
+                .WithOne(d => d.Doctor)
+                .OnDelete(DeleteBehavior.NoAction);
+        }
     }
 }

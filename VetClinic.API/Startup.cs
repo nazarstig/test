@@ -24,7 +24,7 @@ namespace VetClinic.API
         {
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<ApplicationContext>(options =>
-                options.UseSqlServer(connection, b => b.MigrationsAssembly("VetClinic.API")));
+                options.UseSqlServer(connection, b => b.MigrationsAssembly("VetClinic.DAL")));
             services.AddAutoMapper(typeof(Startup));
             services.AddControllers();
             services.AddSwaggerConfig();
