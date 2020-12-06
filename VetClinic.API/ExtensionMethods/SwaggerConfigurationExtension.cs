@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 
-namespace VetClinic.ExtensionMethods
+namespace VetClinic.API.ExtensionMethods
 {
     public static class SwaggerConfigurationExtension
     {
