@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
+using VetClinic.DAL;
+using VetClinic.DAL.Entities;
 
 namespace Is4RoleDemo
 {
@@ -21,18 +23,18 @@ namespace Is4RoleDemo
         {
             var services = new ServiceCollection();
             services.AddLogging();
-            services.AddDbContext<ApplicationDbContext>(options =>
+            services.AddDbContext<ApplicationContext>(options =>
                options.UseSqlite(connectionString));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
+            services.AddIdentity<User, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationContext>()
                 .AddDefaultTokenProviders();
 
             using (var serviceProvider = services.BuildServiceProvider())
             {
                 using (var scope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope())
                 {
-                    var context = scope.ServiceProvider.GetService<ApplicationDbContext>();
+                    var context = scope.ServiceProvider.GetService<ApplicationContext>();
                     context.Database.Migrate();
 
                     var roleMgr = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
@@ -56,11 +58,11 @@ namespace Is4RoleDemo
                         _ = roleMgr.CreateAsync(admin).Result;
                     }
 
-                    var userMgr = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+                    var userMgr = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
                     var alice = userMgr.FindByNameAsync("alice").Result;
                     if (alice == null)
                     {
-                        alice = new ApplicationUser
+                        alice = new User
                         {
                             UserName = "alice",
                             Email = "AliceSmith@email.com",
@@ -98,7 +100,7 @@ namespace Is4RoleDemo
                     var bob = userMgr.FindByNameAsync("bob").Result;
                     if (bob == null)
                     {
-                        bob = new ApplicationUser
+                        bob = new User
                         {
                             UserName = "bob",
                             Email = "BobSmith@email.com",

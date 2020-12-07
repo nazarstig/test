@@ -9,19 +9,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using VetClinic.DAL.Entities;
 
 namespace Is4RoleDemo.Services
 {
     public sealed class ProfileService : IProfileService
     {
-        private readonly IUserClaimsPrincipalFactory<ApplicationUser> _userClaimsPrincipalFactory;
-        private readonly UserManager<ApplicationUser> _userMgr;
+        private readonly IUserClaimsPrincipalFactory<User> _userClaimsPrincipalFactory;
+        private readonly UserManager<User> _userMgr;
         private readonly RoleManager<IdentityRole> _roleMgr;
 
         public ProfileService(
-            UserManager<ApplicationUser> userMgr,
+            UserManager<User> userMgr,
             RoleManager<IdentityRole> roleMgr,
-            IUserClaimsPrincipalFactory<ApplicationUser> userClaimsPrincipalFactory)
+            IUserClaimsPrincipalFactory<User> userClaimsPrincipalFactory)
         {
             _userMgr = userMgr;
             _roleMgr = roleMgr;
@@ -31,7 +32,7 @@ namespace Is4RoleDemo.Services
         public async Task GetProfileDataAsync(ProfileDataRequestContext context)
         {
             string sub = context.Subject.GetSubjectId();
-            ApplicationUser user = await _userMgr.FindByIdAsync(sub);
+            User user = await _userMgr.FindByIdAsync(sub);
             ClaimsPrincipal userClaims = await _userClaimsPrincipalFactory.CreateAsync(user);
 
             List<Claim> claims = userClaims.Claims.ToList();
@@ -60,7 +61,7 @@ namespace Is4RoleDemo.Services
         public async Task IsActiveAsync(IsActiveContext context)
         {
             string sub = context.Subject.GetSubjectId();
-            ApplicationUser user = await _userMgr.FindByIdAsync(sub);
+            User user = await _userMgr.FindByIdAsync(sub);
             context.IsActive = user != null;
         }
     }

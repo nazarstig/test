@@ -34,10 +34,8 @@ namespace Is4RoleDemo
         {
             services.AddControllersWithViews();
 
-
-            string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<ApplicationContext>(options =>
-               options.UseSqlServer(connection, b => b.MigrationsAssembly("VetClinic.DAL")));
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationContext>()

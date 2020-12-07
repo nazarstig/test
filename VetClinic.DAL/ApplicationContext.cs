@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using VetClinic.DAL.Entities;
 
@@ -28,60 +29,56 @@ namespace VetClinic.DAL
                 .WithOne(d => d.Doctor)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            modelBuilder.Entity<AppRole>(entity =>
-            {
-                entity
-                .HasKey(u => u.Id);
-                entity.Property(p => p.Id)
-                .ValueGeneratedOnAdd();
-            });
+            
+            modelBuilder.Entity<IdentityRole>()
+                .HasData(
+                    new IdentityRole
+                    {
+                        Id = "memberId",
+                        Name = "adminId"
+                    },
+                    new IdentityRole
+                    {
+                        Id = "adminId",
+                        Name = "admin"
+                    }
+                );
 
-            modelBuilder.Entity<AppRoleClaim>(entity =>
-            {
-                entity
-                .HasKey(u => u.Id);
-                entity.Property(p => p.Id)
-                .ValueGeneratedOnAdd();
-            });
+            modelBuilder.Entity<User>()
+                .HasData(
+                    new User
+                    {
+                        Id = "aliceId",
+                        UserName = "alice",
+                        Email = "AliceSmith@email.com",
+                        EmailConfirmed = true,
+                        PasswordHash = "Pass123$",
+                    },
+                    new User
+                    {
+                        Id = "bobId",
+                        UserName = "bob",
+                        Email = "BobSmith@email.com",
+                        EmailConfirmed = true,
+                        PasswordHash = "Pass123$",
+                    }
+                );
 
-            modelBuilder.Entity<User>(entity =>
-            {
-                entity
-                .HasKey(u => u.Id);
-                entity.Property(p => p.Id)
-                .ValueGeneratedOnAdd();
-            });
+            modelBuilder.Entity<IdentityUserRole<string>>()
+                .HasData(
+                    new IdentityUserRole<string>()
+                    {
+                        RoleId = "adminId",
+                        UserId = "aliceId"
+                    },
 
-            modelBuilder.Entity<AppUserClaim>(entity =>
-            {
-                entity
-                .HasKey(u => u.Id);
-                entity.Property(p => p.Id)
-                .ValueGeneratedOnAdd();
-            });
-
-            modelBuilder.Entity<AppUserLogin>(entity =>
-            {
-                entity
-                .HasKey(u => u.Id);
-                entity.Property(p => p.Id)
-                .ValueGeneratedOnAdd();
-            });
-
-            modelBuilder.Entity<AppUserRole>(entity =>
-            {
-                entity
-                .HasKey(u => new { u.RoleId, u.UserId });
-            });
-
-            modelBuilder.Entity<AppUserToken>(entity =>
-            {
-                entity
-                .HasKey(u => u.Id);
-                entity.Property(p => p.Id)
-                .ValueGeneratedOnAdd();
-            });
-
+                    new IdentityUserRole<string>()
+                    {
+                        RoleId = "memberId",
+                        UserId = "bobId"
+                    }
+                );
+            
         }
     }
 }

@@ -10,8 +10,8 @@ using VetClinic.DAL;
 namespace VetClinic.DAL.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20201205141842_AddIdentityDbContext")]
-    partial class AddIdentityDbContext
+    [Migration("20201207200205_seedUsersWithRoles")]
+    partial class seedUsersWithRoles
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -46,6 +46,20 @@ namespace VetClinic.DAL.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "memberId",
+                            ConcurrencyStamp = "c2edc99d-6d74-46e4-a07c-11c85be8288c",
+                            Name = "adminId"
+                        },
+                        new
+                        {
+                            Id = "adminId",
+                            ConcurrencyStamp = "5bc22862-c063-40ac-be99-e118f07f7651",
+                            Name = "admin"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -82,6 +96,10 @@ namespace VetClinic.DAL.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
@@ -135,6 +153,8 @@ namespace VetClinic.DAL.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -196,6 +216,18 @@ namespace VetClinic.DAL.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "aliceId",
+                            RoleId = "adminId"
+                        },
+                        new
+                        {
+                            UserId = "bobId",
+                            RoleId = "memberId"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -324,6 +356,57 @@ namespace VetClinic.DAL.Migrations
                     b.ToTable("AppointmentProcedures");
                 });
 
+            modelBuilder.Entity("VetClinic.DAL.Entities.Client", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Clients");
+                });
+
+            modelBuilder.Entity("VetClinic.DAL.Entities.Doctor", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Biography")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Education")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Experience")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Photo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PositionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PositionId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Doctors");
+                });
+
             modelBuilder.Entity("VetClinic.DAL.Entities.Position", b =>
                 {
                     b.Property<int>("Id")
@@ -403,96 +486,39 @@ namespace VetClinic.DAL.Migrations
 
             modelBuilder.Entity("VetClinic.DAL.Entities.User", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
+                    b.HasDiscriminator().HasValue("User");
 
-                    b.Property<string>("ConcurrencyStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Users");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("User");
-                });
-
-            modelBuilder.Entity("VetClinic.DAL.Entities.Client", b =>
-                {
-                    b.HasBaseType("VetClinic.DAL.Entities.User");
-
-                    b.HasDiscriminator().HasValue("Client");
-                });
-
-            modelBuilder.Entity("VetClinic.DAL.Entities.Doctor", b =>
-                {
-                    b.HasBaseType("VetClinic.DAL.Entities.User");
-
-                    b.Property<string>("Biography")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("DoctorId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Education")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Experience")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Photo")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("PositionId")
-                        .HasColumnType("int");
-
-                    b.HasIndex("PositionId");
-
-                    b.HasDiscriminator().HasValue("Doctor");
+                    b.HasData(
+                        new
+                        {
+                            Id = "aliceId",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "eb5abb75-606b-4124-8127-7e624ac5dee8",
+                            Email = "AliceSmith@email.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            PasswordHash = "Pass123$",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "f2e4c986-a2c9-47cb-86f4-8ac59eb669fd",
+                            TwoFactorEnabled = false,
+                            UserName = "alice"
+                        },
+                        new
+                        {
+                            Id = "bobId",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "4703fd9b-45cd-4ea1-9dcb-2bcd96dafa96",
+                            Email = "BobSmith@email.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            PasswordHash = "Pass123$",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "192ccc77-a098-4965-938c-34dde3988863",
+                            TwoFactorEnabled = false,
+                            UserName = "bob"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -594,13 +620,11 @@ namespace VetClinic.DAL.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("VetClinic.DAL.Entities.Procedure", b =>
+            modelBuilder.Entity("VetClinic.DAL.Entities.Client", b =>
                 {
-                    b.HasOne("VetClinic.DAL.Entities.AppointmentProcedures", "AppointmentProcedures")
-                        .WithMany("Procedures")
-                        .HasForeignKey("AppointmentProceduresId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("VetClinic.DAL.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("VetClinic.DAL.Entities.Doctor", b =>
@@ -608,6 +632,19 @@ namespace VetClinic.DAL.Migrations
                     b.HasOne("VetClinic.DAL.Entities.Position", "Position")
                         .WithMany("Doctors")
                         .HasForeignKey("PositionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("VetClinic.DAL.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("VetClinic.DAL.Entities.Procedure", b =>
+                {
+                    b.HasOne("VetClinic.DAL.Entities.AppointmentProcedures", "AppointmentProcedures")
+                        .WithMany("Procedures")
+                        .HasForeignKey("AppointmentProceduresId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
