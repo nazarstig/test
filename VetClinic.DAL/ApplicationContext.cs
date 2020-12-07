@@ -27,6 +27,61 @@ namespace VetClinic.DAL
                 .HasMany(d => d.Appointments)
                 .WithOne(d => d.Doctor)
                 .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<AppRole>(entity =>
+            {
+                entity
+                .HasKey(u => u.Id);
+                entity.Property(p => p.Id)
+                .ValueGeneratedOnAdd();
+            });
+
+            modelBuilder.Entity<AppRoleClaim>(entity =>
+            {
+                entity
+                .HasKey(u => u.Id);
+                entity.Property(p => p.Id)
+                .ValueGeneratedOnAdd();
+            });
+
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity
+                .HasKey(u => u.Id);
+                entity.Property(p => p.Id)
+                .ValueGeneratedOnAdd();
+            });
+
+            modelBuilder.Entity<AppUserClaim>(entity =>
+            {
+                entity
+                .HasKey(u => u.Id);
+                entity.Property(p => p.Id)
+                .ValueGeneratedOnAdd();
+            });
+
+            modelBuilder.Entity<AppUserLogin>(entity =>
+            {
+                entity
+                .HasKey(u => u.Id);
+                entity.Property(p => p.Id)
+                .ValueGeneratedOnAdd();
+            });
+
+            modelBuilder.Entity<AppUserRole>(entity =>
+            {
+                entity
+                .HasKey(u => new { u.RoleId, u.UserId });
+            });
+
+            modelBuilder.Entity<AppUserToken>(entity =>
+            {
+                entity
+                .HasKey(u => u.Id);
+                entity.Property(p => p.Id)
+                .ValueGeneratedOnAdd();
+            });
+
         }
     }
 }

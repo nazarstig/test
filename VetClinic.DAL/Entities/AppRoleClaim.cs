@@ -2,8 +2,7 @@
 
 namespace VetClinic.DAL.Entities
 {
-    public class User : IdentityUser<int, AppUserClaim, AppUserRole>, IBaseEntity
+    public class AppRoleClaim : IdentityRoleClaim<int>
     {
-
     }
 }
