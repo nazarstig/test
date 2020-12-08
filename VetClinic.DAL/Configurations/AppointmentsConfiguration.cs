@@ -13,7 +13,7 @@ namespace VetClinic.DAL.Configurations
                 new Appointment[]
                 {
                     new Appointment{Id=1, AnimalId=1, AppointmentDate=new DateTime(2020, 5, 1, 8, 30, 0),
-                        Complaints ="Temperature", TreatmentDescription="Drink more wather", DoctorId=2, ServiceId=1, StatusId=2 },
+                        Complaints ="Temperature", TreatmentDescription="Drink more wather", DoctorId=1, ServiceId=1, StatusId=2 },
                     new Appointment{Id=2, AnimalId=2, AppointmentDate=new DateTime(2020, 4, 23, 9, 30, 0),
                         Complaints = "Bad wool", TreatmentDescription="Use animal shampoo", DoctorId=3, ServiceId=2, StatusId=3 },
                     new Appointment{Id=3, AnimalId=3, AppointmentDate=new DateTime(2020, 1, 12, 10, 30, 0),

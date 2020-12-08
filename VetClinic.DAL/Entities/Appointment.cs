@@ -10,7 +10,7 @@ namespace VetClinic.DAL.Entities
         public string Complaints { get; set; }
         public string TreatmentDescription { get; set; }
 
-        public int DoctorId { get; set; }
+        public int? DoctorId { get; set; }
         public Doctor Doctor { get; set; }
         public int AnimalId { get; set; }
         public Animal Animal { get; set; }
