@@ -44,20 +44,6 @@ namespace VetClinic.DAL.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "memberId",
-                            ConcurrencyStamp = "c2edc99d-6d74-46e4-a07c-11c85be8288c",
-                            Name = "adminId"
-                        },
-                        new
-                        {
-                            Id = "adminId",
-                            ConcurrencyStamp = "5bc22862-c063-40ac-be99-e118f07f7651",
-                            Name = "admin"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -214,18 +200,6 @@ namespace VetClinic.DAL.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles");
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = "aliceId",
-                            RoleId = "adminId"
-                        },
-                        new
-                        {
-                            UserId = "bobId",
-                            RoleId = "memberId"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -487,36 +461,6 @@ namespace VetClinic.DAL.Migrations
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
                     b.HasDiscriminator().HasValue("User");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "aliceId",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "eb5abb75-606b-4124-8127-7e624ac5dee8",
-                            Email = "AliceSmith@email.com",
-                            EmailConfirmed = true,
-                            LockoutEnabled = false,
-                            PasswordHash = "Pass123$",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "f2e4c986-a2c9-47cb-86f4-8ac59eb669fd",
-                            TwoFactorEnabled = false,
-                            UserName = "alice"
-                        },
-                        new
-                        {
-                            Id = "bobId",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "4703fd9b-45cd-4ea1-9dcb-2bcd96dafa96",
-                            Email = "BobSmith@email.com",
-                            EmailConfirmed = true,
-                            LockoutEnabled = false,
-                            PasswordHash = "Pass123$",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "192ccc77-a098-4965-938c-34dde3988863",
-                            TwoFactorEnabled = false,
-                            UserName = "bob"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
