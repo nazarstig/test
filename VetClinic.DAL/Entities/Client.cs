@@ -1,6 +1,6 @@
 ﻿namespace VetClinic.DAL.Entities
 {
-    public class Client : IBaseEntity
+    public class Client
     {
         public int Id { get; set; }
 

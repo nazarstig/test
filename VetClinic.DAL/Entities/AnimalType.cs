@@ -2,7 +2,7 @@
 
 namespace VetClinic.DAL.Entities
 {
-    public class AnimalType : IBaseEntity
+    public class AnimalType
     {
         public int Id { get; set; }
         public string AnimalTypeName { get; set; }

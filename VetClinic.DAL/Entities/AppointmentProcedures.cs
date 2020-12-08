@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
-
-namespace VetClinic.DAL.Entities
+﻿namespace VetClinic.DAL.Entities
 {
-    public class AppointmentProcedures : IBaseEntity
+    public class AppointmentProcedures 
     {
         public int Id { get; set; }
-        public ICollection<Appointment> Appointments { get; set; }
-        public ICollection<Procedure> Procedures { get; set; }
+
+        public int AppointmentId { get; set; }
+        public Appointment Appointment { get; set; }
+        public int ProcedureId { get; set; }
+        public Procedure Procedure { get; set; }
     }
 }

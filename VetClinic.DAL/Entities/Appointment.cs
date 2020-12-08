@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace VetClinic.DAL.Entities
 {
-    public class Appointment : IBaseEntity
+    public class Appointment 
     {
         public int Id { get; set; }
         public DateTime AppointmentDate { get; set; }
@@ -17,7 +18,6 @@ namespace VetClinic.DAL.Entities
         public Status Status { get; set; }
         public int ServiceId { get; set; }
         public Service Service { get; set; }
-        public int AppointmentProceduresId { get; set; }
-        public AppointmentProcedures AppointmentProcedures { get; set; }
+        public ICollection<AppointmentProcedures> AppointmentProcedures { get; set; }
     }
 }
