@@ -30,11 +30,12 @@ namespace VetClinic.API
                 options.UseSqlServer(connection, builder =>
                     builder.MigrationsAssembly("VetClinic.DAL")));
 
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies()
-                .Where(assembly =>
-                    assembly.FullName.Equals("VetClinic.BLL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null")));
+            services.AddAutoMapper(typeof(Startup));
 
-            services.AddControllers();
+            services.AddControllersWithViews()
+                .AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
 
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
 
