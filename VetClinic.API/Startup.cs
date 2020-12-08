@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,9 +28,7 @@ namespace VetClinic.API
                 options.UseSqlServer(connection, builder =>
                     builder.MigrationsAssembly("VetClinic.DAL")));
 
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies()
-                .Where(assembly =>
-                    assembly.FullName.Equals("VetClinic.BLL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null")));
+            services.AddAutoMapper(typeof(Startup));
 
             services.AddControllers();
 
