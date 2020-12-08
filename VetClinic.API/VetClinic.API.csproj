@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Controllers\" />
     <Folder Include="DTO\" />
     <Folder Include="MapperProfilers\" />
   </ItemGroup>

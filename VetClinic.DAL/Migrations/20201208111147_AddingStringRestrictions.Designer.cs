@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VetClinic.DAL;
 
 namespace VetClinic.DAL.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20201208111147_AddingStringRestrictions")]
+    partial class AddingStringRestrictions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -42,6 +44,9 @@ namespace VetClinic.DAL.Migrations
                     b.Property<string>("Photo")
                         .HasColumnType("nvarchar(150)")
                         .HasMaxLength(150);
+
+                    b.Property<string>("Vasya")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -81,6 +86,9 @@ namespace VetClinic.DAL.Migrations
                     b.Property<DateTime>("AppointmentDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("AppointmentProceduresId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Complaints")
                         .HasColumnType("nvarchar(max)");
 
@@ -100,6 +108,8 @@ namespace VetClinic.DAL.Migrations
 
                     b.HasIndex("AnimalId");
 
+                    b.HasIndex("AppointmentProceduresId");
+
                     b.HasIndex("DoctorId");
 
                     b.HasIndex("ServiceId");
@@ -116,17 +126,7 @@ namespace VetClinic.DAL.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("AppointmentId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProcedureId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("AppointmentId");
-
-                    b.HasIndex("ProcedureId");
 
                     b.ToTable("AppointmentProcedures");
                 });
@@ -210,6 +210,9 @@ namespace VetClinic.DAL.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("AppointmentProceduresId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -224,6 +227,8 @@ namespace VetClinic.DAL.Migrations
                         .HasMaxLength(100);
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AppointmentProceduresId");
 
                     b.ToTable("Procedures");
                 });
@@ -342,6 +347,12 @@ namespace VetClinic.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("VetClinic.DAL.Entities.AppointmentProcedures", "AppointmentProcedures")
+                        .WithMany("Appointments")
+                        .HasForeignKey("AppointmentProceduresId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("VetClinic.DAL.Entities.Doctor", "Doctor")
                         .WithMany("Appointments")
                         .HasForeignKey("DoctorId")
@@ -357,21 +368,6 @@ namespace VetClinic.DAL.Migrations
                     b.HasOne("VetClinic.DAL.Entities.Status", "Status")
                         .WithMany("Appointments")
                         .HasForeignKey("StatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("VetClinic.DAL.Entities.AppointmentProcedures", b =>
-                {
-                    b.HasOne("VetClinic.DAL.Entities.Appointment", "Appointment")
-                        .WithMany("AppointmentProcedures")
-                        .HasForeignKey("AppointmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("VetClinic.DAL.Entities.Procedure", "Procedure")
-                        .WithMany("AppointmentProcedures")
-                        .HasForeignKey("ProcedureId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -396,6 +392,15 @@ namespace VetClinic.DAL.Migrations
                     b.HasOne("VetClinic.DAL.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("VetClinic.DAL.Entities.Procedure", b =>
+                {
+                    b.HasOne("VetClinic.DAL.Entities.AppointmentProcedures", "AppointmentProcedures")
+                        .WithMany("Procedures")
+                        .HasForeignKey("AppointmentProceduresId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

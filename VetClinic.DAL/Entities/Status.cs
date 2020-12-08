@@ -2,7 +2,7 @@
 
 namespace VetClinic.DAL.Entities
 {
-    public class Status : IBaseEntity
+    public class Status
     {
         public int Id { get; set; }
         public string StatusName { get; set; }

@@ -20,10 +20,7 @@ namespace VetClinic.DAL
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Doctor>()
-                .HasMany(d => d.Appointments)
-                .WithOne(d => d.Doctor)
-                .OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationContext).Assembly);
         }
     }
 }
