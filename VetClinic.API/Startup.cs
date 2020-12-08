@@ -32,7 +32,7 @@ namespace VetClinic.API
 
             services.AddAutoMapper(typeof(Startup));
 
-            services.AddControllersWithViews()
+            services.AddControllers()
                 .AddNewtonsoftJson(options =>
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
             );
