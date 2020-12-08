@@ -5,15 +5,15 @@ VisualStudioVersion = 16.0.30611.23
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{389F4926-EAEE-456D-A624-02F4963093F0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VetClinic.API", "VetClinic.API\VetClinic.API.csproj", "{775FA52D-1A38-4FCF-9917-F728DB899009}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VetClinic.API", "VetClinic.API\VetClinic.API.csproj", "{775FA52D-1A38-4FCF-9917-F728DB899009}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VetClinic.BLL", "VetClinic.BLL\VetClinic.BLL.csproj", "{0EE0A0DA-7D94-4F69-924F-BEABD6D64A9D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VetClinic.BLL", "VetClinic.BLL\VetClinic.BLL.csproj", "{0EE0A0DA-7D94-4F69-924F-BEABD6D64A9D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VetClinic.DAL", "VetClinic.DAL\VetClinic.DAL.csproj", "{076EBB57-0504-4501-8A52-8B9E810C87FE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VetClinic.DAL", "VetClinic.DAL\VetClinic.DAL.csproj", "{076EBB57-0504-4501-8A52-8B9E810C87FE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VetClinic.API.Tests", "VetClinic.API.Tests\VetClinic.API.Tests.csproj", "{5C3A6B5C-4E63-48E8-9067-ACEA51AE771E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VetClinic.API.Tests", "VetClinic.API.Tests\VetClinic.API.Tests.csproj", "{5C3A6B5C-4E63-48E8-9067-ACEA51AE771E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VetClinic.BLL.Tests", "VetClinic.BLL.Tests\VetClinic.BLL.Tests.csproj", "{A8E27599-E671-4741-81E9-3E7DB9B325CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VetClinic.BLL.Tests", "VetClinic.BLL.Tests\VetClinic.BLL.Tests.csproj", "{A8E27599-E671-4741-81E9-3E7DB9B325CA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
