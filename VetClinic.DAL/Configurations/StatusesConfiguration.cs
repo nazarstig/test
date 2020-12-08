@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VetClinic.DAL.Entities;
 
 namespace VetClinic.DAL.Configurations
@@ -8,7 +9,9 @@ namespace VetClinic.DAL.Configurations
     {
         public void Configure(EntityTypeBuilder<Status> builder)
         {
-            builder.Property(t => t.StatusName).HasMaxLength(20);
+            builder.Property(t => t.StatusName)
+                .HasConversion(new EnumToStringConverter<StatusName>())
+                .HasMaxLength(20);         
         }
     }
 }
