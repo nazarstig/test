@@ -8,7 +8,7 @@ namespace VetClinic.DAL.Configurations
     {
         public void Configure(EntityTypeBuilder<Position> builder)
         {
-            throw new System.NotImplementedException();
+            builder.Property(t => t.PositionName).HasMaxLength(40);
         }
     }
 }

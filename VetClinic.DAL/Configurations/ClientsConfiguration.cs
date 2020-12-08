@@ -8,7 +8,7 @@ namespace VetClinic.DAL.Configurations
     {
         public void Configure(EntityTypeBuilder<Client> builder)
         {
-            throw new System.NotImplementedException();
+            
         }
     }
 }

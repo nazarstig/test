@@ -4,11 +4,11 @@ using VetClinic.DAL.Entities;
 
 namespace VetClinic.DAL.Configurations
 {
-    public class ProceduresConfiguration : IEntityTypeConfiguration<Position>
+    public class ProceduresConfiguration : IEntityTypeConfiguration<Procedure>
     {
-        public void Configure(EntityTypeBuilder<Position> builder)
+        public void Configure(EntityTypeBuilder<Procedure> builder)
         {
-            throw new System.NotImplementedException();
+            builder.Property(t => t.ProcedureName).HasMaxLength(100);
         }
     }
 }

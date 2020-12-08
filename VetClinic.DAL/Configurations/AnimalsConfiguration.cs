@@ -8,7 +8,9 @@ namespace VetClinic.DAL.Configurations
     {
         public void Configure(EntityTypeBuilder<Animal> builder)
         {
-            throw new System.NotImplementedException();
+            builder.Property(t => t.Name).HasMaxLength(20);
+            builder.Property(t => t.Photo).HasMaxLength(150);
+                
         }
     }
 }

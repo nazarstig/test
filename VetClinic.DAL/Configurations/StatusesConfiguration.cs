@@ -8,7 +8,7 @@ namespace VetClinic.DAL.Configurations
     {
         public void Configure(EntityTypeBuilder<Status> builder)
         {
-            throw new System.NotImplementedException();
+            builder.Property(t => t.StatusName).HasMaxLength(20);
         }
     }
 }
