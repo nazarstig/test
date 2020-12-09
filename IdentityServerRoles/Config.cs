@@ -53,7 +53,8 @@ namespace Is4RoleDemo
                     ClientSecrets = {new Secret("client_secret".ToSha256()) },
 
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
-                    RedirectUris = { "https://oauth.pstmn.io/v1/browser-callback" },
+                    RedirectUris = { "https://oauth.pstmn.io/v1/browser-callback",
+                                    "https://localhost:44346/"},
 
                     AllowedScopes = {"ApiOne"},
                     RequireConsent = false,
@@ -63,12 +64,13 @@ namespace Is4RoleDemo
                 new Client()
                 {
                     ClientId = "angular_client",
-                    RequirePkce = true,
+                    RequirePkce = false,
                     ClientSecrets = {new Secret("angular_secret".ToSha256()) },
 
                     AllowedGrantTypes = GrantTypes.Code,
                     RedirectUris = { "https://oauth.pstmn.io/v1/browser-callback",
-                                       "https://localhost:44334/signin-oidc", },
+                                       "https://localhost:4999/signin-oidc", },
+                    PostLogoutRedirectUris = { "https://localhost:4999/signout-callback-oidc" },
 
 
                     AllowedScopes = new List<string>
@@ -76,7 +78,10 @@ namespace Is4RoleDemo
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         "ApiOne"
-                    }
+                    },
+
+                    RequireConsent = true,
+                    
                 },
 
             };

@@ -2,7 +2,6 @@
 using IdentityServer4.Extensions;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
-using Is4RoleDemo.Models;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;

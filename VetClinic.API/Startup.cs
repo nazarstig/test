@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using VetClinic.ExtensionMethods;
@@ -8,9 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using VetClinic.DAL;
 using AutoMapper;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using Microsoft.AspNetCore.Authentication;
 
 namespace VetClinic.API
 {
@@ -24,32 +20,43 @@ namespace VetClinic.API
 
         public IConfiguration Configuration { get; }
         public void ConfigureServices(IServiceCollection services)
-        {    
-          
-            JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
+        {
+            /*
+              JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
 
-            services.AddAuthentication(options =>
-            {
-                options.DefaultScheme = "Cookies";
-                options.DefaultChallengeScheme = "oidc";
-            })
-                .AddCookie("Cookies")
-                .AddOpenIdConnect("oidc", options =>
-                {
-                    options.Authority = "https://localhost:5001";
+              services.AddAuthentication(options =>
+              {
+                  options.DefaultScheme = "Cookies";
+                  //options.DefaultAuthenticateScheme = "Cookies";
+                  options.DefaultChallengeScheme = "oidc";
+              })
+                  .AddCookie("Cookies")
+                  .AddOpenIdConnect("oidc", options =>
+                  {
+                      options.SignInScheme = "Cookies";
+                      options.Authority = "https://localhost:5001";
 
-                    options.ClientId = "angular_client";
-                    options.ClientSecret = "angular_secret";
-                    options.ResponseType = "code";
+                      options.ClientId = "angular_client";
+                      options.ClientSecret = "angular_secret";
+                      options.ResponseType = "code";
 
-                    options.SaveTokens = true;
-                    options.GetClaimsFromUserInfoEndpoint = true;
-                    options.ClaimActions.MapJsonKey("role","role","role");
-                    options.TokenValidationParameters.NameClaimType = "name";
-                    options.TokenValidationParameters.RoleClaimType = "role";
-                });
+                      //options.Scope.Add("opdenid");
 
-
+                      options.SaveTokens = true;
+                      options.GetClaimsFromUserInfoEndpoint = true;
+                      options.ClaimActions.MapJsonKey("role","role","role");
+                      options.TokenValidationParameters.NameClaimType = "name";
+                      options.TokenValidationParameters.RoleClaimType = "role";
+                  });
+            */
+            services.AddAuthentication("Bearer")
+                 .AddIdentityServerAuthentication(options =>
+                 {
+                     options.Authority = "https://localhost:5001";
+                     //options.RequireHttpsMetadata = false;
+                    // options.ApiName = "api1";
+                 });
+            /*
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("ApiScope", policy =>
@@ -58,6 +65,7 @@ namespace VetClinic.API
                     policy.RequireClaim("scope", "ApiOne");
                 });
             });
+            */
 
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<ApplicationContext>(options =>

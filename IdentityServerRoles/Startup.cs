@@ -2,10 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
-using IdentityServer4;
 using IdentityServer4.Services;
-using Is4RoleDemo.Data;
-using Is4RoleDemo.Models;
 using Is4RoleDemo.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -57,6 +54,8 @@ namespace Is4RoleDemo
                 .AddInMemoryClients(Config.Clients)
                 .AddAspNetIdentity<User>();
 
+            services.AddAuthentication(IdentityConstants.ApplicationScheme);
+
             services.AddScoped<IProfileService, ProfileService>();
 
             // not recommended for production - you need to store your key material somewhere secure
@@ -78,6 +77,7 @@ namespace Is4RoleDemo
             app.UseIdentityServer();
             app.UseAuthorization();
             
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();
