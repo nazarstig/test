@@ -42,11 +42,6 @@ namespace VetClinic.DAL.Repositories.Realizations
             return query.FirstOrDefaultAsync();
         }
 
-        public async Task<TEntity> GetAsync(int id)
-        {
-            return await Context.Set<TEntity>().FindAsync(id);
-        }
-
         public void Add(TEntity entity)
         {
             Context.Set<TEntity>().Add(entity);
