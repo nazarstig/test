@@ -10,7 +10,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using VetClinic.DAL.Entities;
 
-namespace Is4RoleDemo.Services
+namespace IdentityServerRoles.Services
 {
     public sealed class ProfileService : IProfileService
     {

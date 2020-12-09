@@ -4,7 +4,7 @@ using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
 
-namespace Is4RoleDemo
+namespace IdentityServerRoles
 {
     public class Program
     {

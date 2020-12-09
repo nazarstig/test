@@ -3,7 +3,7 @@
 
 
 using IdentityServer4.Services;
-using Is4RoleDemo.Services;
+using IdentityServerRoles.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -14,7 +14,7 @@ using Microsoft.Extensions.Hosting;
 using VetClinic.DAL;
 using VetClinic.DAL.Entities;
 
-namespace Is4RoleDemo
+namespace IdentityServerRoles
 {
     public class Startup
     {
