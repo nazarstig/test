@@ -2,23 +2,25 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using VetClinic.ExtensionMethods;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using VetClinic.DAL;
 using AutoMapper;
+using VetClinic.API.ExtensionMethods;
+using VetClinic.DAL;
+using VetClinic.DAL.Repositories.Interfaces;
+using VetClinic.DAL.Repositories.Realizations;
 
 namespace VetClinic.API
 {
     public class Startup
     {
-
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+        private IConfiguration Configuration { get; }
+
         public void ConfigureServices(IServiceCollection services)
         {
             /*
@@ -69,9 +71,15 @@ namespace VetClinic.API
 
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<ApplicationContext>(options =>
-                options.UseSqlServer(connection, b => b.MigrationsAssembly("VetClinic.DAL")));
+                options.UseSqlServer(connection, builder =>
+                    builder.MigrationsAssembly("VetClinic.DAL")));
+
             services.AddAutoMapper(typeof(Startup));
+
             services.AddControllers();
+
+            services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
+
             services.AddSwaggerConfig();
         }
 
@@ -92,7 +100,6 @@ namespace VetClinic.API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                //.RequireAuthorization("ApiScope");
             });
 
             app.UseCustomSwaggerConfig();

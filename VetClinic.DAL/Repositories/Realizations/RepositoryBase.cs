@@ -5,7 +5,7 @@ using VetClinic.DAL.Repositories.Interfaces;
 
 namespace VetClinic.DAL.Repositories.Realizations
 {
-    public class RepositoryBase<TEntity> : IRepositoryBase<TEntity> where TEntity : class, IBaseEntity
+    public class RepositoryBase<TEntity> : IRepositoryBase<TEntity> where TEntity : class
     {
         protected ApplicationContext Context { get; }
 

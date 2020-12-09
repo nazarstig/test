@@ -4,7 +4,7 @@ using VetClinic.DAL.Entities;
 
 namespace VetClinic.DAL.Repositories.Interfaces
 {
-    public interface IRepositoryBase<TEntity> where TEntity : IBaseEntity
+    public interface IRepositoryBase<TEntity> where TEntity : class
     {
         IQueryable<TEntity> GetAsync();
         Task<TEntity> GetAsync(int id);

@@ -2,7 +2,7 @@
 
 namespace VetClinic.DAL.Entities
 {
-    public class Doctor : IBaseEntity
+    public class Doctor 
     {
         public int Id { get; set; }
         public string Education { get; set; }
