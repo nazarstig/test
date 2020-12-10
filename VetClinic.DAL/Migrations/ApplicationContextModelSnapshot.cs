@@ -87,8 +87,8 @@ namespace VetClinic.DAL.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
@@ -100,18 +100,20 @@ namespace VetClinic.DAL.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("NormalizedEmail")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
                     b.Property<string>("NormalizedUserName")
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
                     b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(300)")
+                        .HasMaxLength(300);
 
                     b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(12)")
+                        .HasMaxLength(12);
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
@@ -123,8 +125,8 @@ namespace VetClinic.DAL.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
                     b.HasKey("Id");
 
@@ -608,22 +610,22 @@ namespace VetClinic.DAL.Migrations
                         new
                         {
                             Id = 1,
-                            UserId = 4
+                            UserId = "4"
                         },
                         new
                         {
                             Id = 2,
-                            UserId = 5
+                            UserId = "5"
                         },
                         new
                         {
                             Id = 3,
-                            UserId = 6
+                            UserId = "6"
                         },
                         new
                         {
                             Id = 4,
-                            UserId = 7
+                            UserId = "7"
                         });
                 });
 
@@ -669,7 +671,7 @@ namespace VetClinic.DAL.Migrations
                             Education = "Gas and Oil",
                             Experience = "2",
                             PositionId = 1,
-                            UserId = 1
+                            UserId = "1"
                         },
                         new
                         {
@@ -677,7 +679,7 @@ namespace VetClinic.DAL.Migrations
                             Education = "IfMedical",
                             Experience = "7",
                             PositionId = 3,
-                            UserId = 2
+                            UserId = "2"
                         },
                         new
                         {
@@ -685,7 +687,7 @@ namespace VetClinic.DAL.Migrations
                             Education = "SelfEducation",
                             Experience = "3",
                             PositionId = 4,
-                            UserId = 3
+                            UserId = "3"
                         });
                 });
 
@@ -883,6 +885,106 @@ namespace VetClinic.DAL.Migrations
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
                     b.HasDiscriminator().HasValue("User");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "1",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "05819030-b422-4de9-be92-16cea73bddec",
+                            Email = "KolesoAnastasiya@gmail.com",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            PhoneNumber = "0984112333",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "b227f918-d432-45a6-88c7-dc239874829e",
+                            TwoFactorEnabled = false,
+                            UserName = "Koleso Anastasiya"
+                        },
+                        new
+                        {
+                            Id = "2",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "4b59b0b6-33ac-442e-b9f9-868f5936ecc9",
+                            Email = "NazarenkoOleh@gmail.com",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            PhoneNumber = "0954453374",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "8aa3757d-8de7-4a6c-8571-e7f36ef0330e",
+                            TwoFactorEnabled = false,
+                            UserName = "Nazarenko Oleh"
+                        },
+                        new
+                        {
+                            Id = "3",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "02732975-b689-4c11-8dc2-7c905c90c0bb",
+                            Email = "NoorkovaShuba@gmail.com",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            PhoneNumber = "0934453214",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "fd22c580-62b4-4d40-b966-cea118828876",
+                            TwoFactorEnabled = false,
+                            UserName = "Noorkova Shuba"
+                        },
+                        new
+                        {
+                            Id = "4",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "7757f1ba-9836-4d62-96b2-73bc3d90ee0c",
+                            Email = "VozniyAndriy@gmail.com",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            PhoneNumber = "0931412622",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "7fc178ce-8059-456d-8eb7-232c31461fe0",
+                            TwoFactorEnabled = false,
+                            UserName = "Vozniy Andriy"
+                        },
+                        new
+                        {
+                            Id = "5",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "0c95ed6c-4db1-44b0-b8c7-3b7b42e7015d",
+                            Email = "KosovichMaruna@gmail.com",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            PhoneNumber = "0681236324",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "11e14ee0-0b84-4e33-9b73-98b05c3ac7e7",
+                            TwoFactorEnabled = false,
+                            UserName = "Kosovich Maruna"
+                        },
+                        new
+                        {
+                            Id = "6",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "4d1adb30-e6b7-4af2-b6a8-9c7a82201c8b",
+                            Email = "WernudubIvan@gmail.com",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            PhoneNumber = "0982123654",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "75249a00-2d4c-497f-929e-6a358558d8c6",
+                            TwoFactorEnabled = false,
+                            UserName = "Wernudub Ivan"
+                        },
+                        new
+                        {
+                            Id = "7",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "1f53ea03-6ae8-424a-8b3a-cb6ee790d4a8",
+                            Email = "MukolenkoNadiya@gmail.com",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            PhoneNumber = "0982131254",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "a4b140d2-6d2f-4196-9c1d-bd4ccaee7388",
+                            TwoFactorEnabled = false,
+                            UserName = "Mukolenko Nadiya"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

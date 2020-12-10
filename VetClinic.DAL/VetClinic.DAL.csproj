@@ -13,6 +13,8 @@
     <Compile Remove="Migrations\20201207200205_seedUsersWithRoles.Designer.cs" />
     <Compile Remove="Migrations\20201207204341_seedUsersWithRoles.cs" />
     <Compile Remove="Migrations\20201207204341_seedUsersWithRoles.Designer.cs" />
+    <Compile Remove="Migrations\20201210213908_AddSalaryPriceTypes.cs" />
+    <Compile Remove="Migrations\20201210213908_AddSalaryPriceTypes.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,6 +30,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\VetClinic.BLL.Tests\VetClinic.BLL.Tests.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>

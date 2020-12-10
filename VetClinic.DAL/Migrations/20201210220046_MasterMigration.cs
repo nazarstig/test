@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace VetClinic.DAL.Migrations
 {
-    public partial class addInitialMigration : Migration
+    public partial class MasterMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,23 +13,11 @@ namespace VetClinic.DAL.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    AnimalTypeName = table.Column<string>(nullable: true)
+                    AnimalTypeName = table.Column<string>(maxLength: 30, nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AnimalTypes", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AppointmentProcedures",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AppointmentProcedures", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -51,15 +39,15 @@ namespace VetClinic.DAL.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
-                    UserName = table.Column<string>(maxLength: 256, nullable: true),
+                    UserName = table.Column<string>(maxLength: 50, nullable: true),
                     NormalizedUserName = table.Column<string>(maxLength: 256, nullable: true),
-                    Email = table.Column<string>(maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(maxLength: 256, nullable: true),
+                    Email = table.Column<string>(maxLength: 50, nullable: true),
+                    NormalizedEmail = table.Column<string>(maxLength: 50, nullable: true),
                     EmailConfirmed = table.Column<bool>(nullable: false),
-                    PasswordHash = table.Column<string>(nullable: true),
+                    PasswordHash = table.Column<string>(maxLength: 300, nullable: true),
                     SecurityStamp = table.Column<string>(nullable: true),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
-                    PhoneNumber = table.Column<string>(nullable: true),
+                    PhoneNumber = table.Column<string>(maxLength: 12, nullable: true),
                     PhoneNumberConfirmed = table.Column<bool>(nullable: false),
                     TwoFactorEnabled = table.Column<bool>(nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
@@ -78,7 +66,7 @@ namespace VetClinic.DAL.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    PositionName = table.Column<string>(nullable: true),
+                    PositionName = table.Column<string>(maxLength: 40, nullable: true),
                     Salary = table.Column<decimal>(nullable: false)
                 },
                 constraints: table =>
@@ -87,12 +75,28 @@ namespace VetClinic.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Procedures",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProcedureName = table.Column<string>(maxLength: 100, nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    Price = table.Column<decimal>(nullable: false),
+                    IsSelectable = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Procedures", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Services",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ServiceName = table.Column<string>(nullable: true)
+                    ServiceName = table.Column<string>(maxLength: 100, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -105,34 +109,11 @@ namespace VetClinic.DAL.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    StatusName = table.Column<string>(nullable: true)
+                    StatusName = table.Column<string>(maxLength: 20, nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Statuses", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Procedures",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ProcedureName = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true),
-                    Price = table.Column<decimal>(nullable: false),
-                    IsSelectable = table.Column<bool>(nullable: false),
-                    AppointmentProceduresId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Procedures", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Procedures_AppointmentProcedures_AppointmentProceduresId",
-                        column: x => x.AppointmentProceduresId,
-                        principalTable: "AppointmentProcedures",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -266,9 +247,9 @@ namespace VetClinic.DAL.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Education = table.Column<string>(nullable: true),
+                    Education = table.Column<string>(maxLength: 100, nullable: true),
                     Biography = table.Column<string>(nullable: true),
-                    Experience = table.Column<string>(nullable: true),
+                    Experience = table.Column<string>(maxLength: 200, nullable: true),
                     Photo = table.Column<string>(nullable: true),
                     PositionId = table.Column<int>(nullable: false),
                     UserId = table.Column<string>(nullable: true)
@@ -296,10 +277,9 @@ namespace VetClinic.DAL.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(maxLength: 20, nullable: true),
                     Age = table.Column<int>(nullable: false),
-                    Photo = table.Column<string>(nullable: true),
-                    Vasya = table.Column<string>(nullable: true),
+                    Photo = table.Column<string>(maxLength: 150, nullable: true),
                     ClientId = table.Column<int>(nullable: false),
                     AnimalTypeId = table.Column<int>(nullable: false)
                 },
@@ -329,11 +309,10 @@ namespace VetClinic.DAL.Migrations
                     AppointmentDate = table.Column<DateTime>(nullable: false),
                     Complaints = table.Column<string>(nullable: true),
                     TreatmentDescription = table.Column<string>(nullable: true),
-                    DoctorId = table.Column<int>(nullable: false),
+                    DoctorId = table.Column<int>(nullable: true),
                     AnimalId = table.Column<int>(nullable: false),
                     StatusId = table.Column<int>(nullable: false),
-                    ServiceId = table.Column<int>(nullable: false),
-                    AppointmentProceduresId = table.Column<int>(nullable: false)
+                    ServiceId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -342,12 +321,6 @@ namespace VetClinic.DAL.Migrations
                         name: "FK_Appointments_Animals_AnimalId",
                         column: x => x.AnimalId,
                         principalTable: "Animals",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Appointments_AppointmentProcedures_AppointmentProceduresId",
-                        column: x => x.AppointmentProceduresId,
-                        principalTable: "AppointmentProcedures",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -369,6 +342,173 @@ namespace VetClinic.DAL.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "AppointmentProcedures",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AppointmentId = table.Column<int>(nullable: false),
+                    ProcedureId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppointmentProcedures", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AppointmentProcedures_Appointments_AppointmentId",
+                        column: x => x.AppointmentId,
+                        principalTable: "Appointments",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AppointmentProcedures_Procedures_ProcedureId",
+                        column: x => x.ProcedureId,
+                        principalTable: "Procedures",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "AnimalTypes",
+                columns: new[] { "Id", "AnimalTypeName" },
+                values: new object[,]
+                {
+                    { 1, "Pes dvorovuy" },
+                    { 2, "Kit Domashniy" },
+                    { 3, "Slon" },
+                    { 4, "Zhuraph" },
+                    { 5, "Zolota Rubka" },
+                    { 6, "Homyak" },
+                    { 7, "Monster" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Discriminator", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[,]
+                {
+                    { "5", 0, "0c95ed6c-4db1-44b0-b8c7-3b7b42e7015d", "User", "KosovichMaruna@gmail.com", false, false, null, null, null, null, "0681236324", false, "11e14ee0-0b84-4e33-9b73-98b05c3ac7e7", false, "Kosovich Maruna" },
+                    { "4", 0, "7757f1ba-9836-4d62-96b2-73bc3d90ee0c", "User", "VozniyAndriy@gmail.com", false, false, null, null, null, null, "0931412622", false, "7fc178ce-8059-456d-8eb7-232c31461fe0", false, "Vozniy Andriy" },
+                    { "3", 0, "02732975-b689-4c11-8dc2-7c905c90c0bb", "User", "NoorkovaShuba@gmail.com", false, false, null, null, null, null, "0934453214", false, "fd22c580-62b4-4d40-b966-cea118828876", false, "Noorkova Shuba" },
+                    { "2", 0, "4b59b0b6-33ac-442e-b9f9-868f5936ecc9", "User", "NazarenkoOleh@gmail.com", false, false, null, null, null, null, "0954453374", false, "8aa3757d-8de7-4a6c-8571-e7f36ef0330e", false, "Nazarenko Oleh" },
+                    { "1", 0, "05819030-b422-4de9-be92-16cea73bddec", "User", "KolesoAnastasiya@gmail.com", false, false, null, null, null, null, "0984112333", false, "b227f918-d432-45a6-88c7-dc239874829e", false, "Koleso Anastasiya" },
+                    { "6", 0, "4d1adb30-e6b7-4af2-b6a8-9c7a82201c8b", "User", "WernudubIvan@gmail.com", false, false, null, null, null, null, "0982123654", false, "75249a00-2d4c-497f-929e-6a358558d8c6", false, "Wernudub Ivan" },
+                    { "7", 0, "1f53ea03-6ae8-424a-8b3a-cb6ee790d4a8", "User", "MukolenkoNadiya@gmail.com", false, false, null, null, null, null, "0982131254", false, "a4b140d2-6d2f-4196-9c1d-bd4ccaee7388", false, "Mukolenko Nadiya" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Positions",
+                columns: new[] { "Id", "PositionName", "Salary" },
+                values: new object[,]
+                {
+                    { 1, "Вirector", 100000m },
+                    { 2, "Сleaner", 10000m },
+                    { 3, "Veterinarian", 500m },
+                    { 4, "Stylist", 1000m }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Procedures",
+                columns: new[] { "Id", "Description", "IsSelectable", "Price", "ProcedureName" },
+                values: new object[,]
+                {
+                    { 4, "Bad operation", false, 240m, "Сastration" },
+                    { 1, "Best for your pet", true, 1000m, "SPA procedures" },
+                    { 3, "Pet inspection", true, 50m, "Examination of animal" },
+                    { 5, "Doctor Consultation about care and maintenance of the animal", false, 100m, "Consultation" },
+                    { 2, "Paw fracture", false, 2000m, "Operation" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Services",
+                columns: new[] { "Id", "ServiceName" },
+                values: new object[,]
+                {
+                    { 4, "Castration" },
+                    { 3, "Urgently" },
+                    { 2, "Makeup" },
+                    { 1, "Inspection" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Statuses",
+                columns: new[] { "Id", "StatusName" },
+                values: new object[,]
+                {
+                    { 1, "Approved" },
+                    { 4, "Completed" },
+                    { 2, "Disapproved" },
+                    { 3, "Processing" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Clients",
+                columns: new[] { "Id", "UserId" },
+                values: new object[,]
+                {
+                    { 1, "4" },
+                    { 2, "5" },
+                    { 3, "6" },
+                    { 4, "7" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Doctors",
+                columns: new[] { "Id", "Biography", "Education", "Experience", "Photo", "PositionId", "UserId" },
+                values: new object[,]
+                {
+                    { 1, null, "Gas and Oil", "2", null, 1, "1" },
+                    { 2, null, "IfMedical", "7", null, 3, "2" },
+                    { 3, null, "SelfEducation", "3", null, 4, "3" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Animals",
+                columns: new[] { "Id", "Age", "AnimalTypeId", "ClientId", "Name", "Photo" },
+                values: new object[,]
+                {
+                    { 2, 3, 2, 1, "Ruzhuk", null },
+                    { 6, 1, 6, 1, "Krug", null },
+                    { 8, 2, 2, 1, "Robin", null },
+                    { 3, 5, 1, 2, "Sirko", null },
+                    { 1, 342, 7, 3, "Pushok", null },
+                    { 7, 1, 5, 3, "Dzvin", null },
+                    { 4, 12, 3, 4, "Biznes", null },
+                    { 5, 4, 4, 4, "Hmarochos", null }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Appointments",
+                columns: new[] { "Id", "AnimalId", "AppointmentDate", "Complaints", "DoctorId", "ServiceId", "StatusId", "TreatmentDescription" },
+                values: new object[,]
+                {
+                    { 2, 2, new DateTime(2020, 4, 23, 9, 30, 0, 0, DateTimeKind.Unspecified), "Bad wool", 3, 2, 3, "Use animal shampoo" },
+                    { 6, 6, new DateTime(2019, 2, 2, 9, 30, 0, 0, DateTimeKind.Unspecified), "Vaccination", 2, 1, 3, "" },
+                    { 8, 8, new DateTime(2020, 3, 30, 10, 30, 0, 0, DateTimeKind.Unspecified), "Paw fracture", 2, 3, 1, "daily bandage change" },
+                    { 3, 3, new DateTime(2020, 1, 12, 10, 30, 0, 0, DateTimeKind.Unspecified), "Required castration", 2, 4, 4, "wear a collar for 12 days" },
+                    { 1, 1, new DateTime(2020, 5, 1, 8, 30, 0, 0, DateTimeKind.Unspecified), "Temperature", 1, 1, 2, "Drink more wather" },
+                    { 7, 7, new DateTime(2020, 12, 12, 12, 30, 0, 0, DateTimeKind.Unspecified), "Sore spine", 2, 1, 2, "daily walk" },
+                    { 4, 4, new DateTime(2019, 5, 14, 11, 30, 0, 0, DateTimeKind.Unspecified), "Spa procedure", 3, 2, 1, "Spa every weak" },
+                    { 5, 5, new DateTime(2019, 11, 15, 12, 30, 0, 0, DateTimeKind.Unspecified), "Need consultation", 3, 1, 4, "Pay more attention" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "AppointmentProcedures",
+                columns: new[] { "Id", "AppointmentId", "ProcedureId" },
+                values: new object[,]
+                {
+                    { 2, 2, 2 },
+                    { 6, 6, 3 },
+                    { 9, 8, 4 },
+                    { 3, 3, 3 },
+                    { 1, 1, 1 },
+                    { 10, 1, 3 },
+                    { 7, 7, 5 },
+                    { 8, 7, 4 },
+                    { 4, 4, 4 },
+                    { 5, 5, 5 }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Animals_AnimalTypeId",
                 table: "Animals",
@@ -380,14 +520,19 @@ namespace VetClinic.DAL.Migrations
                 column: "ClientId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AppointmentProcedures_AppointmentId",
+                table: "AppointmentProcedures",
+                column: "AppointmentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AppointmentProcedures_ProcedureId",
+                table: "AppointmentProcedures",
+                column: "ProcedureId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Appointments_AnimalId",
                 table: "Appointments",
                 column: "AnimalId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Appointments_AppointmentProceduresId",
-                table: "Appointments",
-                column: "AppointmentProceduresId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Appointments_DoctorId",
@@ -457,17 +602,12 @@ namespace VetClinic.DAL.Migrations
                 name: "IX_Doctors_UserId",
                 table: "Doctors",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Procedures_AppointmentProceduresId",
-                table: "Procedures",
-                column: "AppointmentProceduresId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Appointments");
+                name: "AppointmentProcedures");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
@@ -485,7 +625,13 @@ namespace VetClinic.DAL.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Appointments");
+
+            migrationBuilder.DropTable(
                 name: "Procedures");
+
+            migrationBuilder.DropTable(
+                name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "Animals");
@@ -498,12 +644,6 @@ namespace VetClinic.DAL.Migrations
 
             migrationBuilder.DropTable(
                 name: "Statuses");
-
-            migrationBuilder.DropTable(
-                name: "AspNetRoles");
-
-            migrationBuilder.DropTable(
-                name: "AppointmentProcedures");
 
             migrationBuilder.DropTable(
                 name: "AnimalTypes");

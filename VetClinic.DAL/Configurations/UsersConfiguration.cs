@@ -11,7 +11,7 @@ namespace VetClinic.DAL.Configurations
             
             builder.Property(t => t.Email).HasMaxLength(50);
             builder.Property(t => t.NormalizedEmail).HasMaxLength(50);
-            builder.Property(t => t.PasswordHash).HasMaxLength(30);
+            builder.Property(t => t.PasswordHash).HasMaxLength(300);
             builder.Property(t => t.PhoneNumber).HasMaxLength(12);            
             builder.Property(t => t.UserName).HasMaxLength(50);
 
