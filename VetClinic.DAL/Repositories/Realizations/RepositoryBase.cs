@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -18,7 +18,7 @@ namespace VetClinic.DAL.Repositories.Realizations
             Context = context;
         }
 
-        public async Task<ICollection> GetAsync(
+        public async Task<ICollection<TEntity>> GetAsync(
             Expression<Func<TEntity, bool>> filter = null,
             Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
