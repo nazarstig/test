@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Serilog.Events;
@@ -15,10 +16,10 @@ namespace VetClinic.API.ExtensionMethods
 {
     public static class AppExtensions
     {
-        public static void SeedUsersWithRoles(this IApplicationBuilder app)
+        public static void SeedUsersWithRoles(this IApplicationBuilder app, IConfiguration config)
         {
             
-            string connectionString = "Server=(localdb)\\mssqllocaldb;Database=VetClinicDb;Trusted_Connection=True;";
+            string connectionString = config.GetConnectionString("DefaultConnection");
 
             var services = new ServiceCollection();
             services.AddLogging();

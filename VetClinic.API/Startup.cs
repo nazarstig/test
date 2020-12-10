@@ -67,7 +67,7 @@ namespace VetClinic.API
 
             app.UseCustomSwaggerConfig();
 
-            app.SeedUsersWithRoles();
+            app.SeedUsersWithRoles(Configuration);
         }
     }
 }
