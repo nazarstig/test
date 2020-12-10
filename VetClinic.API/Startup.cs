@@ -23,51 +23,14 @@ namespace VetClinic.API
 
         public void ConfigureServices(IServiceCollection services)
         {
-            /*
-              JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
 
-              services.AddAuthentication(options =>
-              {
-                  options.DefaultScheme = "Cookies";
-                  //options.DefaultAuthenticateScheme = "Cookies";
-                  options.DefaultChallengeScheme = "oidc";
-              })
-                  .AddCookie("Cookies")
-                  .AddOpenIdConnect("oidc", options =>
-                  {
-                      options.SignInScheme = "Cookies";
-                      options.Authority = "https://localhost:5001";
-
-                      options.ClientId = "angular_client";
-                      options.ClientSecret = "angular_secret";
-                      options.ResponseType = "code";
-
-                      //options.Scope.Add("opdenid");
-
-                      options.SaveTokens = true;
-                      options.GetClaimsFromUserInfoEndpoint = true;
-                      options.ClaimActions.MapJsonKey("role","role","role");
-                      options.TokenValidationParameters.NameClaimType = "name";
-                      options.TokenValidationParameters.RoleClaimType = "role";
-                  });
-            */
-            services.AddAuthentication("Bearer")
-                 .AddIdentityServerAuthentication(options =>
-                 {
-                     options.Authority = "https://localhost:5001";
-                     //options.RequireHttpsMetadata = false;
-                    // options.ApiName = "api1";
-                 });
-            /*
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("ApiScope", policy =>
-                {
-                    policy.RequireAuthenticatedUser();
-                    policy.RequireClaim("scope", "ApiOne");
-                });
-            });
-            */
+            services.AddAuthentication("RefAndJWTToken")
+             .AddIdentityServerAuthentication("RefAndJWTToken", options =>
+             {
+                 options.Authority = "https://localhost:5001";
+                 options.ApiName = "VetClinicApi";
+                 options.ApiSecret = "angular_secret";
+             });
 
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<ApplicationContext>(options =>
@@ -103,6 +66,8 @@ namespace VetClinic.API
             });
 
             app.UseCustomSwaggerConfig();
+
+            app.SeedUsersWithRoles();
         }
     }
 }

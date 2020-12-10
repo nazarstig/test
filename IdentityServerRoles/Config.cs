@@ -8,12 +8,37 @@ namespace IdentityServerRoles
     public static class Config
     {
         public static IEnumerable<IdentityResource> IdentityResources =>
-                   new IdentityResource[]
-                   {
+            new IdentityResource[]
+            {
                 new IdentityResources.OpenId(),
-                //new IdentityResources.Email(),
                 new IdentityResources.Profile(),
-                   };
+            };
+
+        public static IEnumerable<ApiResource> ApiResources =>
+            new ApiResource[]
+            {
+                // expanded version if more control is needed
+                new ApiResource
+                {
+                    Name = "VetClinicApi",
+
+                    // secret for using introspection endpoint
+                    ApiSecrets =
+                    {
+                        new Secret("angular_secret".Sha256())
+                    },
+                    
+                    // include the following using claims in access token (in addition to subject id)
+                    UserClaims = { JwtClaimTypes.Name, JwtClaimTypes.Email },
+
+                    // this API defines two scopes
+                    Scopes =
+                    {
+                       "ApiOne",
+
+                    },
+                }
+            };
 
         public static IEnumerable<ApiScope> ApiScopes =>
             new ApiScope[]
@@ -27,25 +52,6 @@ namespace IdentityServerRoles
 
             new Client[]
             {
-
-                new Client
-                {
-                    ClientId = "postman",
-                    RequirePkce = true,
-                    Enabled = true,
-
-                    AllowedGrantTypes = GrantTypes.CodeAndClientCredentials,
-                    ClientSecrets = { new Secret("secret".ToSha256()) },
-
-                    RedirectUris = { "https://oauth.pstmn.io/v1/browser-callback" },
-
-                    AllowedScopes = {
-                        IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Profile,
-                        "scope1",
-                        "scope2"
-                    }
-                },
                 // m2m client credentials flow client
                 new Client()
                 {
@@ -64,23 +70,33 @@ namespace IdentityServerRoles
                 new Client()
                 {
                     ClientId = "angular_client",
-                    RequirePkce = false,
+                    RequirePkce = true,
                     ClientSecrets = {new Secret("angular_secret".ToSha256()) },
 
                     AllowedGrantTypes = GrantTypes.Code,
                     RedirectUris = { "https://oauth.pstmn.io/v1/browser-callback",
                                        "https://localhost:4999/signin-oidc", },
-                    PostLogoutRedirectUris = { "https://localhost:4999/signout-callback-oidc" },
+
+                    PostLogoutRedirectUris = { "https://localhost:4999/signout-callback-oidc"},
 
 
                     AllowedScopes = new List<string>
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
-                        "ApiOne"
+                        "ApiOne",
                     },
 
                     RequireConsent = true,
+
+                    AllowOfflineAccess = true,
+
+                    RefreshTokenUsage =  TokenUsage.OneTimeOnly,
+
+                    AbsoluteRefreshTokenLifetime = 3600 * 72,
+                    AccessTokenLifetime = 3600,
+
+                    AccessTokenType = AccessTokenType.Reference,
                     
                 },
 

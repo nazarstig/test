@@ -1,40 +1,45 @@
 ﻿using IdentityModel;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Serilog;
+using Serilog.Events;
 using System;
 using System.Linq;
 using System.Security.Claims;
 using VetClinic.DAL;
 using VetClinic.DAL.Entities;
 
-namespace VetClinic.API.Controllers
+namespace VetClinic.API.ExtensionMethods
 {
-    public class RegisterController : Controller
+    public static class AppExtensions
     {
-        [HttpGet]
-        [Route("/registerUsers")]
-        public void Register()
+        public static void SeedUsersWithRoles(this IApplicationBuilder app)
         {
-
+            
             string connectionString = "Server=(localdb)\\mssqllocaldb;Database=VetClinicDb;Trusted_Connection=True;";
 
             var services = new ServiceCollection();
             services.AddLogging();
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.Console(restrictedToMinimumLevel: LogEventLevel.Debug)
+                .CreateLogger();
             services.AddDbContext<ApplicationContext>(options =>
                 options.UseSqlServer(connectionString));
 
             services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationContext>()
                 .AddDefaultTokenProviders();
-
+            
+           
             using (var serviceProvider = services.BuildServiceProvider())
             {
                 using (var scope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope())
                 {
                     var context = scope.ServiceProvider.GetService<ApplicationContext>();
-                    context.Database.Migrate();
+                    //context.Database.Migrate();
 
                     var roleMgr = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
                     var member = roleMgr.FindByNameAsync("member").Result;
@@ -89,11 +94,11 @@ namespace VetClinic.API.Controllers
                             _ = userMgr.AddToRoleAsync(alice, admin.Name).Result;
                         }
 
-                        //Log.Debug("alice created");
+                        Log.Debug("alice created");
                     }
                     else
                     {
-                        //Log.Debug("alice already exists");
+                        Log.Debug("alice already exists");
                     }
 
                     var bob = userMgr.FindByNameAsync("bob").Result;
@@ -128,15 +133,16 @@ namespace VetClinic.API.Controllers
                             _ = userMgr.AddToRoleAsync(bob, member.Name).Result;
                         }
 
-                        //Log.Debug("bob created");
+                        Log.Debug("bob created");
                     }
                     else
                     {
-                        //Log.Debug("bob already exists");
+                        Log.Debug("bob already exists");
                     }
                 }
             }
-            
+
         }
     }
 }
+
