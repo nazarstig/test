@@ -22,10 +22,4 @@
     <ProjectReference Include="..\VetClinic.DAL\VetClinic.DAL.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-    <Folder Include="DTO\" />
-    <Folder Include="MapperProfilers\" />
-  </ItemGroup>
-
 </Project>
