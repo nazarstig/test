@@ -64,7 +64,6 @@ namespace IdentityServerRoles
 
                     AllowedScopes = {"ApiOne"},
                     RequireConsent = false,
-
                 },
 
                 new Client()
@@ -99,7 +98,6 @@ namespace IdentityServerRoles
                     AccessTokenType = AccessTokenType.Reference,
                     
                 },
-
             };
     }
 }

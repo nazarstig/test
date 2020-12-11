@@ -387,13 +387,13 @@ namespace VetClinic.DAL.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Discriminator", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "5", 0, "0c95ed6c-4db1-44b0-b8c7-3b7b42e7015d", "User", "KosovichMaruna@gmail.com", false, false, null, null, null, null, "0681236324", false, "11e14ee0-0b84-4e33-9b73-98b05c3ac7e7", false, "Kosovich Maruna" },
-                    { "4", 0, "7757f1ba-9836-4d62-96b2-73bc3d90ee0c", "User", "VozniyAndriy@gmail.com", false, false, null, null, null, null, "0931412622", false, "7fc178ce-8059-456d-8eb7-232c31461fe0", false, "Vozniy Andriy" },
-                    { "3", 0, "02732975-b689-4c11-8dc2-7c905c90c0bb", "User", "NoorkovaShuba@gmail.com", false, false, null, null, null, null, "0934453214", false, "fd22c580-62b4-4d40-b966-cea118828876", false, "Noorkova Shuba" },
-                    { "2", 0, "4b59b0b6-33ac-442e-b9f9-868f5936ecc9", "User", "NazarenkoOleh@gmail.com", false, false, null, null, null, null, "0954453374", false, "8aa3757d-8de7-4a6c-8571-e7f36ef0330e", false, "Nazarenko Oleh" },
-                    { "1", 0, "05819030-b422-4de9-be92-16cea73bddec", "User", "KolesoAnastasiya@gmail.com", false, false, null, null, null, null, "0984112333", false, "b227f918-d432-45a6-88c7-dc239874829e", false, "Koleso Anastasiya" },
-                    { "6", 0, "4d1adb30-e6b7-4af2-b6a8-9c7a82201c8b", "User", "WernudubIvan@gmail.com", false, false, null, null, null, null, "0982123654", false, "75249a00-2d4c-497f-929e-6a358558d8c6", false, "Wernudub Ivan" },
-                    { "7", 0, "1f53ea03-6ae8-424a-8b3a-cb6ee790d4a8", "User", "MukolenkoNadiya@gmail.com", false, false, null, null, null, null, "0982131254", false, "a4b140d2-6d2f-4196-9c1d-bd4ccaee7388", false, "Mukolenko Nadiya" }
+                    { "5", 0, "5ab93c35-b2be-4bb9-b58c-fdf70621dbfc", "User", "KosovichMaruna@gmail.com", false, false, null, null, null, null, "0681236324", false, "9a84f6b5-5d50-4736-86ce-79f9aadbdce2", false, "Kosovich Maruna" },
+                    { "4", 0, "732d617f-9ec7-4e33-b631-df9c4fb7f3c4", "User", "VozniyAndriy@gmail.com", false, false, null, null, null, null, "0931412622", false, "40f85397-45b6-432d-a711-93df2c1cce5e", false, "Vozniy Andriy" },
+                    { "3", 0, "07c750ca-53f9-431b-ba81-d33dcf38d19b", "User", "NoorkovaShuba@gmail.com", false, false, null, null, null, null, "0934453214", false, "adc6034b-0c0a-46a7-944f-3158ad6ead8b", false, "Noorkova Shuba" },
+                    { "2", 0, "99bffdba-2d91-4eae-84d6-1a7e9b13d3d7", "User", "NazarenkoOleh@gmail.com", false, false, null, null, null, null, "0954453374", false, "3d511176-f5f4-428a-a874-a2833d2ba4d6", false, "Nazarenko Oleh" },
+                    { "1", 0, "199d8f6c-f299-4ce5-a80a-27d2e74a1457", "User", "KolesoAnastasiya@gmail.com", false, false, null, null, null, null, "0984112333", false, "feb42154-f76e-43e9-831e-9ef53ab4a35b", false, "Koleso Anastasiya" },
+                    { "6", 0, "e54ff86e-7866-4993-87fb-d1a7285ee8e4", "User", "WernudubIvan@gmail.com", false, false, null, null, null, null, "0982123654", false, "d780d6ad-0156-4529-a3ca-2a47f70b72b5", false, "Wernudub Ivan" },
+                    { "7", 0, "457202b1-bc96-465d-9c27-763f304a7aa6", "User", "MukolenkoNadiya@gmail.com", false, false, null, null, null, null, "0982131254", false, "2db11faa-0364-4600-b2ca-eb72f1672300", false, "Mukolenko Nadiya" }
                 });
 
             migrationBuilder.InsertData(

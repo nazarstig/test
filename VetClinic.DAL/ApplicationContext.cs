@@ -15,7 +15,7 @@ namespace VetClinic.DAL
         public virtual DbSet<Procedure> Procedures { get; set; }
         public virtual DbSet<Service> Services { get; set; }
         public virtual DbSet<Status> Statuses { get; set; }
-        public virtual DbSet<User> Users { get; set; }
+        public virtual new DbSet<User> Users { get; set; }
 
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options) { }
 
