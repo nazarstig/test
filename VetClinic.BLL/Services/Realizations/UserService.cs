@@ -106,15 +106,8 @@ namespace VetClinic.BLL.Services.Realizations
 
                     return true;
                 }
-                else
-                {
-                    return false;
-                }
             }
-            else
-            {
                 return false;
-            }
         }
 
         private bool Equals(IEnumerable<string> arr1, IEnumerable<string> arr2)
