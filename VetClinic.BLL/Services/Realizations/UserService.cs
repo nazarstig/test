@@ -1,12 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using VetClinic.BLL.Services.Interfaces;
 using VetClinic.DAL.Entities;
 using FluentValidation;
-using VetClinic.DAL.Validators;
 using FluentValidation.Results;
 
 namespace VetClinic.BLL.Services.Realizations
@@ -64,7 +62,6 @@ namespace VetClinic.BLL.Services.Realizations
                 {
                     return (false, string.Empty);
                 }
-                
             }
             else
             {
