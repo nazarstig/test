@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using VetClinic.API.DTO.PositionDTO;
+using VetClinic.BLL.Services.Interfaces;
 using VetClinic.DAL.Entities;
 using VetClinic.DAL.Repositories.Interfaces;
 
@@ -12,27 +13,26 @@ namespace VetClinic.API.Controllers
     [ApiController]
     public class PositionController : ControllerBase
     {
-        private IRepositoryWrapper _repositoryWrapper;
-        private IMapper _mapper;
-        public PositionController(IRepositoryWrapper repositoryWrapper, IMapper mapper)
+        private readonly IPositionService _positionService;
+        private readonly IMapper _mapper;
+        public PositionController(IPositionService positionService, IMapper mapper)
         {
-            _repositoryWrapper = repositoryWrapper;
+            _positionService = positionService;
             _mapper = mapper;
 
         }
-        
+
         [HttpGet]
         public async Task<ICollection<ReadPositionDTO>> Get()
         {
-            
-            var positions =  _mapper.Map<ICollection<ReadPositionDTO>>(await _repositoryWrapper.PositionRepository.GetAsync());
-            return positions;
+
+            return _mapper.Map<ICollection<ReadPositionDTO>>(await _positionService.GetAsync());
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<ReadPositionDTO>> Get(int id)
         {
-            var position = _mapper.Map<ReadPositionDTO>(await _repositoryWrapper.PositionRepository.GetFirstOrDefaultAsync(p=> p.Id==id));
+            var position = _mapper.Map<ReadPositionDTO>(await _positionService.GetAsync(id));
             if (position == null)
                 return BadRequest();
             return Ok(position);
@@ -41,23 +41,25 @@ namespace VetClinic.API.Controllers
         [HttpPost]
         public async Task<ActionResult<CreatePositionDTO>> Post(CreatePositionDTO position)
         {
-             _repositoryWrapper.PositionRepository.Add(_mapper.Map<Position>(position));
-            await _repositoryWrapper.SaveAsync();
+            await _positionService.Add(_mapper.Map<Position>(position));
             return Ok(position);
         }
 
         [HttpPut]
         public async Task<ActionResult<UpdatePositionDTO>> Put(UpdatePositionDTO position)
         {
-            Position pos =await _repositoryWrapper.PositionRepository.GetFirstOrDefaultAsync(p => p.Id == position.Id);
-            pos.PositionName = position.PositionName;
-            pos.Salary = position.Salary;
-            _repositoryWrapper.PositionRepository.Update(pos);
-            await _repositoryWrapper.SaveAsync();
-            return Ok(position);
+            if (!(await _positionService.IsAnyAsync(position.Id)))
+                return BadRequest();
+
+            if (await _positionService.Update(_mapper.Map<Position>(position)))
+            {
+                return Ok(position);
+            }
+
+            return BadRequest();
         }
 
-
+        [HttpDelete]
 
 
     }
