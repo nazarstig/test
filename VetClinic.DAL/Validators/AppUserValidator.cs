@@ -3,9 +3,9 @@ using VetClinic.DAL.Entities;
 
 namespace VetClinic.DAL.Validators
 {
-    public class MyUserValidator : AbstractValidator<User>
+    public class AppUserValidator : AbstractValidator<User>
     {
-        public MyUserValidator()
+        public AppUserValidator()
         {
             RuleFor(user => user.UserName).NotNull().MaximumLength(50);
             RuleFor(user => user.Email).NotNull().EmailAddress().MaximumLength(50);

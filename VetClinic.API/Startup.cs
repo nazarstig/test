@@ -53,7 +53,7 @@ namespace VetClinic.API
 
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
             services.AddScoped<IUserService, UserService>();
-            services.AddScoped<AbstractValidator<User>, MyUserValidator>();
+            services.AddScoped<AbstractValidator<User>, AppUserValidator>();
 
             services.AddSwaggerConfig();
         }
