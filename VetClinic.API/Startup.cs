@@ -23,6 +23,15 @@ namespace VetClinic.API
 
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddAuthentication("RefAndJWTToken")
+             .AddIdentityServerAuthentication("RefAndJWTToken", options =>
+             {
+                 options.Authority = "https://localhost:5001";
+                 options.ApiName = "VetClinicApi";
+                 options.ApiSecret = "angular_secret";
+             });
+
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<ApplicationContext>(options =>
                 options.UseSqlServer(connection, builder =>
@@ -47,9 +56,18 @@ namespace VetClinic.API
 
             app.UseRouting();
 
-            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+            app.UseAuthentication();
+
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
 
             app.UseCustomSwaggerConfig();
+
+            app.SeedUsersWithRoles(Configuration);
         }
     }
 }
