@@ -13,6 +13,8 @@ using VetClinic.DAL.Entities;
 using Microsoft.AspNetCore.Identity;
 using VetClinic.BLL.Services.Interfaces;
 using VetClinic.BLL.Services.Realizations;
+using FluentValidation;
+using VetClinic.DAL.Validators;
 
 namespace VetClinic.API
 {
@@ -51,6 +53,7 @@ namespace VetClinic.API
 
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<AbstractValidator<User>, MyUserValidator>();
 
             services.AddSwaggerConfig();
         }
