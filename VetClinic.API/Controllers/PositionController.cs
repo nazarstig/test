@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using VetClinic.API.DTO.PositionDTO;
 using VetClinic.BLL.Services.Interfaces;
 using VetClinic.DAL.Entities;
-using VetClinic.DAL.Repositories.Interfaces;
 
 namespace VetClinic.API.Controllers
 {
@@ -22,45 +21,52 @@ namespace VetClinic.API.Controllers
 
         }
 
+        /// <summary>
+        /// Get all posiotions that are avali
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
-        public async Task<ICollection<ReadPositionDTO>> Get()
+        public async Task<ICollection<PositionDTO>> Get()
         {
-
-            return _mapper.Map<ICollection<ReadPositionDTO>>(await _positionService.GetAsync());
+            return _mapper.Map<ICollection<PositionDTO>>(await _positionService.GetAsync());
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ReadPositionDTO>> Get(int id)
+        public async Task<ActionResult<PositionDTO>> Get(int id)
         {
-            var position = _mapper.Map<ReadPositionDTO>(await _positionService.GetAsync(id));
+            var position = _mapper.Map<PositionDTO>(await _positionService.GetAsync(id));
             if (position == null)
                 return BadRequest();
             return Ok(position);
         }
 
         [HttpPost]
-        public async Task<ActionResult<CreatePositionDTO>> Post(CreatePositionDTO position)
+        public async Task<ActionResult<PositionDTO>> Post(PositionDTO position)
         {
             await _positionService.Add(_mapper.Map<Position>(position));
             return Ok(position);
         }
 
         [HttpPut]
-        public async Task<ActionResult<UpdatePositionDTO>> Put(UpdatePositionDTO position)
+        public async Task<ActionResult<PositionDTO>> Put(PositionDTO position)
         {
-            if (!(await _positionService.IsAnyAsync(position.Id)))
-                return BadRequest();
-
-            if (await _positionService.Update(_mapper.Map<Position>(position)))
+            var successUpdate = await _positionService.Update(_mapper.Map<Position>(position));
+            if (successUpdate)
             {
                 return Ok(position);
             }
-
-            return BadRequest();
+            return NotFound();
         }
 
-        [HttpDelete]
 
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> Remove(int id)
+        {   
+            var successDelete = await _positionService.Remove(id);
+            if (successDelete)
+                return NotFound();
+            return Ok();
+        }
 
     }
 }

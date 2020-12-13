@@ -36,16 +36,32 @@ namespace VetClinic.BLL.Services.Realizations
             return await _repositoryWrapper.PositionRepository.IsAnyAsync(p => p.Id == positionId);
         }
 
-        public Task<bool> Remove(int positionId)
+        public async Task<bool> Remove(int positionId)
         {
-            throw new System.NotImplementedException();
+            var position = await _repositoryWrapper.PositionRepository.GetFirstOrDefaultAsync(p => p.Id == positionId);
+            if (position == null)
+            {
+                return false;
+            }
+            _repositoryWrapper.PositionRepository.Remove(position);
+            return true;
+
         }
 
         public async Task<bool> Update(Position position)
         {
-            _repositoryWrapper.PositionRepository.Update(position);
-            await _repositoryWrapper.SaveAsync();
-            return true;
+            if (position == null)
+                return false;
+
+            if (await _repositoryWrapper.PositionRepository.IsAnyAsync(p => p.Id == position.Id))
+            {
+                _repositoryWrapper.PositionRepository.Update(position);
+                await _repositoryWrapper.SaveAsync();
+                return true;
+            }
+
+            return false;
+            
         }
     }
 }
