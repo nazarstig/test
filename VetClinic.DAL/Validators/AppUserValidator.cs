@@ -12,7 +12,6 @@ namespace VetClinic.DAL.Validators
             RuleFor(user => user.NormalizedEmail).EmailAddress().MaximumLength(50);
             RuleFor(user => user.PhoneNumber).NotNull().MaximumLength(12);
             RuleFor(user => user.PasswordHash).NotNull().MaximumLength(300);
-            RuleFor(user => user.MyRoles).NotNull();
         }
     }
 }

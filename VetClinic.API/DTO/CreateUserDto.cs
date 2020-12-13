@@ -9,6 +9,6 @@ namespace VetClinic.API.DTO
         public string PhoneNumber { get; set; }
         public string Password { get; set; }
 
-        public IEnumerable<string> MyRoles { get; set; }
+        public IEnumerable<RoleDto> MyRoles { get; set; }
     }
 }

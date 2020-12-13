@@ -12,7 +12,6 @@ namespace VetClinic.API.Mapping
                 .ForMember(d => d.Email, o => o.MapFrom(s => s.Email))
                 .ForMember(d => d.PhoneNumber, o => o.MapFrom(s => s.PhoneNumber))
                 .ForMember(d => d.PasswordHash, o => o.MapFrom(s => s.Password))
-                .ForMember(d => d.MyRoles, o => o.MapFrom(s => s.MyRoles))
                 .ForAllOtherMembers(o => o.Ignore());                           
         }
     }

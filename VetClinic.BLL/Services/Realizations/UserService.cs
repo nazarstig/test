@@ -22,7 +22,7 @@ namespace VetClinic.BLL.Services.Realizations
         public RoleManager<IdentityRole> RoleManager { get; }
         public AbstractValidator<User> Validator { get; }
 
-        public async Task<(bool, string)> CreateUser(User inputUser)
+        public async Task<(bool, string)> CreateUser(User inputUser, IEnumerable<IdentityRole> inputRoles)
         {
             var user = UserManager.FindByNameAsync(inputUser.UserName).Result;
             if(user == null)
@@ -48,28 +48,22 @@ namespace VetClinic.BLL.Services.Realizations
                     }
 
                     //whitelist roles
-                    foreach (string role in inputUser.MyRoles)
+                    
+                    foreach (IdentityRole role in inputRoles)
                     {
-                        if (RoleManager.RoleExistsAsync(role).Result)
+                        if (RoleManager.RoleExistsAsync(role.Name).Result)
                         {
-                            _ = await UserManager.AddToRoleAsync(user, role);
+                            _ = await UserManager.AddToRoleAsync(user, role.Name);
                         }
                     }
-
+                    
                     return (true, UserManager.FindByNameAsync(user.UserName).Result.Id);
                 }
-                else
-                {
-                    return (false, string.Empty);
-                }
             }
-            else
-            {
                 return (false, string.Empty);
-            }
         }
-
-        public async Task<bool> UpdateUser(User inputUser)
+        
+        public async Task<bool> UpdateUser(User inputUser, IEnumerable<IdentityRole> inputRoles)
         {
             var user = UserManager.FindByNameAsync(inputUser.UserName).Result;
 
@@ -77,7 +71,7 @@ namespace VetClinic.BLL.Services.Realizations
             {
                 //validate input user
                 ValidationResult results = Validator.Validate(inputUser);
-
+                
                 if (results.IsValid)
                 {
 
@@ -86,18 +80,18 @@ namespace VetClinic.BLL.Services.Realizations
                     user.PhoneNumber = inputUser.PhoneNumber;
 
                     //We need to pull roles explicitly because they are in a different table
-                    user.MyRoles = await UserManager.GetRolesAsync(user);
+                    var MyRoles = await UserManager.GetRolesAsync(user);
 
                     _ = await UserManager.UpdateAsync(user);
 
-                    if (!Equals(user.MyRoles, inputUser.MyRoles))
+                    if (!Equals(MyRoles, inputRoles))
                     {
-                        _ = await UserManager.RemoveFromRolesAsync(user, user.MyRoles);
-                        foreach (string role in inputUser.MyRoles)
+                        _ = await UserManager.RemoveFromRolesAsync(user, MyRoles);
+                        foreach (IdentityRole role in inputRoles)
                         {
-                            if (RoleManager.RoleExistsAsync(role).Result)
+                            if (RoleManager.RoleExistsAsync(role.Name).Result)
                             {
-                                _ = await UserManager.AddToRoleAsync(user, role);
+                                _ = await UserManager.AddToRoleAsync(user, role.Name);
                             }
                         }
                     }
@@ -105,14 +99,16 @@ namespace VetClinic.BLL.Services.Realizations
                     _ = await UserManager.UpdateSecurityStampAsync(user);
 
                     return true;
-                }
+                } 
             }
-                return false;
+            return false;
         }
-
-        private bool Equals(IEnumerable<string> arr1, IEnumerable<string> arr2)
+        
+        private bool Equals(IEnumerable<string> arr1, IEnumerable<IdentityRole> arr2)
         {
-            return !arr1.Except(arr2).Any() && !arr2.Except(arr1).Any();
+            IEnumerable<string> roles = arr2.Select(arr2 => arr2.Name);
+
+            return !arr1.Except(roles).Any() && !roles.Except(arr1).Any();
         }
     }
 }

@@ -8,7 +8,6 @@ namespace VetClinic.DAL.Configurations
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
-            builder.Ignore("MyRoles");
 
             builder.Property(t => t.Email).HasMaxLength(50);
             builder.Property(t => t.NormalizedEmail).HasMaxLength(50);
