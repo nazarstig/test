@@ -9,6 +9,10 @@ using VetClinic.API.ExtensionMethods;
 using VetClinic.DAL;
 using VetClinic.DAL.Repositories.Interfaces;
 using VetClinic.DAL.Repositories.Realizations;
+using VetClinic.DAL.Entities;
+using Microsoft.AspNetCore.Identity;
+using VetClinic.BLL.Services.Interfaces;
+using VetClinic.BLL.Services.Realizations;
 
 namespace VetClinic.API
 {
@@ -37,11 +41,16 @@ namespace VetClinic.API
                 options.UseSqlServer(connection, builder =>
                     builder.MigrationsAssembly("VetClinic.DAL")));
 
+            services.AddIdentity<User, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationContext>()
+                .AddDefaultTokenProviders();
+
             services.AddAutoMapper(typeof(Startup));
 
             services.AddControllers();
 
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
+            services.AddScoped<IUserService, UserService>();
 
             services.AddSwaggerConfig();
         }
