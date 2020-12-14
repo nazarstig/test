@@ -11,7 +11,7 @@ namespace VetClinic.BLL.Services.Realizations
 {
     public class UserService : IUserService
     {
-        public UserService(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, AbstractValidator<User> validator)
+        public UserService(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IValidator<User> validator)
         {
             UserManager = userManager;
             RoleManager = roleManager;
@@ -20,7 +20,7 @@ namespace VetClinic.BLL.Services.Realizations
 
         public UserManager<User> UserManager { get; }
         public RoleManager<IdentityRole> RoleManager { get; }
-        public AbstractValidator<User> Validator { get; }
+        public IValidator<User> Validator { get; }
 
         public async Task<(bool, string)> CreateUser(User inputUser, IEnumerable<IdentityRole> inputRoles)
         {
@@ -50,7 +50,6 @@ namespace VetClinic.BLL.Services.Realizations
                     }
 
                     //whitelist roles
-                    
                     foreach (IdentityRole role in inputRoles)
                     {
                         if (RoleManager.RoleExistsAsync(role.Name).Result)
@@ -76,7 +75,6 @@ namespace VetClinic.BLL.Services.Realizations
                 
                 if (results.IsValid)
                 {
-
                     user.UserName = inputUser.UserName;
                     user.FirstName = inputUser.FirstName;
                     user.LastName = inputUser.LastName;
