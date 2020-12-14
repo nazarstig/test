@@ -8,7 +8,8 @@ namespace VetClinic.DAL.Configurations
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
-
+            builder.Property(t => t.FirstName).HasMaxLength(30);
+            builder.Property(t => t.LastName).HasMaxLength(30);
             builder.Property(t => t.Email).HasMaxLength(50);
             builder.Property(t => t.NormalizedEmail).HasMaxLength(50);
             builder.Property(t => t.PasswordHash).HasMaxLength(300);

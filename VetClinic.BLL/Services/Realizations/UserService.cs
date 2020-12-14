@@ -36,6 +36,8 @@ namespace VetClinic.BLL.Services.Realizations
                     user = new User
                     {
                         UserName = inputUser.UserName,
+                        FirstName = inputUser.FirstName,
+                        LastName = inputUser.LastName,
                         Email = inputUser.Email,
                         PhoneNumber = inputUser.PhoneNumber,
                     };
@@ -76,6 +78,8 @@ namespace VetClinic.BLL.Services.Realizations
                 {
 
                     user.UserName = inputUser.UserName;
+                    user.FirstName = inputUser.FirstName;
+                    user.LastName = inputUser.LastName;
                     user.Email = inputUser.Email;
                     user.PhoneNumber = inputUser.PhoneNumber;
 

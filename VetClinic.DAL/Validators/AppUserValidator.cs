@@ -8,6 +8,8 @@ namespace VetClinic.DAL.Validators
         public AppUserValidator()
         {
             RuleFor(user => user.UserName).NotNull().MaximumLength(50);
+            RuleFor(user => user.FirstName).NotNull().MaximumLength(30);
+            RuleFor(user => user.LastName).NotNull().MaximumLength(30);
             RuleFor(user => user.Email).NotNull().EmailAddress().MaximumLength(50);
             RuleFor(user => user.NormalizedEmail).EmailAddress().MaximumLength(50);
             RuleFor(user => user.PhoneNumber).NotNull().MaximumLength(12);
