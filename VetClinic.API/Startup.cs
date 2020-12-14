@@ -9,6 +9,8 @@ using VetClinic.API.ExtensionMethods;
 using VetClinic.DAL;
 using VetClinic.DAL.Repositories.Interfaces;
 using VetClinic.DAL.Repositories.Realizations;
+using VetClinic.BLL.Services.Interfaces;
+using VetClinic.BLL.Services.Realizations;
 
 namespace VetClinic.API
 {
@@ -33,6 +35,7 @@ namespace VetClinic.API
             services.AddControllers();
 
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
+            services.AddScoped<IServiceService, ServiceService>();
 
             services.AddSwaggerConfig();
         }
