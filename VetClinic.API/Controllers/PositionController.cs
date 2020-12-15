@@ -20,11 +20,7 @@ namespace VetClinic.API.Controllers
             _mapper = mapper;
 
         }
-
-        /// <summary>
-        /// Get all posiotions that are avali
-        /// </summary>
-        /// <returns></returns>
+               
         [HttpGet]
         public async Task<ICollection<PositionDTO>> Get()
         {
@@ -36,7 +32,7 @@ namespace VetClinic.API.Controllers
         {
             var position = _mapper.Map<PositionDTO>(await _positionService.GetAsync(id));
             if (position == null)
-                return BadRequest();
+                return NotFound();
             return Ok(position);
         }
 
