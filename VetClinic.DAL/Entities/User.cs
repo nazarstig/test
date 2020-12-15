@@ -7,7 +7,7 @@ namespace VetClinic.DAL.Entities
         public string FirstName { get; set; }
         public string LastName { get; set; }
 
-        public Client Client { get; set; }
-        public Doctor Doctor { get; set; }
+        public Client? Client { get; set; }
+        public Doctor? Doctor { get; set; }
     }
 }

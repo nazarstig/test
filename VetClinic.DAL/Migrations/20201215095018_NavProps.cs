@@ -19,49 +19,49 @@ namespace VetClinic.DAL.Migrations
                 keyColumn: "Id",
                 keyValue: "1",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "c19d272b-e5ac-41ba-b952-1c92a493f7ae", "dcbfd902-ca32-4020-b1cc-c289bae26251" });
+                values: new object[] { "d22f25d4-fb32-4638-97c1-e5418b0fff4e", "256576c4-7aa7-4462-a3aa-50b7ce2cc5b0" });
 
             migrationBuilder.UpdateData(
                 table: "AspNetUsers",
                 keyColumn: "Id",
                 keyValue: "2",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "6a7f6e1e-c1dd-4d98-94b6-34317edbcc3b", "e9f014a1-fa2a-45f0-bd8c-62c8c18a9ef0" });
+                values: new object[] { "b0d50173-b420-42d0-9c2d-290f4d94082c", "7f8de133-7632-43c6-9970-605176aa3aad" });
 
             migrationBuilder.UpdateData(
                 table: "AspNetUsers",
                 keyColumn: "Id",
                 keyValue: "3",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "22720637-460f-4009-bb3e-ea673048e8e5", "0a4ee7cd-5386-42e2-b907-be805627e8e6" });
+                values: new object[] { "766b8940-4bb0-4801-8b33-75341b42dc18", "00e5b94a-ddd0-4897-8798-345d470d7a76" });
 
             migrationBuilder.UpdateData(
                 table: "AspNetUsers",
                 keyColumn: "Id",
                 keyValue: "4",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "5aa8fc1e-4f4d-4f6c-9ac6-62d90c42aa7a", "cee8ad93-40b0-439c-8c7f-91dc74243225" });
+                values: new object[] { "558784e4-123b-4f1b-acf4-94051f99f3f5", "9ce1574c-6ab7-4171-8c92-57be445b21a0" });
 
             migrationBuilder.UpdateData(
                 table: "AspNetUsers",
                 keyColumn: "Id",
                 keyValue: "5",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "ce59b9c0-31c6-406e-ae43-db16eb794b27", "192a664d-cb13-48e4-a259-400c1f7ae6bb" });
+                values: new object[] { "cd2bb144-b8fc-4572-a4b9-cf38d879e316", "cfc6f287-96af-4141-b7bc-bb47f3a1eabd" });
 
             migrationBuilder.UpdateData(
                 table: "AspNetUsers",
                 keyColumn: "Id",
                 keyValue: "6",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "fd3b6a21-b998-405e-b0f0-1f9e5a489d72", "3eb3bbb0-a463-401c-bd41-0b4c0c215ab5" });
+                values: new object[] { "370a33e1-51cb-4fb7-93cb-101176dc4eab", "ea0668ee-fc18-4a94-8101-aeecee0a0a34" });
 
             migrationBuilder.UpdateData(
                 table: "AspNetUsers",
                 keyColumn: "Id",
                 keyValue: "7",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "3813dad5-779d-4b7a-bf8d-a674a0528761", "26045be3-eac8-4a21-8fc7-6b9adc22beef" });
+                values: new object[] { "1581d609-d35e-4266-aa27-ba91d51a6806", "9e2f88b3-b896-4f6e-b251-bb9ae717308d" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Doctors_UserId",
