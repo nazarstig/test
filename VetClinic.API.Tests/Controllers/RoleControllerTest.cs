@@ -10,13 +10,14 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using VetClinic.API.Controllers;
 using Xunit;
+using VetClinic.API.DTO;
 
 namespace VetClinic.API.Tests.Controllers
 {
     public class RoleControllerTest 
     {
         [Fact]
-        public async Task Get_NoParams_ReturnAllRolesInJson()
+        public async Task Index_NoParams_ReturnOk()
         {
             //arrange
             var roleStore = new Mock<IRoleStore<IdentityRole>>();
@@ -26,7 +27,7 @@ namespace VetClinic.API.Tests.Controllers
 
 
             //act
-            var result = controller.Get();
+            var result = controller.Index();
             var contentResult = result as ObjectResult;
 
             //assert
@@ -36,7 +37,7 @@ namespace VetClinic.API.Tests.Controllers
         }
 
         [Fact]
-        public async Task Get_Id_ReturnRoleInJson()
+        public async Task Get_Id_ReturnOk()
         {
             //arrange
             var roleStore = new Mock<IRoleStore<IdentityRole>>();
@@ -49,7 +50,7 @@ namespace VetClinic.API.Tests.Controllers
 
 
             //act
-            var result = await controller.Get("LOL");
+            var result = await controller.Show("LOL");
             var contentResult = result as ObjectResult;
 
             //assert
@@ -61,7 +62,7 @@ namespace VetClinic.API.Tests.Controllers
 
 
         [Fact]
-        public async Task Post_Id_ReturnCreated()
+        public async Task Create_RoleDTO_ReturnCreated()
         {
             //arrange
             var roleStore = new Mock<IRoleStore<IdentityRole>>();
@@ -74,13 +75,55 @@ namespace VetClinic.API.Tests.Controllers
 
 
             //act
-            var result = await controller.Create(new DTO.RoleDto());
+            var result = await controller.Create(new RoleDto());
             var contentResult = result as ObjectResult;
 
             //assert
             Assert.NotNull(result);
             Assert.IsType<CreatedResult>(result);
             Assert.NotEmpty(contentResult.Value.ToString());
+        }
+
+        [Fact]
+        public async Task Update_IdDto_ReturnNoContent()
+        {
+            //arrange
+            var role = new IdentityRole();
+            var roleStore = new Mock<IRoleStore<IdentityRole>>();
+            var roleManagerMock = new Mock<RoleManager<IdentityRole>>(roleStore.Object, null, null, null, null);
+            roleManagerMock.Setup(c => c.FindByIdAsync(It.IsAny<string>()))
+                .ReturnsAsync(role);
+
+            roleManagerMock.Setup(c => c.UpdateAsync(It.IsAny<IdentityRole>()))
+                .ReturnsAsync(IdentityResult.Success);
+
+            var controller = new RoleController(roleManagerMock.Object);
+
+            //act
+            var result = await controller.Update(It.IsAny<string>(), new RoleDto());
+
+            //assign
+            Assert.NotNull(result);
+            Assert.IsType<NoContentResult>(result);
+        }
+
+        [Fact]
+        public async Task Destroy_Id_ReturnOk()
+        {
+            //arrange
+            var roleStore = new Mock<IRoleStore<IdentityRole>>();
+            var roleManagerMock = new Mock<RoleManager<IdentityRole>>(roleStore.Object, null, null, null, null);
+            roleManagerMock.Setup(c => c.DeleteAsync(It.IsAny<IdentityRole>()))
+                .ReturnsAsync(IdentityResult.Success);
+
+            var controller = new RoleController(roleManagerMock.Object);
+
+            //act
+            var result = await controller.Destroy(It.IsAny<string>());
+
+            //assign
+            Assert.NotNull(result);
+            Assert.IsType<OkObjectResult>(result);
         }
     }
 }

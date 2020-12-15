@@ -43,10 +43,13 @@ namespace VetClinic.API
                 options.UseSqlServer(connection, builder =>
                     builder.MigrationsAssembly("VetClinic.DAL")));
 
-            services.AddIdentity<User, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationContext>()
+            IdentityBuilder builder = services.AddIdentityCore<User>();
+            builder = new IdentityBuilder(typeof(User), typeof(IdentityRole), builder.Services);
+            builder.AddEntityFrameworkStores<ApplicationContext>()
                 .AddDefaultTokenProviders();
 
+            services.AddScoped<IRoleValidator<IdentityRole>, RoleValidator<IdentityRole>>();
+            services.AddScoped<RoleManager<IdentityRole>, RoleManager<IdentityRole>>();
             services.AddAutoMapper(typeof(Startup));
 
             services.AddControllers();
