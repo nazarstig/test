@@ -29,23 +29,28 @@ namespace VetClinic.API
 
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddAuthentication("RefAndJWTToken")
-             .AddIdentityServerAuthentication("RefAndJWTToken", options =>
-             {
-                 options.Authority = "https://localhost:5001";
-                 options.ApiName = "VetClinicApi";
-                 options.ApiSecret = "angular_secret";
-             });
+            .AddIdentityServerAuthentication("RefAndJWTToken", options =>
+            {
+                options.Authority = "https://localhost:5001";
+                options.ApiName = "VetClinicApi";
+                options.ApiSecret = "angular_secret";
+            });
 
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<ApplicationContext>(options =>
                 options.UseSqlServer(connection, builder =>
                     builder.MigrationsAssembly("VetClinic.DAL")));
+           
 
-            services.AddIdentity<User, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationContext>()
+            IdentityBuilder builder = services.AddIdentityCore<User>();
+            builder = new IdentityBuilder(typeof(User), typeof(IdentityRole), builder.Services);
+            builder.AddEntityFrameworkStores<ApplicationContext>()
                 .AddDefaultTokenProviders();
+
+            services.AddScoped<IRoleValidator<IdentityRole>, RoleValidator<IdentityRole>>();
+            services.AddScoped<RoleManager<IdentityRole>, RoleManager<IdentityRole>>();
+
 
             services.AddAutoMapper(typeof(Startup));
 
