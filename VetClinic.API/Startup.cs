@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -9,12 +9,7 @@ using VetClinic.API.ExtensionMethods;
 using VetClinic.DAL;
 using VetClinic.DAL.Repositories.Interfaces;
 using VetClinic.DAL.Repositories.Realizations;
-using VetClinic.DAL.Entities;
-using Microsoft.AspNetCore.Identity;
-using VetClinic.BLL.Services.Interfaces;
-using VetClinic.BLL.Services.Realizations;
-using FluentValidation;
-using VetClinic.DAL.Validators;
+using VetClinic.BLL.Services;
 
 namespace VetClinic.API
 {
@@ -56,6 +51,8 @@ namespace VetClinic.API
             services.AddScoped<AbstractValidator<User>, AppUserValidator>();
 
             services.AddSwaggerConfig();
+
+            services.AddTransient<ProcedureService>();
         }
 
 
@@ -67,6 +64,12 @@ namespace VetClinic.API
             }
 
             app.UseRouting();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Procedure}/{action=GetProcedure}/{id=3}");
+            });
 
             app.UseAuthentication();
 
@@ -76,6 +79,16 @@ namespace VetClinic.API
             {
                 endpoints.MapControllers();
             });
+
+       
+            //app.UseEndpoints(endpoints =>
+            //{
+            //    // ����������� ���������
+            //    endpoints.MapControllerRoute(
+            //        name: "default",
+            //        pattern: "{controller=Home}/{action=Index}/{id?}");
+            //});
+
 
             app.UseCustomSwaggerConfig();
 
