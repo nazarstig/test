@@ -19,7 +19,7 @@ namespace VetClinic.BLL.Tests.Services
             //arrange
             var fixture = new Fixture().Customize(new AutoMoqCustomization());
 
-            var user = fixture.Create<User>();
+            var user = new User() { };
             var roles = fixture.CreateMany<IdentityRole>();
             
             var store = new Mock<IUserStore<User>>();
@@ -43,7 +43,7 @@ namespace VetClinic.BLL.Tests.Services
             //arrange
             var fixture = new Fixture().Customize(new AutoMoqCustomization());
 
-            var user = fixture.Create<User>();
+            var user = new User() { };
             var roles = fixture.CreateMany<IdentityRole>();
 
             var store = new Mock<IUserStore<User>>();
@@ -72,7 +72,7 @@ namespace VetClinic.BLL.Tests.Services
             //arrange
             var fixture = new Fixture().Customize(new AutoMoqCustomization());
 
-            var user = fixture.Create<User>();
+            var user = new User() { };
             var roles = fixture.CreateMany<IdentityRole>();
 
             var store = new Mock<IUserStore<User>>();
@@ -106,7 +106,7 @@ namespace VetClinic.BLL.Tests.Services
             //arrange
             var fixture = new Fixture().Customize(new AutoMoqCustomization());
 
-            var user = fixture.Create<User>();
+            var user = new User() { };
             var roles = fixture.CreateMany<IdentityRole>();
 
             var store = new Mock<IUserStore<User>>();
@@ -145,7 +145,7 @@ namespace VetClinic.BLL.Tests.Services
             //arrange
             var fixture = new Fixture().Customize(new AutoMoqCustomization());
 
-            var user = fixture.Create<User>();
+            var user = new User() { };
             var roles = fixture.CreateMany<IdentityRole>();
 
             var store = new Mock<IUserStore<User>>();
@@ -169,7 +169,7 @@ namespace VetClinic.BLL.Tests.Services
             //arrange
             var fixture = new Fixture().Customize(new AutoMoqCustomization());
 
-            var user = fixture.Create<User>();
+            var user = new User() { };
             var roles = fixture.CreateMany<IdentityRole>();
 
             var store = new Mock<IUserStore<User>>();
