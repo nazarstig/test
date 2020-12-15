@@ -9,6 +9,12 @@ using VetClinic.API.ExtensionMethods;
 using VetClinic.DAL;
 using VetClinic.DAL.Repositories.Interfaces;
 using VetClinic.DAL.Repositories.Realizations;
+using VetClinic.DAL.Entities;
+using Microsoft.AspNetCore.Identity;
+using VetClinic.BLL.Services.Interfaces;
+using VetClinic.BLL.Services.Realizations;
+using FluentValidation;
+using VetClinic.DAL.Validators;
 
 namespace VetClinic.API
 {
@@ -23,16 +29,31 @@ namespace VetClinic.API
 
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddAuthentication("RefAndJWTToken")
+             .AddIdentityServerAuthentication("RefAndJWTToken", options =>
+             {
+                 options.Authority = "https://localhost:5001";
+                 options.ApiName = "VetClinicApi";
+                 options.ApiSecret = "angular_secret";
+             });
+
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<ApplicationContext>(options =>
                 options.UseSqlServer(connection, builder =>
                     builder.MigrationsAssembly("VetClinic.DAL")));
+
+            services.AddIdentity<User, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationContext>()
+                .AddDefaultTokenProviders();
 
             services.AddAutoMapper(typeof(Startup));
 
             services.AddControllers();
 
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<AbstractValidator<User>, AppUserValidator>();
 
             services.AddSwaggerConfig();
         }
@@ -47,9 +68,18 @@ namespace VetClinic.API
 
             app.UseRouting();
 
-            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+            app.UseAuthentication();
+
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
 
             app.UseCustomSwaggerConfig();
+
+            app.SeedUsersWithRoles(Configuration);
         }
     }
 }
