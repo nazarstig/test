@@ -22,16 +22,18 @@ namespace VetClinic.API.Controllers
         }
                
         [HttpGet]
-        public async Task<ICollection<PositionDTO>> Get()
+        public async Task<ActionResult<ICollection<PositionDTO>>> Get()
         {
-            return _mapper.Map<ICollection<PositionDTO>>(await _positionService.GetAsync());
+            var positionsDTO= _mapper.Map<ICollection<PositionDTO>>(await _positionService.GetAsync());
+            return Ok(positionsDTO);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<PositionDTO>> Get(int id)
         {
-            var position = _mapper.Map<PositionDTO>(await _positionService.GetAsync(id));
-            if (position == null)
+            var position = await _positionService.GetAsync(id);
+            var positionDTO = _mapper.Map<PositionDTO>(position);
+            if (positionDTO == null)
                 return NotFound();
             return Ok(position);
         }
@@ -60,8 +62,8 @@ namespace VetClinic.API.Controllers
         {   
             var successDelete = await _positionService.Remove(id);
             if (successDelete)
-                return NotFound();
-            return NoContent();
+                return NoContent();
+            return NotFound();
         }
 
     }

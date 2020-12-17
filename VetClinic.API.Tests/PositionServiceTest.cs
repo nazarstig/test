@@ -13,7 +13,7 @@ namespace VetClinic.API.Tests
     public class PositionServiceTest
     {      
         [Theory, AutoMoqData]
-        public async Task PositionService_GetEqualCount([Frozen]List<Position> positions,[Frozen] Mock<IRepositoryWrapper> repositoryMock )
+        public async Task GetAll_EqualCount([Frozen]List<Position> positions,[Frozen] Mock<IRepositoryWrapper> repositoryMock )
         {
             // Arrange
             repositoryMock.Setup(x => x.PositionRepository
@@ -31,7 +31,7 @@ namespace VetClinic.API.Tests
         }
 
         [Theory, AutoMoqData]
-        public async Task PositionService_GetPositionById_ReturnsPositionWithRequestedId([Frozen] Position position, [Frozen] Mock<IRepositoryWrapper> repositoryMock)
+        public async Task GetById_PositionId_ReturnsPositionWithRequestedId([Frozen] Position position, [Frozen] Mock<IRepositoryWrapper> repositoryMock)
         {
             // Arrange
             int id = position.Id;
@@ -50,7 +50,7 @@ namespace VetClinic.API.Tests
         }
 
         [Theory, AutoMoqData]
-        public async Task PositionService_AddPosition_ReturnsAdedPosition([Frozen] Position position, [Frozen] Mock<IRepositoryWrapper> repositoryMock)
+        public async Task Add_Position_ReturnsAdedPosition([Frozen] Position position, [Frozen] Mock<IRepositoryWrapper> repositoryMock)
         {
             // Arrange            
             repositoryMock.Setup(x => x.PositionRepository
@@ -68,7 +68,7 @@ namespace VetClinic.API.Tests
         }
 
         [Theory, AutoMoqData]
-        public async Task PositionService_RemovePosition_ReturnsTrue([Frozen] Position position, [Frozen] Mock<IRepositoryWrapper> repositoryMock)
+        public async Task Remove_Position_ReturnsTrue([Frozen] Position position, [Frozen] Mock<IRepositoryWrapper> repositoryMock)
         {
             // Arrange
             int id = position.Id;
@@ -87,7 +87,7 @@ namespace VetClinic.API.Tests
         }
 
         [Theory, AutoMoqData]
-        public async Task PositionService_RemovePosition_ReturnsFalce([Frozen] Mock<IRepositoryWrapper> repositoryMock)
+        public async Task Removee_PositionId_ReturnsFalce([Frozen] Mock<IRepositoryWrapper> repositoryMock)
         {
             // Arrange    
             int id = 1;
@@ -105,7 +105,7 @@ namespace VetClinic.API.Tests
         }
 
         [Theory, AutoMoqData]
-        public async Task PositionService_UpdateNullPosition_ReturnsFalce([Frozen] Mock<IRepositoryWrapper> repositoryMock)
+        public async Task Update_NullPosition_ReturnsFalce([Frozen] Mock<IRepositoryWrapper> repositoryMock)
         {
             // Arrange             
             Position position = null;            
@@ -120,7 +120,7 @@ namespace VetClinic.API.Tests
         }
 
         [Theory, AutoMoqData]
-        public async Task PositionService_UpdatePosition_ReturnsTrue([Frozen] Position position, [Frozen] Mock<IRepositoryWrapper> repositoryMock)
+        public async Task Update_Position_ReturnsTrue([Frozen] Position position, [Frozen] Mock<IRepositoryWrapper> repositoryMock)
         {
             // Arrange      
             int id = position.Id;
@@ -138,7 +138,7 @@ namespace VetClinic.API.Tests
         }
 
         [Theory, AutoMoqData]
-        public async Task PositionService_UpdatePositionUnableId_ReturnsFalce([Frozen] Position position, [Frozen] Mock<IRepositoryWrapper> repositoryMock)
+        public async Task Update_PositionUnableId_ReturnsFalce([Frozen] Position position, [Frozen] Mock<IRepositoryWrapper> repositoryMock)
         {
             // Arrange      
             int id = position.Id;
