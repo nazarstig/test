@@ -43,13 +43,13 @@ namespace VetClinic.API.Controllers
             return Ok(position);
         }
 
-        [HttpPut]
-        public async Task<ActionResult<PositionDTO>> Put(PositionDTO position)
-        {
-            var successUpdate = await _positionService.Update(_mapper.Map<Position>(position));
+        [HttpPut("{id}")]
+        public async Task<ActionResult<PositionDTO>> Put(PositionDTO position,int id)
+        {            
+            var successUpdate = await _positionService.Update((_mapper.Map<Position>(position)),id);
             if (successUpdate)
             {
-                return Ok(position);
+                return NoContent();
             }
             return NotFound();
         }
@@ -61,7 +61,7 @@ namespace VetClinic.API.Controllers
             var successDelete = await _positionService.Remove(id);
             if (successDelete)
                 return NotFound();
-            return Ok();
+            return NoContent();
         }
 
     }

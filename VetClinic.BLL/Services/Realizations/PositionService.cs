@@ -21,8 +21,9 @@ namespace VetClinic.BLL.Services.Realizations
         }
 
         public async Task<Position> GetAsync(int positionId)
-        {
-            return await _repositoryWrapper.PositionRepository.GetFirstOrDefaultAsync(p => p.Id == positionId);
+        {            
+           return await _repositoryWrapper.PositionRepository.GetFirstOrDefaultAsync(p => p.Id == positionId);
+                      
         }
 
         public async Task<ICollection<Position>> GetAsync()
@@ -31,25 +32,27 @@ namespace VetClinic.BLL.Services.Realizations
 
         }
        
-        public async Task<bool> Remove(int positionId)
+        public async Task<bool> Remove(int id)
         {
-            var position = await _repositoryWrapper.PositionRepository.GetFirstOrDefaultAsync(p => p.Id == positionId);
-            if (position == null)
+            var position = await _repositoryWrapper.PositionRepository.GetFirstOrDefaultAsync(p => p.Id == id);
+            if (position != null)
             {
-                return false;
+                _repositoryWrapper.PositionRepository.Remove(position);
+                return true;
             }
-            _repositoryWrapper.PositionRepository.Remove(position);
-            return true;
+
+            return false;
 
         }
 
-        public async Task<bool> Update(Position position)
+        public async Task<bool> Update(Position position, int id)
         {
             if (position == null)
                 return false;
 
-            if (await _repositoryWrapper.PositionRepository.IsAnyAsync(p => p.Id == position.Id))
+            if (await _repositoryWrapper.PositionRepository.IsAnyAsync(p => p.Id == id))
             {
+                position.Id = id;
                 _repositoryWrapper.PositionRepository.Update(position);
                 await _repositoryWrapper.SaveAsync();
                 return true;

@@ -1,74 +1,161 @@
-﻿using Autofac.Extras.Moq;
+﻿using AutoFixture.Xunit2;
 using Moq;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using VetClinic.BLL.Services.Realizations;
 using VetClinic.DAL.Entities;
 using VetClinic.DAL.Repositories.Interfaces;
+
 using Xunit;
 
 namespace VetClinic.API.Tests
 {
     public class PositionServiceTest
-    {   [Fact]
-        public void GetPositionValidCall()
+    {      
+        [Theory, AutoMoqData]
+        public async Task PositionService_GetEqualCount([Frozen]List<Position> positions,[Frozen] Mock<IRepositoryWrapper> repositoryMock )
         {
-            using (var mock = AutoMock.GetLoose())
-            {
-                mock.Mock<IRepositoryWrapper>()
-                    .Setup( x =>  x.PositionRepository.GetAsync(null,null,null,false))
-                    .Returns(Task.Run(()=>CreatePositionsList()));
+            // Arrange
+            repositoryMock.Setup(x => x.PositionRepository
+            .GetAsync(null, null, null, false))
+                .ReturnsAsync(positions);
+             var positionService = new PositionService(repositoryMock.Object);
 
-                var cls = mock.Create<PositionService>();
-                var expected =Task.Run(()=> CreatePositionsList());
+            // Act
+            var actual = await positionService.GetAsync();
 
-                var actual = cls.GetAsync();
-
-                Assert.True(actual != null);
-                Assert.Equal(expected.Result.Count, actual.Result.Count);
-
-                for (int i = 0; i < expected.Result.Count; i++)
-                { 
-                    Assert.Equal(expected.Result.ToList()[i].PositionName, actual.Result.ToList()[i].PositionName);
-                    Assert.Equal(expected.Result.ToList()[i].Salary, actual.Result.ToList()[i].Salary);
-                }
-            }
+            // Assert
+            Assert.Equal(positions.Count, actual.Count);
+            repositoryMock.Verify(m => m.PositionRepository.GetAsync(null,null,null,false), Times.Once);
+            
         }
 
-        [Fact]
-        public void AddPositionValidCall()
+        [Theory, AutoMoqData]
+        public async Task PositionService_GetPositionById_ReturnsPositionWithRequestedId([Frozen] Position position, [Frozen] Mock<IRepositoryWrapper> repositoryMock)
         {
-            using (var mock = AutoMock.GetLoose())
-            {
-                var position = CreatePositionsList().ToList<Position>()[0];
+            // Arrange
+            int id = position.Id;
+            repositoryMock.Setup(x => x.PositionRepository
+            .GetFirstOrDefaultAsync(p=>p.Id==id, null, false))
+                .ReturnsAsync(position);
+            var positionService = new PositionService(repositoryMock.Object);
 
-                mock.Mock<IRepositoryWrapper>()
-                    .Setup(x => x.PositionRepository.Add(position));                  
+            // Act
+            var actual = await positionService.GetAsync(id);
 
-                var cls = mock.Create<PositionService>();
-                cls.Add(position);
+            // Assert
+            Assert.Equal(position.Id, actual.Id);
+            repositoryMock.Verify(m => m.PositionRepository.GetFirstOrDefaultAsync(p => p.Id == id, null, false), Times.Once);
 
-                mock.Mock<IRepositoryWrapper>()
-                    .Verify(x => x.PositionRepository.Add(position), Times.Exactly(1));             
-
-            }
         }
 
-        private ICollection<Position> CreatePositionsList()
+        [Theory, AutoMoqData]
+        public async Task PositionService_AddPosition_ReturnsAdedPosition([Frozen] Position position, [Frozen] Mock<IRepositoryWrapper> repositoryMock)
         {
-            List<Position> output = new List<Position>
-            {
-            new Position{ PositionName="Golova", Salary=1110},
-            new Position{ PositionName="Noga", Salary=1240},
-            new Position{ PositionName="Ruka", Salary=1210},
-            new Position{ PositionName="Golova", Salary=1420}
-            };
-            return output;
+            // Arrange            
+            repositoryMock.Setup(x => x.PositionRepository
+            .Add(position));           
+            var positionService = new PositionService(repositoryMock.Object);
+
+            // Act
+            var actual = await positionService.Add(position);
+
+            // Assert
+            Assert.Equal(position.Id, actual.Id);
+            repositoryMock.Verify(m => m.PositionRepository.Add(position), Times.Once);
+            repositoryMock.Verify(m => m.SaveAsync(), Times.Once);
+
         }
 
+        [Theory, AutoMoqData]
+        public async Task PositionService_RemovePosition_ReturnsTrue([Frozen] Position position, [Frozen] Mock<IRepositoryWrapper> repositoryMock)
+        {
+            // Arrange
+            int id = position.Id;
+            repositoryMock.Setup(x => x.PositionRepository
+            .GetFirstOrDefaultAsync(p=>p.Id==id, null, false))
+                .ReturnsAsync(position);
+            var positionService = new PositionService(repositoryMock.Object);
+
+            // Act
+            var actual = await positionService.Remove(position.Id);
+
+            // Assert      
+            Assert.True(actual);
+            repositoryMock.Verify(m => m.PositionRepository.Remove(position), Times.Once);            
+
+        }
+
+        [Theory, AutoMoqData]
+        public async Task PositionService_RemovePosition_ReturnsFalce([Frozen] Mock<IRepositoryWrapper> repositoryMock)
+        {
+            // Arrange    
+            int id = 1;
+            repositoryMock.Setup(x => x.PositionRepository
+            .GetFirstOrDefaultAsync(p => p.Id == id, null, false))
+                .ReturnsAsync(value: null);
+            var positionService = new PositionService(repositoryMock.Object);
+
+            // Act
+            var actual = await positionService.Remove(id);
+
+            // Assert      
+            Assert.False(actual);
+            repositoryMock.Verify(m => m.PositionRepository.Remove(null), Times.Never);
+        }
+
+        [Theory, AutoMoqData]
+        public async Task PositionService_UpdateNullPosition_ReturnsFalce([Frozen] Mock<IRepositoryWrapper> repositoryMock)
+        {
+            // Arrange             
+            Position position = null;            
+            var positionService = new PositionService(repositoryMock.Object);
+
+            // Act
+            var actual = await positionService.Update(position,1);
+
+            // Assert      
+            Assert.False(actual);
+            repositoryMock.Verify(m => m.PositionRepository.Update(null), Times.Never);
+        }
+
+        [Theory, AutoMoqData]
+        public async Task PositionService_UpdatePosition_ReturnsTrue([Frozen] Position position, [Frozen] Mock<IRepositoryWrapper> repositoryMock)
+        {
+            // Arrange      
+            int id = position.Id;
+            repositoryMock.Setup(m => m.PositionRepository
+            .IsAnyAsync(p => p.Id == id))
+                .ReturnsAsync(true);                      
+            var positionService = new PositionService(repositoryMock.Object);
+
+            // Act
+            var actual = await positionService.Update(position, id);
+
+            // Assert      
+            Assert.True(actual);
+            repositoryMock.Verify(m => m.PositionRepository.Update(position), Times.Once);
+        }
+
+        [Theory, AutoMoqData]
+        public async Task PositionService_UpdatePositionUnableId_ReturnsFalce([Frozen] Position position, [Frozen] Mock<IRepositoryWrapper> repositoryMock)
+        {
+            // Arrange      
+            int id = position.Id;
+            repositoryMock.Setup(m => m.PositionRepository
+            .IsAnyAsync(p => p.Id == id))
+                .ReturnsAsync(false);
+            var positionService = new PositionService(repositoryMock.Object);
+
+            // Act
+            var actual = await positionService.Update(position, id);
+
+            // Assert      
+            Assert.False(actual);
+            repositoryMock.Verify(m => m.PositionRepository.Update(position), Times.Never);
+        }
 
     }
 
-    
+
 }
