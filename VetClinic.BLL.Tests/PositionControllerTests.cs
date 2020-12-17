@@ -41,34 +41,11 @@ namespace VetClinic.API.Tests
 
 
         [Theory, AutoMoqData]
-        public async Task GetById_PositionId_ReturnsNotFound( 
-           [Frozen] Mock<IPositionService> positionServiceMock,
-           [Frozen] Mock<IMapper> mapper,
-           Position position = null
-            )
-        {
-            // Arrange           
-            positionServiceMock.Setup(p => p.GetAsync(6))
-                .ReturnsAsync((Position)null);
-            mapper.Setup(m => m.Map<PositionDTO>(position))
-                .Returns((PositionDTO)null);
-
-            var positionController = new PositionController(positionServiceMock.Object, mapper.Object);
-
-            // Act
-            var actualResult = await positionController.Get(6);
-
-            // Assert                          
-            Assert.True(actualResult.Result is NotFoundResult);
-            positionServiceMock.Verify(m => m.GetAsync(6), Times.Once);
-        }
-
-        [Theory, AutoMoqData]
         public async Task GetById_PositionId_ReturnsPositionWithRequestedId(
            [Frozen] Position position,
            [Frozen] PositionDTO positionDTO,
            [Frozen] Mock<IPositionService> positionServiceMock,
-           [Frozen] Mock<IMapper> mapper           
+           [Frozen] Mock<IMapper> mapper
             )
         {
             // Arrange           
@@ -76,11 +53,11 @@ namespace VetClinic.API.Tests
                 .ReturnsAsync(position);
             mapper.Setup(m => m.Map<PositionDTO>(position))
                 .Returns(positionDTO);
-            
+
             var positionController = new PositionController(positionServiceMock.Object, mapper.Object);
 
             // Act
-            var actualResult = await positionController.Get(position.Id) ;
+            var actualResult = await positionController.Get(position.Id);
 
             // Assert    
             var result = actualResult.Result as OkObjectResult;
@@ -90,8 +67,29 @@ namespace VetClinic.API.Tests
         }
 
 
-        
+        [Fact]
+        public async Task GetById_PositionId_ReturnsNotFound()
+        {
+            // Arrange     
+            var positionServiceMock =new Mock<IPositionService>();
+            var mapper = new Mock<IMapper>();
+            Position position = new Position { Id = 1 };
+            PositionDTO positionDTO = new PositionDTO { Id = 1 };            
+            positionServiceMock.Setup(p => p.GetAsync(position.Id))
+                .ReturnsAsync(null as Position);
+            mapper.Setup(m => m.Map<PositionDTO>(position))
+                .Returns(positionDTO);
 
+            var positionController = new PositionController(positionServiceMock.Object, mapper.Object);
+
+            // Act
+            var actualResult = await positionController.Get(position.Id);
+
+            // Assert                          
+            Assert.True(actualResult.Result is NotFoundResult);
+            positionServiceMock.Verify(m => m.GetAsync(position.Id), Times.Once);
+        }
+    
 
         [Theory, AutoMoqData]
         public async Task Post_PositionDTO_ReturnsPositionDTO(

@@ -35,7 +35,7 @@ namespace VetClinic.API.Controllers
             var positionDTO = _mapper.Map<PositionDTO>(position);
             if (positionDTO == null)
                 return NotFound();
-            return Ok(position);
+            return Ok(positionDTO);
         }
 
         [HttpPost]
