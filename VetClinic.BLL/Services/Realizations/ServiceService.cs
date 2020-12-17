@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using VetClinic.BLL.Services.Interfaces;
 using VetClinic.DAL.Entities;
@@ -16,47 +15,43 @@ namespace VetClinic.BLL.Services.Realizations
             _repositoryWrapper = repositoryWrapper;
         }
 
-        public async Task<ICollection<Service>> GetAllServices()
+        public async Task<ICollection<Service>> GetAllServicesAsync()
         {
-            return await _repositoryWrapper.ServiceRepository.GetAsync(
-                filter: s => s.Id > 2,
-                include: source => source.Include(s => s.Appointments));
+            return await _repositoryWrapper.ServiceRepository.GetAsync();
         }
 
-        public async Task<Service> GetServiceById(int id)
+        public async Task<Service> GetServiceByIdAsync(int id)
         {
             return await _repositoryWrapper.ServiceRepository.GetFirstOrDefaultAsync(
-                filter: s => s.Id == id, 
-                include: source => source.Include(s => s.Appointments));
+                filter: s => s.Id == id);
         }
 
-        public async Task<Service> Add(Service service)
+        public async Task<Service> AddAsync(Service service)
         {
             _repositoryWrapper.ServiceRepository.Add(service);
             await _repositoryWrapper.SaveAsync();
             return service;
         }
 
-        public async Task<bool> Update(Service service)
+        public async Task<bool> UpdateAsync(int id, Service service)
         {
             var serviceUpdated = await _repositoryWrapper.ServiceRepository.GetFirstOrDefaultAsync(
-               filter: s => s.Id == service.Id);
+               filter: s => s.Id == id);
 
             if (serviceUpdated == null)
             {
                 return false;
             }
 
-            serviceUpdated.Id = service.Id;
             serviceUpdated.ServiceName = service.ServiceName;
             serviceUpdated.Appointments = service.Appointments;
 
-              _repositoryWrapper.ServiceRepository.Update(serviceUpdated);
-             int affectedRows =  await _repositoryWrapper.SaveAsync();
-             return affectedRows > 0;
+            _repositoryWrapper.ServiceRepository.Update(serviceUpdated);
+            int affectedRows =  await _repositoryWrapper.SaveAsync();
+            return affectedRows > 0;
         }
 
-        public async Task<bool> Remove(int serviceId)
+        public async Task<bool> RemoveAsync(int serviceId)
         {
             var service = await _repositoryWrapper.ServiceRepository.GetFirstOrDefaultAsync(
                 filter: s => s.Id == serviceId);

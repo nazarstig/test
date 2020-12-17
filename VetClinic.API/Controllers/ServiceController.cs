@@ -23,18 +23,24 @@ namespace VetClinic.API.Controllers
 
         //GET api/service
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<ActionResult<ICollection<ServiceDTO>>> Get()
         {
-            var services = await _serviceService.GetAllServices();
+            var services = await _serviceService.GetAllServicesAsync();
             var servicesDTO = _mapper.Map<ICollection<ServiceDTO>>(services);
             return Ok(servicesDTO);
         }
 
         // GET api/service/3
-        [HttpGet("{serviceId:min(1)}")]
-        public async Task<ActionResult<ServiceDTO>> Get([FromRoute] int serviceId)
+        [HttpGet("{id:min(1)}")]
+        public async Task<ActionResult<ServiceDTO>> Get([FromRoute] int id)
         {
-            var service = await _serviceService.GetServiceById(serviceId);
+            var service = await _serviceService.GetServiceByIdAsync(id);
+
+            if(service == null)
+            {
+                return NotFound();
+            }
+
             var serviceDTO = _mapper.Map<ServiceDTO>(service);
             return Ok(serviceDTO);
         }
@@ -44,20 +50,22 @@ namespace VetClinic.API.Controllers
         public async Task<ActionResult<ServiceDTO>> PostService([FromBody] ServiceDTO serviceDTO)
         {
             var service = _mapper.Map<Service>(serviceDTO);
-            var insertedService  =  await _serviceService.Add(service);
-            return Ok(insertedService.Id);
+            var insertedService  =  await _serviceService.AddAsync(service);
+            var insertedServiceDTO = _mapper.Map<ServiceDTO>(insertedService);
+            return CreatedAtAction("Get", new { id = insertedServiceDTO.Id }, insertedServiceDTO);
         }
 
-        // PUT api/service
-        [HttpPut]
-        public async Task<IActionResult> UpdateService(ServiceDTO serviceDTO)
+        // PUT api/service/id
+        [HttpPut("{id:min(1)}")]
+        public async Task<IActionResult> UpdateService([FromRoute] int id, [FromBody]ServiceDTO serviceDTO)
         {
             var service = _mapper.Map<Service>(serviceDTO);
-            var updated = await _serviceService.Update(service);
+            var updated = await _serviceService.UpdateAsync(id, service);
             if (!updated)
             {
                 return NotFound();
             }
+            
             return NoContent();
         }
 
@@ -65,13 +73,14 @@ namespace VetClinic.API.Controllers
         [HttpDelete("{id:min(1)}")]
         public async Task<IActionResult> DeleteService(int id)
         {
-            var service = await _serviceService.Remove(id);
+            var service = await _serviceService.RemoveAsync(id);
             if(!service)
             {
                 return NotFound();
             }
-
-            return Ok();
+            
+            return NoContent();
         }
+       
     }
 }

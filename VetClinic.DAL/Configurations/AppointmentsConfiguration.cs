@@ -8,9 +8,7 @@ namespace VetClinic.DAL.Configurations
     public class AppointmentsConfiguration : IEntityTypeConfiguration<Appointment>
     {
         public void Configure(EntityTypeBuilder<Appointment> builder)
-        {
-            builder.HasOne(s => s.Service).WithMany(a => a.Appointments).OnDelete(DeleteBehavior.SetNull);
-
+        {          
             builder.HasData(
                 new Appointment[]
                 {

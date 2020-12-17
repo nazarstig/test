@@ -9,7 +9,6 @@ namespace VetClinic.API.Mapping
         public ServiceProfile()
         {
             CreateMap<Service, ServiceDTO>().ReverseMap();
-
         }
     }
 }
