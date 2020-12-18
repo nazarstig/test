@@ -7,6 +7,8 @@ namespace VetClinic.API.Tests
 {
     internal class AutoMoqDataAttribute : AutoDataAttribute
     {
+
+
         public AutoMoqDataAttribute() : base(() =>
         {
             var fixture = new Fixture().Customize(new CompositeCustomization(
@@ -15,10 +17,10 @@ namespace VetClinic.API.Tests
 
             fixture.Behaviors.OfType<ThrowingRecursionBehavior>().ToList().ForEach(b => fixture.Behaviors.Remove(b));
             fixture.Behaviors.Add(new OmitOnRecursionBehavior());
-
+            
             return fixture;
         })
-    {
-    }
+        {            
+        }
 }
 }
