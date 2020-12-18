@@ -11,6 +11,8 @@ using VetClinic.DAL.Repositories.Interfaces;
 using VetClinic.DAL.Repositories.Realizations;
 using VetClinic.BLL.Services.Interfaces;
 using VetClinic.BLL.Services.Realizations;
+using VetClinic.DAL.Entities;
+using Microsoft.AspNetCore.Identity;
 
 namespace VetClinic.API
 {
