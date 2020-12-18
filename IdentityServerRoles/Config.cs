@@ -31,7 +31,7 @@ namespace IdentityServerRoles
                     // include the following using claims in access token (in addition to subject id)
                     UserClaims = { JwtClaimTypes.Name, JwtClaimTypes.Email },
 
-                    // this API defines two scopes
+                    // defines scopes
                     Scopes =
                     {
                        "ApiOne",
