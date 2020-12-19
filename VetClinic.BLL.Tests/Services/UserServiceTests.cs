@@ -102,7 +102,7 @@ namespace VetClinic.BLL.Tests.Services
             var userService = new UserService(mgr.Object, Fixture.Create<RoleManager<IdentityRole>>());
 
             //act
-            var result = await userService.UpdateUser(AppUser, Roles);
+            var result = await userService.UpdateUser("2",AppUser, Roles);
 
             //assert
             Assert.False(result);

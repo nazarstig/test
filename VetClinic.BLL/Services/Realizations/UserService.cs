@@ -41,14 +41,13 @@ namespace VetClinic.BLL.Services.Realizations
                 }
                     
                 return (true, UserManager.FindByNameAsync(inputUser.UserName).Result.Id);
-
             }
              return (false, string.Empty);
         }
         
-        public async Task<bool> UpdateUser(User inputUser, IEnumerable<IdentityRole> inputRoles)
+        public async Task<bool> UpdateUser(string id, User inputUser, IEnumerable<IdentityRole> inputRoles)
         {
-            var user = UserManager.FindByNameAsync(inputUser.UserName).Result;
+            var user = UserManager.FindByIdAsync(id).Result;
 
             if(user != null)
             {
