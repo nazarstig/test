@@ -19,6 +19,10 @@
     <Compile Remove="Migrations\20201213085944_UserService.Designer.cs" />
     <Compile Remove="Migrations\20201215094327_NavProps.cs" />
     <Compile Remove="Migrations\20201215094327_NavProps.Designer.cs" />
+    <Compile Remove="Migrations\20201215095018_NavProps.cs" />
+    <Compile Remove="Migrations\20201215095018_NavProps.Designer.cs" />
+    <Compile Remove="Migrations\20201219104903_AddUserService.cs" />
+    <Compile Remove="Migrations\20201219104903_AddUserService.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
