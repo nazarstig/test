@@ -19,9 +19,14 @@ namespace VetClinic.BLL.Services.Realizations
         public RoleManager<IdentityRole> RoleManager { get; }
         
 
+        public async Task<User> GetUserAsync(string userId)
+        {
+            return await UserManager.FindByIdAsync(userId);
+        }
+
         public async Task<(bool, string)> CreateUser(User inputUser, IEnumerable<IdentityRole> inputRoles)
         {
-            var user = UserManager.FindByNameAsync(inputUser.UserName).Result;
+            var user = UserManager.FindByNameAsync(inputUser.UserName).Result;            
             if(user == null)
             {
                 //validate input user
@@ -51,8 +56,8 @@ namespace VetClinic.BLL.Services.Realizations
                     foreach (IdentityRole role in inputRoles)
                     {
                         if (RoleManager.RoleExistsAsync(role.Name).Result)
-                        {
-                            _ = await UserManager.AddToRoleAsync(user, role.Name);
+                        {                           
+                           _ = await UserManager.AddToRoleAsync(user, role.Name);
                         }
                     }
                     

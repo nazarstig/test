@@ -8,7 +8,7 @@ using VetClinic.DAL.Entities;
 
 namespace VetClinic.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("/[controller]")]
     [ApiController]
     public class PositionController : ControllerBase
     {
@@ -42,8 +42,10 @@ namespace VetClinic.API.Controllers
         [HttpPost]
         public async Task<ActionResult<PositionDTO>> Create(PositionDTO position)
         {
-            await _positionService.AddPosition(_mapper.Map<Position>(position));
-            return Ok(position);
+            var createdPosition =await _positionService.AddPosition(_mapper.Map<Position>(position));
+            var positionDto = _mapper.Map<PositionDTO>(createdPosition);
+
+            return Ok(positionDto);
         }
 
         [HttpPut("{id}")]

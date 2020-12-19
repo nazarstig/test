@@ -6,10 +6,10 @@ namespace VetClinic.BLL.Services.Interfaces
 {
     public interface IDoctorService
     {
-        public Task<Doctor> GetAsync(int doctorId);
-        public Task<ICollection<Doctor>> GetAsync();
-        public Task<Doctor> Add(Doctor doctor, User user);
-        public Task<bool> Remove(int id);
-        public Task<bool> Update(Doctor doctor, User user, int id);
+        public Task<(Doctor, User)> GetDoctorAsync(int doctorId);
+        public Task<(ICollection<Doctor>, ICollection<User>)> GetDoctorAsync();
+        public Task<(Doctor,User)> AddDoctor(Doctor doctor, User user);
+        public Task<bool> RemoveDoctor(int id);
+        public Task<bool> UpdateDoctor(Doctor doctor, User user, int doctorId);
     }
 }
