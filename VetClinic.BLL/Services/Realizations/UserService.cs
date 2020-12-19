@@ -23,6 +23,7 @@ namespace VetClinic.BLL.Services.Realizations
             var user = UserManager.FindByNameAsync(inputUser.UserName).Result;
             if(user == null)
             {
+                //create user
                 var result = UserManager.CreateAsync(inputUser, inputUser.PasswordHash).Result;
 
                 if (!result.Succeeded)
@@ -31,7 +32,6 @@ namespace VetClinic.BLL.Services.Realizations
                 }
 
                 //whitelist roles
-                    
                 foreach (IdentityRole role in inputRoles)
                 {
                     if (RoleManager.RoleExistsAsync(role.Name).Result)
@@ -41,18 +41,16 @@ namespace VetClinic.BLL.Services.Realizations
                 }
                     
                 return (true, UserManager.FindByNameAsync(inputUser.UserName).Result.Id);
-                
             }
-            return (false, string.Empty);
+             return (false, string.Empty);
         }
         
-        public async Task<bool> UpdateUser(User inputUser, IEnumerable<IdentityRole> inputRoles)
+        public async Task<bool> UpdateUser(string id, User inputUser, IEnumerable<IdentityRole> inputRoles)
         {
-            var user = UserManager.FindByNameAsync(inputUser.UserName).Result;
+            var user = UserManager.FindByIdAsync(id).Result;
 
             if(user != null)
             {
-
                 user.UserName = inputUser.UserName;
                 user.FirstName = inputUser.FirstName;
                 user.LastName = inputUser.LastName;
@@ -78,8 +76,7 @@ namespace VetClinic.BLL.Services.Realizations
 
                 _ = await UserManager.UpdateSecurityStampAsync(user);
 
-                return true;
-                
+                return true;   
             }
             return false;
         }
