@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using VetClinic.DAL.Enums;
 
 namespace VetClinic.DAL.Entities
 {

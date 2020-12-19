@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using VetClinic.API.Controllers;
 using VetClinic.API.DTO;
+using VetClinic.API.DTO.Service;
 using VetClinic.API.Mapping;
 using VetClinic.BLL.Services.Interfaces;
 using VetClinic.DAL.Entities;
@@ -131,13 +132,14 @@ namespace VetClinic.API.Tests
             };
 
             _service.Setup(s => s.AddAsync(It.IsAny<Service>())).ReturnsAsync(testItem);
-            // Act
-            
-            var createdResponse = await _controller.PostService(It.IsAny<ServiceDTO>());
+
+            // Act           
+            var createdResponse = await _controller.PostService(It.IsAny<ServiceCreateDTO>());
+
             // Assert
             Assert.IsType<CreatedAtActionResult>(createdResponse.Result);
         }
-
+       
         [Fact]
         public async Task Add_ValidObjectPassed_ReturnedResponseHasCreatedItem()
         {
@@ -149,7 +151,7 @@ namespace VetClinic.API.Tests
             _service.Setup(s => s.AddAsync(It.IsAny<Service>())).ReturnsAsync(testItem);
             
             // Act
-            var createdAtActionResult = await _controller.PostService(It.IsAny<ServiceDTO>());
+            var createdAtActionResult = await _controller.PostService(It.IsAny<ServiceCreateDTO>());
             var result = (ServiceDTO)((CreatedAtActionResult)createdAtActionResult.Result).Value;
             
             // Assert
@@ -190,7 +192,7 @@ namespace VetClinic.API.Tests
             _service.Setup(s => s.UpdateAsync(It.IsAny<int>(),It.IsAny<Service>())).ReturnsAsync(true);
 
             // Act
-            var result = await _controller.UpdateService(It.IsAny<int>(),It.IsAny<ServiceDTO>());
+            var result = await _controller.UpdateService(It.IsAny<int>(),It.IsAny<ServiceUpdateDTO>());
 
             // Assert
             Assert.IsType<NoContentResult>(result);
@@ -203,7 +205,7 @@ namespace VetClinic.API.Tests
             _service.Setup(s => s.UpdateAsync(It.IsAny<int>(),It.IsAny<Service>())).ReturnsAsync(false);
            
             // Act
-            var result = await _controller.UpdateService(It.IsAny<int>(),It.IsAny<ServiceDTO>());
+            var result = await _controller.UpdateService(It.IsAny<int>(),It.IsAny<ServiceUpdateDTO>());
 
             // Assert
             Assert.IsType<NotFoundResult>(result);

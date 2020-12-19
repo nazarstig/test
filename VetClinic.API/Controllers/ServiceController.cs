@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using VetClinic.API.DTO;
+using VetClinic.API.DTO.Service;
 using VetClinic.BLL.Services.Interfaces;
 using VetClinic.DAL.Entities;
 
@@ -47,9 +48,9 @@ namespace VetClinic.API.Controllers
 
         // POST api/service
         [HttpPost]
-        public async Task<ActionResult<ServiceDTO>> PostService([FromBody] ServiceDTO serviceDTO)
+        public async Task<ActionResult<ServiceDTO>> PostService([FromBody] ServiceCreateDTO serviceCreateDTO)
         {
-            var service = _mapper.Map<Service>(serviceDTO);
+            var service = _mapper.Map<Service>(serviceCreateDTO);
             var insertedService  =  await _serviceService.AddAsync(service);
             var insertedServiceDTO = _mapper.Map<ServiceDTO>(insertedService);
             return CreatedAtAction("Get", new { id = insertedServiceDTO.Id }, insertedServiceDTO);
@@ -57,9 +58,9 @@ namespace VetClinic.API.Controllers
 
         // PUT api/service/id
         [HttpPut("{id:min(1)}")]
-        public async Task<IActionResult> UpdateService([FromRoute] int id, [FromBody]ServiceDTO serviceDTO)
+        public async Task<IActionResult> UpdateService([FromRoute] int id, [FromBody]ServiceUpdateDTO serviceUpdateDTO)
         {
-            var service = _mapper.Map<Service>(serviceDTO);
+            var service = _mapper.Map<Service>(serviceUpdateDTO);
             var updated = await _serviceService.UpdateAsync(id, service);
             if (!updated)
             {
