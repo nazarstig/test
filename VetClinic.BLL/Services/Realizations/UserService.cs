@@ -4,23 +4,20 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using VetClinic.BLL.Services.Interfaces;
 using VetClinic.DAL.Entities;
-using FluentValidation;
-using FluentValidation.Results;
 
 namespace VetClinic.BLL.Services.Realizations
 {
     public class UserService : IUserService
     {
-        public UserService(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, AbstractValidator<User> validator)
+        public UserService(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
         {
             UserManager = userManager;
-            RoleManager = roleManager;
-            Validator = validator;
+            RoleManager = roleManager;            
         }
 
         public UserManager<User> UserManager { get; }
         public RoleManager<IdentityRole> RoleManager { get; }
-        public AbstractValidator<User> Validator { get; }
+        
 
         public async Task<(bool, string)> CreateUser(User inputUser, IEnumerable<IdentityRole> inputRoles)
         {
@@ -28,9 +25,9 @@ namespace VetClinic.BLL.Services.Realizations
             if(user == null)
             {
                 //validate input user
-                ValidationResult results = Validator.Validate(inputUser);
                 
-                if (results.IsValid)
+                
+                if (true)
                 {
                     //create user
                     user = new User
@@ -72,9 +69,9 @@ namespace VetClinic.BLL.Services.Realizations
             if(user != null)
             {
                 //validate input user
-                ValidationResult results = Validator.Validate(inputUser);
                 
-                if (results.IsValid)
+                
+                if (true)
                 {
 
                     user.UserName = inputUser.UserName;
