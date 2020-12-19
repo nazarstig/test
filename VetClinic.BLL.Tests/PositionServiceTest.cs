@@ -31,7 +31,7 @@ namespace VetClinic.API.Tests
                 .ReturnsAsync(positions);             
 
             // Act
-            var actual = await positionService.GetAsync();
+            var actual = await positionService.GetPositionAsync();
 
             // Assert
             Assert.Equal(positions.Count, actual.Count);
@@ -49,7 +49,7 @@ namespace VetClinic.API.Tests
                 .ReturnsAsync(position);            
 
             // Act
-            var actual = await positionService.GetAsync(id);
+            var actual = await positionService.GetPositionAsync(id);
 
             // Assert
             Assert.Equal(position.Id, actual.Id);
@@ -65,7 +65,7 @@ namespace VetClinic.API.Tests
             .Add(position));             
 
             // Act
-            var actual = await positionService.Add(position);
+            var actual = await positionService.AddPosition(position);
 
             // Assert
             Assert.Equal(position.Id, actual.Id);
@@ -84,7 +84,7 @@ namespace VetClinic.API.Tests
                 .ReturnsAsync(position);
            
             // Act
-            var actual = await positionService.Remove(position.Id);
+            var actual = await positionService.RemovePosition(position.Id);
 
             // Assert      
             Assert.True(actual);
@@ -101,7 +101,7 @@ namespace VetClinic.API.Tests
                 .ReturnsAsync(value: null);            
 
             // Act
-            var actual = await positionService.Remove(id);
+            var actual = await positionService.RemovePosition(id);
 
             // Assert      
             Assert.False(actual);
@@ -115,7 +115,7 @@ namespace VetClinic.API.Tests
             position = null;
 
             // Act
-            var actual = await positionService.Update(position,1);
+            var actual = await positionService.UpdatePosition(position,1);
 
             // Assert      
             Assert.False(actual);
@@ -132,7 +132,7 @@ namespace VetClinic.API.Tests
                 .ReturnsAsync(true); 
 
             // Act
-            var actual = await positionService.Update(position, id);
+            var actual = await positionService.UpdatePosition(position, id);
 
             // Assert      
             Assert.True(actual);
@@ -149,7 +149,7 @@ namespace VetClinic.API.Tests
                 .ReturnsAsync(false);            
 
             // Act
-            var actual = await positionService.Update(position, id);
+            var actual = await positionService.UpdatePosition(position, id);
 
             // Assert      
             Assert.False(actual);

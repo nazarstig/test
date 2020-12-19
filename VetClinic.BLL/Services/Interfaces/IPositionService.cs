@@ -6,11 +6,11 @@ namespace VetClinic.BLL.Services.Interfaces
 {
     public interface IPositionService
     {
-        public Task<Position> GetAsync(int positionId);
-        public Task<ICollection<Position>> GetAsync();
-        public Task<Position> Add(Position position);
-        public Task<bool> Remove(int id);
-        public Task<bool> Update(Position position, int id);  
+        public Task<Position> GetPositionAsync(int positionId);
+        public Task<ICollection<Position>> GetPositionAsync();
+        public Task<Position> AddPosition(Position position);
+        public Task<bool> RemovePosition(int id);
+        public Task<bool> UpdatePosition(Position position, int id);  
 
     }
 }

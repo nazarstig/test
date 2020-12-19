@@ -34,20 +34,20 @@ namespace VetClinic.API.Tests
             [Frozen] List<PositionDTO> positionsDTO)
         {
             // Arrange
-            positionServiceMock.Setup(m => m.GetAsync())            
+            positionServiceMock.Setup(m => m.GetPositionAsync())            
                 .ReturnsAsync(positions);
             mapper.Setup(m => m.Map<ICollection<PositionDTO>>(positions))
                 .Returns(positionsDTO);            
 
             // Act
-            var actualResult = await positionController.Get();
+            var actualResult = await positionController.Index();
 
             // Assert      
             var result = actualResult.Result as OkObjectResult; 
             
             Assert.Equal(positionsDTO, result.Value );
             Assert.True(actualResult.Result is OkObjectResult);
-            positionServiceMock.Verify(m => m.GetAsync(), Times.Once);
+            positionServiceMock.Verify(m => m.GetPositionAsync(), Times.Once);
         }
 
 
@@ -57,19 +57,19 @@ namespace VetClinic.API.Tests
            [Frozen] PositionDTO positionDTO )
         {
             // Arrange           
-            positionServiceMock.Setup(p => p.GetAsync(position.Id))
+            positionServiceMock.Setup(p => p.GetPositionAsync(position.Id))
                 .ReturnsAsync(position);
             mapper.Setup(m => m.Map<PositionDTO>(position))
                 .Returns(positionDTO);          
 
             // Act
-            var actualResult = await positionController.Get(position.Id);
+            var actualResult = await positionController.Show(position.Id);
 
             // Assert    
             var result = actualResult.Result as OkObjectResult;
             Assert.Equal(positionDTO, result.Value);
             Assert.True(actualResult.Result is OkObjectResult);
-            positionServiceMock.Verify(m => m.GetAsync(position.Id), Times.Once);
+            positionServiceMock.Verify(m => m.GetPositionAsync(position.Id), Times.Once);
         }
 
 
@@ -82,7 +82,7 @@ namespace VetClinic.API.Tests
             Position position = new Position { Id = 1 };
             PositionDTO positionDTO = new PositionDTO { Id = 1 }; 
             
-            positionServiceMock1.Setup(p => p.GetAsync(position.Id))
+            positionServiceMock1.Setup(p => p.GetPositionAsync(position.Id))
                 .ReturnsAsync(null as Position);
             mapper1.Setup(m => m.Map<PositionDTO>(position))
                 .Returns(positionDTO);
@@ -90,11 +90,11 @@ namespace VetClinic.API.Tests
             var positionController1 = new PositionController(positionServiceMock1.Object, mapper1.Object);
 
             // Act
-            var actualResult = await positionController1.Get(position.Id);
+            var actualResult = await positionController1.Show(position.Id);
 
             // Assert                          
             Assert.True(actualResult.Result is NotFoundResult);
-            positionServiceMock1.Verify(m => m.GetAsync(position.Id), Times.Once);
+            positionServiceMock1.Verify(m => m.GetPositionAsync(position.Id), Times.Once);
 
         }
     
@@ -105,18 +105,18 @@ namespace VetClinic.API.Tests
            [Frozen] PositionDTO positionDTO)
         {
             // Arrange            
-            positionServiceMock.Setup(m => m.Add(position))
+            positionServiceMock.Setup(m => m.AddPosition(position))
                 .ReturnsAsync(position);            
             mapper.Setup(m => m.Map<Position>(positionDTO))
                 .Returns(position);            
 
             // Act
-            var actualResult = await positionController.Post(positionDTO);
+            var actualResult = await positionController.Create(positionDTO);
 
             // Assert 
             var result = actualResult.Result as OkObjectResult;
             Assert.Equal(positionDTO, result.Value);
-            positionServiceMock.Verify(m => m.Add(position), Times.Once);
+            positionServiceMock.Verify(m => m.AddPosition(position), Times.Once);
         }
 
 
@@ -126,17 +126,17 @@ namespace VetClinic.API.Tests
            [Frozen] PositionDTO positionDTO)
         {
             // Arrange            
-            positionServiceMock.Setup(m => m.Update(position,position.Id))
+            positionServiceMock.Setup(m => m.UpdatePosition(position,position.Id))
                 .ReturnsAsync(true);
             mapper.Setup(m => m.Map<Position>(positionDTO))
                 .Returns(position);            
 
             // Act
-            var actualResult = await positionController.Put(positionDTO,position.Id);
+            var actualResult = await positionController.Update(positionDTO,position.Id);
 
             // Assert             
             Assert.True(actualResult.Result is NoContentResult);
-            positionServiceMock.Verify(m => m.Update(position, position.Id), Times.Once);
+            positionServiceMock.Verify(m => m.UpdatePosition(position, position.Id), Times.Once);
         }
 
 
@@ -146,13 +146,13 @@ namespace VetClinic.API.Tests
            [Frozen] PositionDTO positionDTO)
         {
             // Arrange            
-            positionServiceMock.Setup(m => m.Update(position, position.Id))
+            positionServiceMock.Setup(m => m.UpdatePosition(position, position.Id))
                 .ReturnsAsync(false);
             mapper.Setup(m => m.Map<Position>(positionDTO))
                 .Returns(position);            
 
             // Act
-            var actualResult = await positionController.Put(positionDTO, position.Id);
+            var actualResult = await positionController.Update(positionDTO, position.Id);
 
             // Assert             
             Assert.True(actualResult.Result is NotFoundResult);
@@ -164,15 +164,15 @@ namespace VetClinic.API.Tests
            [Frozen] int id)
         {
             // Arrange            
-            positionServiceMock.Setup(m => m.Remove(id))
+            positionServiceMock.Setup(m => m.RemovePosition(id))
                 .ReturnsAsync(true); 
 
             // Act
-            var actualResult = await positionController.Remove(id);
+            var actualResult = await positionController.Destroy(id);
 
             // Assert             
             Assert.True(actualResult is NoContentResult);
-            positionServiceMock.Verify(m => m.Remove(id), Times.Once);
+            positionServiceMock.Verify(m => m.RemovePosition(id), Times.Once);
         }
 
 
@@ -181,15 +181,15 @@ namespace VetClinic.API.Tests
            [Frozen] int id )
         {
             // Arrange            
-            positionServiceMock.Setup(m => m.Remove(id))
+            positionServiceMock.Setup(m => m.RemovePosition(id))
                 .ReturnsAsync(false);            
 
             // Act
-            var actualResult = await positionController.Remove(id);
+            var actualResult = await positionController.Destroy(id);
 
             // Assert             
             Assert.True(actualResult is NotFoundResult);
-            positionServiceMock.Verify(m => m.Remove(id), Times.Once);
+            positionServiceMock.Verify(m => m.RemovePosition(id), Times.Once);
         }
     }
 }
