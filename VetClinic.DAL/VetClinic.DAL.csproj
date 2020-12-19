@@ -17,6 +17,12 @@
     <Compile Remove="Migrations\20201210213908_AddSalaryPriceTypes.Designer.cs" />
     <Compile Remove="Migrations\20201213085944_UserService.cs" />
     <Compile Remove="Migrations\20201213085944_UserService.Designer.cs" />
+    <Compile Remove="Migrations\20201215094327_NavProps.cs" />
+    <Compile Remove="Migrations\20201215094327_NavProps.Designer.cs" />
+    <Compile Remove="Migrations\20201215095018_NavProps.cs" />
+    <Compile Remove="Migrations\20201215095018_NavProps.Designer.cs" />
+    <Compile Remove="Migrations\20201219104903_AddUserService.cs" />
+    <Compile Remove="Migrations\20201219104903_AddUserService.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,10 +35,6 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\VetClinic.BLL.Tests\VetClinic.BLL.Tests.csproj" />
   </ItemGroup>
 
 </Project>
