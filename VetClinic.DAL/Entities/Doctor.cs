@@ -12,7 +12,7 @@ namespace VetClinic.DAL.Entities
         public int PositionId { get; set; }
 
 
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public User User { get; set; }
         public Position Position { get; set; }
         public ICollection<Appointment> Appointments { get; set; }

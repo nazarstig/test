@@ -19,6 +19,210 @@ namespace VetClinic.DAL.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("NormalizedName")
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("AspNetRoles");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RoleId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetRoleClaims");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(300)")
+                        .HasMaxLength(300);
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(12)")
+                        .HasMaxLength(12);
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.ToTable("AspNetUsers");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUser");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserClaims");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+                {
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProviderKey")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProviderDisplayName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("LoginProvider", "ProviderKey");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserLogins");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("RoleId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetUserRoles");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId", "LoginProvider", "Name");
+
+                    b.ToTable("AspNetUserTokens");
+                });
+
             modelBuilder.Entity("VetClinic.DAL.Entities.Animal", b =>
                 {
                     b.Property<int>("Id")
@@ -393,12 +597,14 @@ namespace VetClinic.DAL.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId")
+                        .IsUnique()
+                        .HasFilter("[UserId] IS NOT NULL");
 
                     b.ToTable("Clients");
 
@@ -406,22 +612,22 @@ namespace VetClinic.DAL.Migrations
                         new
                         {
                             Id = 1,
-                            UserId = 4
+                            UserId = "4"
                         },
                         new
                         {
                             Id = 2,
-                            UserId = 5
+                            UserId = "5"
                         },
                         new
                         {
                             Id = 3,
-                            UserId = 6
+                            UserId = "6"
                         },
                         new
                         {
                             Id = 4,
-                            UserId = 7
+                            UserId = "7"
                         });
                 });
 
@@ -449,14 +655,16 @@ namespace VetClinic.DAL.Migrations
                     b.Property<int>("PositionId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("PositionId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId")
+                        .IsUnique()
+                        .HasFilter("[UserId] IS NOT NULL");
 
                     b.ToTable("Doctors");
 
@@ -467,7 +675,7 @@ namespace VetClinic.DAL.Migrations
                             Education = "Gas and Oil",
                             Experience = "2",
                             PositionId = 1,
-                            UserId = 1
+                            UserId = "1"
                         },
                         new
                         {
@@ -475,7 +683,7 @@ namespace VetClinic.DAL.Migrations
                             Education = "IfMedical",
                             Experience = "7",
                             PositionId = 3,
-                            UserId = 2
+                            UserId = "2"
                         },
                         new
                         {
@@ -483,7 +691,7 @@ namespace VetClinic.DAL.Migrations
                             Education = "SelfEducation",
                             Experience = "3",
                             PositionId = 4,
-                            UserId = 3
+                            UserId = "3"
                         });
                 });
 
@@ -678,154 +886,168 @@ namespace VetClinic.DAL.Migrations
 
             modelBuilder.Entity("VetClinic.DAL.Entities.User", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PasswordHash")
+                    b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(30)")
                         .HasMaxLength(30);
 
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(12)")
-                        .HasMaxLength(12);
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(30)")
+                        .HasMaxLength(30);
 
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Users");
+                    b.HasDiscriminator().HasValue("User");
 
                     b.HasData(
                         new
                         {
-                            Id = 1,
+                            Id = "1",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "cc30471f-eaa9-4cf5-a142-cf658f94b730",
+                            ConcurrencyStamp = "80b15a9f-96c3-4f7b-9fc1-a19a07c36703",
                             Email = "KolesoAnastasiya@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             PhoneNumber = "0984112333",
                             PhoneNumberConfirmed = false,
+                            SecurityStamp = "70fed886-9b33-4247-8926-7c8afb8ec199",
                             TwoFactorEnabled = false,
                             UserName = "Koleso Anastasiya"
                         },
                         new
                         {
-                            Id = 2,
+                            Id = "2",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "fc4f1c94-b1bf-4d46-8838-0a0ad66520ca",
+                            ConcurrencyStamp = "7057a228-e6a9-4245-8e36-03e8862702c2",
                             Email = "NazarenkoOleh@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             PhoneNumber = "0954453374",
                             PhoneNumberConfirmed = false,
+                            SecurityStamp = "60e4e0a4-d90e-4e35-8fd7-c09b07b4ab56",
                             TwoFactorEnabled = false,
                             UserName = "Nazarenko Oleh"
                         },
                         new
                         {
-                            Id = 3,
+                            Id = "3",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "a5b49172-bc19-4b73-a214-1eefb989077a",
+                            ConcurrencyStamp = "51532d56-dd05-4a52-9948-9a5d30b5da6d",
                             Email = "NoorkovaShuba@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             PhoneNumber = "0934453214",
                             PhoneNumberConfirmed = false,
+                            SecurityStamp = "7b9c0ff3-7cc2-4649-bd99-6f955f456883",
                             TwoFactorEnabled = false,
                             UserName = "Noorkova Shuba"
                         },
                         new
                         {
-                            Id = 4,
+                            Id = "4",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "50481f48-16e1-4310-a110-8f3d8d66f14d",
+                            ConcurrencyStamp = "03e014cd-68d5-429a-ba98-11887a780fec",
                             Email = "VozniyAndriy@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             PhoneNumber = "0931412622",
                             PhoneNumberConfirmed = false,
+                            SecurityStamp = "5c81c2b2-4287-446a-8596-b93ad4f43b40",
                             TwoFactorEnabled = false,
                             UserName = "Vozniy Andriy"
                         },
                         new
                         {
-                            Id = 5,
+                            Id = "5",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "26b03458-47b1-46fb-954d-534acb88df2b",
+                            ConcurrencyStamp = "890fcfbe-4760-4afe-9e68-d447cab064ba",
                             Email = "KosovichMaruna@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             PhoneNumber = "0681236324",
                             PhoneNumberConfirmed = false,
+                            SecurityStamp = "def2b3e0-b4e0-4ad6-bba1-1cb2e9d818b9",
                             TwoFactorEnabled = false,
                             UserName = "Kosovich Maruna"
                         },
                         new
                         {
-                            Id = 6,
+                            Id = "6",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "790361bc-062c-4df1-a609-5b3a8eca0f6f",
+                            ConcurrencyStamp = "bf036a59-f2e4-4625-88cb-e8810aea8aab",
                             Email = "WernudubIvan@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             PhoneNumber = "0982123654",
                             PhoneNumberConfirmed = false,
+                            SecurityStamp = "b330182e-28dd-4243-9c74-cb9b14349944",
                             TwoFactorEnabled = false,
                             UserName = "Wernudub Ivan"
                         },
                         new
                         {
-                            Id = 7,
+                            Id = "7",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "40a73d4c-bd54-494b-88a2-e02c183d5bbc",
+                            ConcurrencyStamp = "5293d30c-edd8-4465-9b94-ff9ce62c75ea",
                             Email = "MukolenkoNadiya@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             PhoneNumber = "0982131254",
                             PhoneNumberConfirmed = false,
+                            SecurityStamp = "a5048b25-4e7e-4c3a-8c38-f156ef3f37b3",
                             TwoFactorEnabled = false,
                             UserName = "Mukolenko Nadiya"
                         });
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("VetClinic.DAL.Entities.Animal", b =>
@@ -887,10 +1109,8 @@ namespace VetClinic.DAL.Migrations
             modelBuilder.Entity("VetClinic.DAL.Entities.Client", b =>
                 {
                     b.HasOne("VetClinic.DAL.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithOne("Client")
+                        .HasForeignKey("VetClinic.DAL.Entities.Client", "UserId");
                 });
 
             modelBuilder.Entity("VetClinic.DAL.Entities.Doctor", b =>
@@ -902,10 +1122,8 @@ namespace VetClinic.DAL.Migrations
                         .IsRequired();
 
                     b.HasOne("VetClinic.DAL.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithOne("Doctor")
+                        .HasForeignKey("VetClinic.DAL.Entities.Doctor", "UserId");
                 });
 #pragma warning restore 612, 618
         }
