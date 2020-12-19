@@ -1,73 +1,68 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json;
 using System.Threading.Tasks;
-using VetClinic.API.DTO;
-using VetClinic.API.Mapping;
+using VetClinic.API.DTO.Role;
 
 namespace VetClinic.API.Controllers
 {
     [Route("roles")]
     public class RoleController : Controller
     {
-        public RoleController(RoleManager<IdentityRole> roleManager)
+        public RoleController(RoleManager<IdentityRole> roleManager, IMapper mapper)
         {
             RoleManager = roleManager;
+            Mapper = mapper;
         }
 
         public RoleManager<IdentityRole> RoleManager { get; }
+        public IMapper Mapper { get; }
 
         [Route("")]
         [HttpGet]
         public IActionResult Index()
         {
             var roles = RoleManager.Roles;
-            var json = JsonSerializer.Serialize(roles);
-            return Ok(json);
+            IEnumerable<RoleDto> roleDtos = Mapper.Map< IEnumerable<IdentityRole>, IEnumerable <RoleDto> >(roles);
+
+            return Ok(roleDtos);
         }
 
         [Route("{id}")]
         [HttpGet]
         public async Task<IActionResult> Show(string id)
         {
-            var roles = await RoleManager.FindByIdAsync(id);
-            var json = JsonSerializer.Serialize(roles);
-            return Ok(json);
+            IdentityRole role = await RoleManager.FindByIdAsync(id);
+            if(role == null)
+            {
+                return NotFound();
+            }
+            RoleDto roleDto = Mapper.Map<IdentityRole, RoleDto>(role);
+            return Ok(roleDto);
         }
 
         [Route("")]
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody]RoleDto dto)
+        public async Task<IActionResult> Create(CreateRoleDto dto)
         {
-            var RoleConfig = new MapperConfiguration(cfg => cfg.AddProfile<RoleProfile>());
-            var roleMapper = new Mapper(RoleConfig);
+            IdentityRole role = Mapper.Map<CreateRoleDto, IdentityRole>(dto);
 
-            IdentityRole role = roleMapper.Map<RoleDto,IdentityRole>(dto);
-
-            var result = await RoleManager.CreateAsync(role);
+            _ = await RoleManager.CreateAsync(role);
             
-            return Created("/roles/create",result);
+            return Created("/roles/", dto);
         }
 
         [Route("{id}")]
         [HttpPut]
-        public async Task<IActionResult> Update(string id, [FromBody] RoleDto dto)
+        public async Task<IActionResult> Update(string id, CreateRoleDto dto)
         {
-            var RoleConfig = new MapperConfiguration(cfg => cfg.AddProfile<RoleProfile>());
-            var roleMapper = new Mapper(RoleConfig);
-
-            IdentityRole inputRole = roleMapper.Map<RoleDto, IdentityRole>(dto);
-            
-            //todo:validation
+            IdentityRole inputRole = Mapper.Map<CreateRoleDto, IdentityRole>(dto);
 
             var role = await RoleManager.FindByIdAsync(id);
 
             role.Name = inputRole.Name;
-            role.NormalizedName = inputRole.NormalizedName;
+            role.NormalizedName = inputRole.Name.ToUpper();
 
             _ = await RoleManager.UpdateAsync(role);
 

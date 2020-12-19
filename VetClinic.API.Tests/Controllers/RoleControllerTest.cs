@@ -1,30 +1,36 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using AutoFixture;
+using AutoFixture.AutoMoq;
+using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using Newtonsoft.Json.Linq;
-using System;
 using System.Collections.Generic;
-using System.Text;
-using FluentAssertions;
-using System.Text.Json;
 using System.Threading.Tasks;
 using VetClinic.API.Controllers;
+using VetClinic.API.DTO.Role;
 using Xunit;
-using VetClinic.API.DTO;
 
 namespace VetClinic.API.Tests.Controllers
 {
-    public class RoleControllerTest 
+    public class RoleControllerTest
     {
+        public RoleControllerTest()
+        {
+            Fixture = new Fixture().Customize(new AutoMoqCustomization());
+            RoleStore = Fixture.Create<IRoleStore<IdentityRole>>();
+            Mapper = new Mock<IMapper>();
+        }
+        public IFixture Fixture { get; }
+        public IRoleStore<IdentityRole> RoleStore { get; }
+        public Mock<IMapper> Mapper { get; }
+
         [Fact]
-        public async Task Index_NoParams_ReturnOk()
+        public void Index_NoParams_ReturnOk()
         {
             //arrange
-            var roleStore = new Mock<IRoleStore<IdentityRole>>();
-            var roleManagerMock = new Mock<RoleManager<IdentityRole>>(roleStore.Object, null, null, null, null);
+            var roleManagerMock = new Mock<RoleManager<IdentityRole>>(RoleStore, null, null, null, null);
 
-            var controller = new RoleController(roleManagerMock.Object);
-
+            var controller = new RoleController(roleManagerMock.Object, Mapper.Object);
 
             //act
             var result = controller.Index();
@@ -33,74 +39,101 @@ namespace VetClinic.API.Tests.Controllers
             //assert
             Assert.NotNull(result);
             Assert.IsType<OkObjectResult>(result);
+            Assert.IsAssignableFrom<IEnumerable<RoleDto>>(contentResult.Value);
             Assert.NotEmpty(contentResult.Value.ToString());
         }
 
         [Fact]
-        public async Task Get_Id_ReturnOk()
+        public async Task Show_Id_ReturnOk()
         {
             //arrange
-            var roleStore = new Mock<IRoleStore<IdentityRole>>();
-            var roleManagerMock = new Mock<RoleManager<IdentityRole>>(roleStore.Object, null, null, null, null);
+            IdentityRole role = new IdentityRole() { Name = "Vasya" };
+            RoleDto dto = new RoleDto() { Id = "fan", Name = "Vasya" };
+
+            var roleManagerMock = new Mock<RoleManager<IdentityRole>>(RoleStore, null, null, null, null);
             roleManagerMock
                 .Setup(c => c.FindByIdAsync(It.IsAny<string>()))
-                .ReturnsAsync(new IdentityRole());
+                .ReturnsAsync(role);
 
-            var controller = new RoleController(roleManagerMock.Object);
+            Mapper.Setup(m => m.Map<IdentityRole, RoleDto>(role)).Returns(dto);
 
+            var controller = new RoleController(roleManagerMock.Object, Mapper.Object);
 
             //act
             var result = await controller.Show("LOL");
-            var contentResult = result as ObjectResult;
+            var contentResult = result as OkObjectResult;
 
             //assert
             Assert.NotNull(result);
             Assert.IsType<OkObjectResult>(result);
-            Assert.NotEmpty(contentResult.Value.ToString());
+            Assert.IsAssignableFrom<RoleDto>(contentResult.Value);
+            Assert.Equal(dto, contentResult.Value);
         }
 
 
+        [Fact]
+        public async Task Show_NoSuchId_ReturnNotFound()
+        {
+            //arrange
+            var roleManagerMock = new Mock<RoleManager<IdentityRole>>(RoleStore, null, null, null, null);
+            roleManagerMock
+                .Setup(c => c.FindByIdAsync(It.IsAny<string>()))
+                .ReturnsAsync(null as IdentityRole);
+
+            var controller = new RoleController(roleManagerMock.Object, Mapper.Object);
+
+            //act
+            var result = await controller.Show("LOL");
+
+            //assert
+            Assert.NotNull(result);
+            Assert.IsType<NotFoundResult>(result);
+        }
 
         [Fact]
         public async Task Create_RoleDTO_ReturnCreated()
         {
             //arrange
-            var roleStore = new Mock<IRoleStore<IdentityRole>>();
-            var roleManagerMock = new Mock<RoleManager<IdentityRole>>(roleStore.Object, null, null, null, null);
+            var dto = new CreateRoleDto() { Name = "Vasya" };
+
+            var roleManagerMock = new Mock<RoleManager<IdentityRole>>(RoleStore, null, null, null, null);
             roleManagerMock
                 .Setup(c => c.CreateAsync(It.IsAny<IdentityRole>()))
                 .ReturnsAsync(IdentityResult.Success);
 
-            var controller = new RoleController(roleManagerMock.Object);
-
+            var controller = new RoleController(roleManagerMock.Object, Mapper.Object);
 
             //act
-            var result = await controller.Create(new RoleDto());
+            var result = await controller.Create(dto);
             var contentResult = result as ObjectResult;
 
             //assert
             Assert.NotNull(result);
             Assert.IsType<CreatedResult>(result);
-            Assert.NotEmpty(contentResult.Value.ToString());
+            Assert.IsAssignableFrom<CreateRoleDto>(contentResult.Value);
+            Assert.Equal(dto.Name, ((CreateRoleDto)contentResult.Value).Name);
         }
 
         [Fact]
         public async Task Update_IdDto_ReturnNoContent()
         {
             //arrange
-            var role = new IdentityRole();
-            var roleStore = new Mock<IRoleStore<IdentityRole>>();
-            var roleManagerMock = new Mock<RoleManager<IdentityRole>>(roleStore.Object, null, null, null, null);
+            var role = new IdentityRole() { Id = "S", Name = "Charlamane" };
+            CreateRoleDto dto = new CreateRoleDto() { Name = "Vasya" };
+
+            var roleManagerMock = new Mock<RoleManager<IdentityRole>>(RoleStore, null, null, null, null);
             roleManagerMock.Setup(c => c.FindByIdAsync(It.IsAny<string>()))
                 .ReturnsAsync(role);
 
             roleManagerMock.Setup(c => c.UpdateAsync(It.IsAny<IdentityRole>()))
                 .ReturnsAsync(IdentityResult.Success);
 
-            var controller = new RoleController(roleManagerMock.Object);
+            Mapper.Setup(m => m.Map<CreateRoleDto, IdentityRole>(It.IsAny<CreateRoleDto>())).Returns(role);
+
+            var controller = new RoleController(roleManagerMock.Object, Mapper.Object);
 
             //act
-            var result = await controller.Update(It.IsAny<string>(), new RoleDto());
+            var result = await controller.Update(It.IsAny<string>(), dto);
 
             //assign
             Assert.NotNull(result);
@@ -111,12 +144,11 @@ namespace VetClinic.API.Tests.Controllers
         public async Task Destroy_Id_ReturnOk()
         {
             //arrange
-            var roleStore = new Mock<IRoleStore<IdentityRole>>();
-            var roleManagerMock = new Mock<RoleManager<IdentityRole>>(roleStore.Object, null, null, null, null);
+            var roleManagerMock = new Mock<RoleManager<IdentityRole>>(RoleStore, null, null, null, null);
             roleManagerMock.Setup(c => c.DeleteAsync(It.IsAny<IdentityRole>()))
                 .ReturnsAsync(IdentityResult.Success);
 
-            var controller = new RoleController(roleManagerMock.Object);
+            var controller = new RoleController(roleManagerMock.Object, Mapper.Object);
 
             //act
             var result = await controller.Destroy(It.IsAny<string>());

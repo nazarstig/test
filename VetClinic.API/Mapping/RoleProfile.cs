@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
-using VetClinic.API.DTO;
+using VetClinic.API.DTO.Role;
 
 namespace VetClinic.API.Mapping
 {
@@ -8,7 +8,13 @@ namespace VetClinic.API.Mapping
     {
         public RoleProfile()
         {
-            CreateMap<RoleDto, IdentityRole>().ForMember(d => d.Name, o => o.MapFrom(s => s.Name))
+            CreateMap<CreateRoleDto, IdentityRole>().ForMember(d => d.Name, o => o.MapFrom(s => s.Name))
+                .ReverseMap()
+                .ForAllOtherMembers(o => o.Ignore());
+
+            CreateMap<RoleDto, IdentityRole>().ForMember(d => d.Id, o => o.MapFrom(s => s.Id))
+                .ForMember(d => d.Name, o => o.MapFrom(s => s.Name))
+                .ReverseMap()
                 .ForAllOtherMembers(o => o.Ignore());
         }
     }
