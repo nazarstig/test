@@ -74,9 +74,9 @@ namespace IdentityServerRoles
 
                     AllowedGrantTypes = GrantTypes.Code,
                     RedirectUris = { "https://oauth.pstmn.io/v1/browser-callback",
-                                       "https://localhost:4999/signin-oidc", },
+                                       "https://localhost:5001/signin-oidc", },
 
-                    PostLogoutRedirectUris = { "https://localhost:4999/signout-callback-oidc"},
+                    PostLogoutRedirectUris = { "https://localhost:5001/signout-callback-oidc"},
 
 
                     AllowedScopes = new List<string>
