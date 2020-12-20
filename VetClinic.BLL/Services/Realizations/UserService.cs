@@ -18,10 +18,11 @@ namespace VetClinic.BLL.Services.Realizations
         public UserManager<User> UserManager { get; }
         public RoleManager<IdentityRole> RoleManager { get; }
 
+
         public async Task<(bool, string)> CreateUser(User inputUser, IEnumerable<IdentityRole> inputRoles)
         {
             var user = UserManager.FindByNameAsync(inputUser.UserName).Result;
-            if(user == null)
+            if (user == null)
             {
                 //create user
                 var result = UserManager.CreateAsync(inputUser, inputUser.PasswordHash).Result;
@@ -49,7 +50,7 @@ namespace VetClinic.BLL.Services.Realizations
         {
             var user = UserManager.FindByIdAsync(id).Result;
 
-            if(user != null)
+            if (user != null)
             {
                 user.UserName = inputUser.UserName;
                 user.FirstName = inputUser.FirstName;
@@ -80,7 +81,7 @@ namespace VetClinic.BLL.Services.Realizations
             }
             return false;
         }
-        
+
         private bool Equals(IEnumerable<string> arr1, IEnumerable<IdentityRole> arr2)
         {
             IEnumerable<string> roles = arr2.Select(arr2 => arr2.Name);

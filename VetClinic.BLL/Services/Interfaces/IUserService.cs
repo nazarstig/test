@@ -6,7 +6,7 @@ using VetClinic.DAL.Entities;
 namespace VetClinic.BLL.Services.Interfaces
 {
     public interface IUserService
-    {
+    {        
         public Task<(bool, string)> CreateUser(User inputUser, IEnumerable<IdentityRole> inputRoles);
         public Task<bool> UpdateUser(string id, User inputUser, IEnumerable<IdentityRole> inputRoles);
     }

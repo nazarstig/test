@@ -17,6 +17,12 @@ using VetClinic.DAL;
 using VetClinic.DAL.Entities;
 using VetClinic.DAL.Repositories.Interfaces;
 using VetClinic.DAL.Repositories.Realizations;
+using VetClinic.BLL.Services.Interfaces;
+using VetClinic.BLL.Services.Realizations;
+using VetClinic.DAL.Entities;
+using Microsoft.AspNetCore.Identity;
+using FluentValidation;
+using VetClinic.DAL.Validators;
 
 namespace VetClinic.API
 {
@@ -63,7 +69,11 @@ namespace VetClinic.API
             services.Configure<ApiBehaviorOptions>(options => { options.SuppressModelStateInvalidFilter = true; });
 
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
+            services.AddScoped<IPositionService, PositionService>();
+            services.AddScoped<IDoctorService, DoctorService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<AbstractValidator<User>, AppUserValidator>();
+
 
             services.AddSwaggerConfig();
         }
