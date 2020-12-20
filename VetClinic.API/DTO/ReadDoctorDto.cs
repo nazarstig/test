@@ -1,4 +1,6 @@
-﻿namespace VetClinic.API.DTO
+﻿using VetClinic.API.DTO.User;
+
+namespace VetClinic.API.DTO
 {
     public class ReadDoctorDto
     {       
@@ -10,6 +12,6 @@
 
 
         public string UserId { get; set; }
-        public ReadUserDto User { get; set; }       
+        public UserDto User { get; set; }       
     }
 }

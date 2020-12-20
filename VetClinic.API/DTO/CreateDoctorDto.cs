@@ -1,4 +1,6 @@
-﻿namespace VetClinic.API.DTO
+﻿using VetClinic.API.DTO.User;
+
+namespace VetClinic.API.DTO
 {
     public class CreateDoctorDto
     {       

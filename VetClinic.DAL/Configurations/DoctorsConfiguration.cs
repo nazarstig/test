@@ -11,6 +11,11 @@ namespace VetClinic.DAL.Configurations
             builder.HasMany(d => d.Appointments)
                 .WithOne(d => d.Doctor)
                 .OnDelete(DeleteBehavior.NoAction);
+            builder.HasOne(c => c.User)
+                .WithOne(c => c.Doctor)
+                .HasForeignKey<Doctor>(c => c.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
             builder.Property(t => t.Education).HasMaxLength(100);
             builder.Property(t => t.Experience).HasMaxLength(200);
 

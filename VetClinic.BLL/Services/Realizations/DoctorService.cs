@@ -91,11 +91,9 @@ namespace VetClinic.BLL.Services.Realizations
 
             if (inputDoctor != null)
             {
-                inputDoctor.Id = doctorId;
-                inputUser.UserName = doctor.User.UserName;
+                inputDoctor.Id = doctorId;                
                 inputDoctor.User = null;
-                _repositoryWrapper.DoctorRepository.Update(inputDoctor);
-                await _userService.UpdateUser(inputUser, roles);
+                _repositoryWrapper.DoctorRepository.Update(inputDoctor);                
                 await _repositoryWrapper.SaveAsync();
                 return true;
             }

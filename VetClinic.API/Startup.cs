@@ -22,7 +22,6 @@ using VetClinic.BLL.Services.Realizations;
 using VetClinic.DAL.Entities;
 using Microsoft.AspNetCore.Identity;
 using FluentValidation;
-using VetClinic.DAL.Validators;
 
 namespace VetClinic.API
 {
@@ -71,8 +70,7 @@ namespace VetClinic.API
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
             services.AddScoped<IPositionService, PositionService>();
             services.AddScoped<IDoctorService, DoctorService>();
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<AbstractValidator<User>, AppUserValidator>();
+            services.AddScoped<IUserService, UserService>();            
 
 
             services.AddSwaggerConfig();
