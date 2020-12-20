@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using VetClinic.BLL.Services.Interfaces;
@@ -11,52 +12,95 @@ namespace VetClinic.BLL.Services.Realizations
     {
         private readonly IUserService _userService;        
         private readonly IRepositoryWrapper _repositoryWrapper;
+        private readonly RoleManager<IdentityRole> _roleManager;
         public DoctorService(IRepositoryWrapper repositoryWrapper, IUserService userService, RoleManager<IdentityRole> roleManager)
-        {            
+        {
+            _roleManager = roleManager;
             _repositoryWrapper = repositoryWrapper;
             _userService = userService;
         }       
 
-        public async Task<(Doctor, User)> AddDoctor(Doctor doctor, User user)
+        public async Task<Doctor> AddDoctor(Doctor doctor, User user)
         {
-            IdentityRole identityRole = new IdentityRole() { Name = "doctor" };
-            
-                
-                await _userService.RoleManager.CreateAsync(identityRole);            
-                       
-            IdentityRole[] identityRoles = { identityRole };
-            
-            return (doctor, user);
-        }
 
-        public async Task<(Doctor, User)> GetDoctorAsync(int doctorId)
-        {
-            Doctor doctor = await _repositoryWrapper.DoctorRepository.GetFirstOrDefaultAsync(d => d.Id == doctorId);
-            User user = await _userService.GetUserAsync(doctor.UserId);
-            return (doctor, user);
-        }
-
-        public async Task<(ICollection<Doctor>, ICollection<User>)> GetDoctorAsync()
-        {
-            var doctors = await _repositoryWrapper.DoctorRepository.GetAsync();
-            List<User> users = new List<User>();
-            foreach (Doctor doc in doctors)
+            var role =await  _roleManager.FindByNameAsync("doctor");
+            if (role == null)
             {
-                users.Add(await _userService.GetUserAsync(doc.UserId));
+                await _roleManager.CreateAsync(new IdentityRole() { Name = "doctor" });
+                role = await _roleManager.FindByNameAsync("doctor");
             }
-            return (doctors, users);
+                        
+            List<IdentityRole> roles = new List<IdentityRole> { role};
+            var (sucssess, userId) =await _userService.CreateUser(user, roles);
+            if (sucssess)
+            {
+                _repositoryWrapper.DoctorRepository.Add(doctor);
+                await _repositoryWrapper.SaveAsync();
+                return doctor;
+            }
 
+            return null;
         }
 
-        public Task<bool> RemoveDoctor(int id)
+        public async Task<Doctor> GetDoctorAsync(int doctorId)
         {
-            throw new System.NotImplementedException();
+            Doctor doctor = await _repositoryWrapper.DoctorRepository.GetFirstOrDefaultAsync(
+                filter: d => d.Id == doctorId,
+                include: d=>d.Include(c=>c.User));           
+            return (doctor);
         }
 
-        public Task<bool> UpdateDoctor(Doctor doctor, User user, int doctorId)
+        public async Task<ICollection<Doctor>> GetDoctorAsync()
         {
-            throw new System.NotImplementedException();
+            var doctors = await _repositoryWrapper.DoctorRepository.GetAsync(
+                include:c=>c.Include(i=>i.User));            
+            return doctors;
+
         }
-                
+
+        public async Task<bool> RemoveDoctor(int doctorId)
+        {
+            var doctor = await _repositoryWrapper.DoctorRepository.GetFirstOrDefaultAsync(d => d.Id == doctorId);
+            if (doctor != null)
+            {
+                _repositoryWrapper.DoctorRepository.Remove(doctor);
+                await _repositoryWrapper.SaveAsync();
+                return true;
+            }
+
+            return false;
+        }
+
+        public async Task<bool> UpdateDoctor(Doctor inputDoctor, User inputUser, int doctorId)
+        {
+            var role = await _roleManager.FindByNameAsync("doctor");
+            if (role == null)
+            {
+                await _roleManager.CreateAsync(new IdentityRole() { Name = "doctor" });
+                role = await _roleManager.FindByNameAsync("doctor");
+            }
+
+            List<IdentityRole> roles = new List<IdentityRole> { role };
+            var doctor= await _repositoryWrapper.DoctorRepository.GetFirstOrDefaultAsync(c => c.Id == doctorId
+            );
+            if (doctor==null)             
+                return false;
+
+            if (inputDoctor == null && inputUser == null)
+                return false;
+
+            if (inputDoctor != null)
+            {
+                inputDoctor.Id = doctorId;
+                inputUser.UserName = doctor.User.UserName;
+                inputDoctor.User = null;
+                _repositoryWrapper.DoctorRepository.Update(inputDoctor);
+                await _userService.UpdateUser(inputUser, roles);
+                await _repositoryWrapper.SaveAsync();
+                return true;
+            }
+            return false;
+        }
+
     }
 }

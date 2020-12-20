@@ -1,6 +1,6 @@
 ﻿namespace VetClinic.API.DTO
 {
-    public class DoctorDto
+    public class CreateDoctorDto
     {       
         public string Education { get; set; }
         public string Biography { get; set; }

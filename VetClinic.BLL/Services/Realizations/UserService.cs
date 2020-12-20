@@ -12,104 +12,95 @@ namespace VetClinic.BLL.Services.Realizations
         public UserService(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
         {
             UserManager = userManager;
-            RoleManager = roleManager;            
+            RoleManager = roleManager;
         }
 
         public UserManager<User> UserManager { get; }
         public RoleManager<IdentityRole> RoleManager { get; }
-        
 
-        public async Task<User> GetUserAsync(string userId)
-        {
-            return await UserManager.FindByIdAsync(userId);
-        }
 
         public async Task<(bool, string)> CreateUser(User inputUser, IEnumerable<IdentityRole> inputRoles)
         {
-            var user = UserManager.FindByNameAsync(inputUser.UserName).Result;            
-            if(user == null)
+            var user = UserManager.FindByNameAsync(inputUser.UserName).Result;
+            if (user == null)
             {
                 //validate input user
-                
-                
-                if (true)
+
+
+                //create user
+                user = new User
                 {
-                    //create user
-                    user = new User
-                    {
-                        UserName = inputUser.UserName,
-                        FirstName = inputUser.FirstName,
-                        LastName = inputUser.LastName,
-                        Email = inputUser.Email,
-                        PhoneNumber = inputUser.PhoneNumber,
-                    };
+                    UserName = inputUser.UserName,
+                    FirstName = inputUser.FirstName,
+                    LastName = inputUser.LastName,
+                    Email = inputUser.Email,
+                    PhoneNumber = inputUser.PhoneNumber,
+                };
 
-                    var result = UserManager.CreateAsync(user, inputUser.PasswordHash).Result;
+                var result = UserManager.CreateAsync(user, inputUser.PasswordHash).Result;
 
-                    if (!result.Succeeded)
-                    {
-                        return (false, string.Empty);
-                    }
-
-                    //whitelist roles
-                    
-                    foreach (IdentityRole role in inputRoles)
-                    {
-                        if (RoleManager.RoleExistsAsync(role.Name).Result)
-                        {                           
-                           _ = await UserManager.AddToRoleAsync(user, role.Name);
-                        }
-                    }
-                    
-                    return (true, UserManager.FindByNameAsync(user.UserName).Result.Id);
+                if (!result.Succeeded)
+                {
+                    return (false, string.Empty);
                 }
+
+                //whitelist roles
+
+                foreach (IdentityRole role in inputRoles)
+                {
+                    if (RoleManager.RoleExistsAsync(role.Name).Result)
+                    {
+                        _ = await UserManager.AddToRoleAsync(user, role.Name);
+                    }
+                }
+
+                return (true, UserManager.FindByNameAsync(user.UserName).Result.Id);
+
             }
-                return (false, string.Empty);
+            return (false, string.Empty);
         }
-        
+
         public async Task<bool> UpdateUser(User inputUser, IEnumerable<IdentityRole> inputRoles)
         {
             var user = UserManager.FindByNameAsync(inputUser.UserName).Result;
 
-            if(user != null)
+            if (user != null)
             {
                 //validate input user
-                
-                
-                if (true)
+
+
+
+                user.UserName = inputUser.UserName;
+                user.FirstName = inputUser.FirstName;
+                user.LastName = inputUser.LastName;
+                user.Email = inputUser.Email;
+                user.PhoneNumber = inputUser.PhoneNumber;
+
+                //We need to pull roles explicitly because they are in a different table
+                var MyRoles = await UserManager.GetRolesAsync(user);
+
+                _ = await UserManager.UpdateAsync(user);
+
+                if (!Equals(MyRoles, inputRoles))
                 {
-
-                    user.UserName = inputUser.UserName;
-                    user.FirstName = inputUser.FirstName;
-                    user.LastName = inputUser.LastName;
-                    user.Email = inputUser.Email;
-                    user.PhoneNumber = inputUser.PhoneNumber;
-
-                    //We need to pull roles explicitly because they are in a different table
-                    var MyRoles = await UserManager.GetRolesAsync(user);
-
-                    _ = await UserManager.UpdateAsync(user);
-
-                    if (!Equals(MyRoles, inputRoles))
+                    _ = await UserManager.RemoveFromRolesAsync(user, MyRoles);
+                    foreach (IdentityRole role in inputRoles)
                     {
-                        _ = await UserManager.RemoveFromRolesAsync(user, MyRoles);
-                        foreach (IdentityRole role in inputRoles)
+                        if (RoleManager.RoleExistsAsync(role.Name).Result)
                         {
-                            if (RoleManager.RoleExistsAsync(role.Name).Result)
-                            {
-                                _ = await UserManager.AddToRoleAsync(user, role.Name);
-                            }
+                            _ = await UserManager.AddToRoleAsync(user, role.Name);
                         }
                     }
+                }
 
-                    _ = await UserManager.UpdateSecurityStampAsync(user);
+                _ = await UserManager.UpdateSecurityStampAsync(user);
 
-                    return true;
-                } 
+                return true;
+
             }
             return false;
         }
-        
+
         private bool Equals(IEnumerable<string> arr1, IEnumerable<IdentityRole> arr2)
         {
             IEnumerable<string> roles = arr2.Select(arr2 => arr2.Name);

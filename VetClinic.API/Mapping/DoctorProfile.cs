@@ -8,8 +8,11 @@ namespace VetClinic.API.Mapping
     {
         public DoctorProfile()
         {
-            CreateMap<Doctor, DoctorDto>();
-            CreateMap<Doctor, DoctorDto>().ReverseMap();
+            CreateMap<ReadDoctorDto, Doctor>();
+            CreateMap<ReadDoctorDto, Doctor>().ReverseMap();
+
+            CreateMap<CreateDoctorDto, Doctor>();
+            CreateMap<CreateDoctorDto, Doctor>().ReverseMap();
         }
     }
 }
