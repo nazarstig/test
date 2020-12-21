@@ -20,7 +20,7 @@ namespace VetClinic.BLL.Services.Realizations
             _userService = userService;
         }       
 
-        public async Task<Doctor> AddDoctor(Doctor doctor, User user)
+        public async Task<Doctor> AddDoctorAsync(Doctor doctor, User user)
         {
 
             var role =await  _roleManager.FindByNameAsync("doctor");
@@ -58,12 +58,13 @@ namespace VetClinic.BLL.Services.Realizations
 
         }
 
-        public async Task<bool> RemoveDoctor(int doctorId)
+        public async Task<bool> RemoveDoctorAsync(int doctorId)
         {
             var doctor = await _repositoryWrapper.DoctorRepository.GetFirstOrDefaultAsync(d => d.Id == doctorId);
             if (doctor != null)
             {
                 _repositoryWrapper.DoctorRepository.Remove(doctor);
+
                 await _repositoryWrapper.SaveAsync();
                 return true;
             }
@@ -71,7 +72,7 @@ namespace VetClinic.BLL.Services.Realizations
             return false;
         }
 
-        public async Task<bool> UpdateDoctor(Doctor inputDoctor, User inputUser, int doctorId)
+        public async Task<bool> UpdateDoctorAsync(Doctor inputDoctor, User inputUser, int doctorId)
         {
             var role = await _roleManager.FindByNameAsync("doctor");
             if (role == null)

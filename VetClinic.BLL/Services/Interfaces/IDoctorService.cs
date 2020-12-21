@@ -8,8 +8,8 @@ namespace VetClinic.BLL.Services.Interfaces
     {
         public Task<Doctor> GetDoctorAsync(int doctorId);
         public Task<ICollection<Doctor>> GetDoctorAsync();
-        public Task<Doctor> AddDoctor(Doctor doctor, User user);
-        public Task<bool> RemoveDoctor(int doctorId);
-        public Task<bool> UpdateDoctor(Doctor inputDoctor, User inputUser, int doctorId);
+        public Task<Doctor> AddDoctorAsync(Doctor doctor, User user);
+        public Task<bool> RemoveDoctorAsync(int doctorId);
+        public Task<bool> UpdateDoctorAsync(Doctor inputDoctor, User inputUser, int doctorId);
     }
 }

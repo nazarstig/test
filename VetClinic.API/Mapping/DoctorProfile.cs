@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using VetClinic.API.DTO;
+using VetClinic.API.DTO.Doctor;
 using VetClinic.DAL.Entities;
 
 namespace VetClinic.API.Mapping

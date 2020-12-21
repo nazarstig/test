@@ -8,8 +8,8 @@ namespace VetClinic.API.Mapping
     {
         public PositionProfile()
         {
-            CreateMap<Position, PositionDTO>();
-            CreateMap<Position, PositionDTO>().ReverseMap();
+            CreateMap<Position, PositionDto>();
+            CreateMap<Position, PositionDto>().ReverseMap();
         }
     }
 }

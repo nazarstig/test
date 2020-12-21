@@ -1,6 +1,6 @@
 ﻿using VetClinic.API.DTO.User;
 
-namespace VetClinic.API.DTO
+namespace VetClinic.API.DTO.Doctor
 {
     public class CreateDoctorDto
     {       

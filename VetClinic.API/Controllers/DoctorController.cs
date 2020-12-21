@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using VetClinic.API.DTO;
+using VetClinic.API.DTO.Doctor;
 using VetClinic.BLL.Services.Interfaces;
 using VetClinic.DAL.Entities;
 
@@ -42,16 +42,17 @@ namespace VetClinic.API.Controllers
         public async Task<ActionResult<ReadDoctorDto>> Create(CreateDoctorDto doctorDto)
         {
             var doctor = _mapper.Map<Doctor>(doctorDto);
-            var createdDoctor = await _doctorService.AddDoctor(doctor, doctor.User);
+            var createdDoctor = await _doctorService.AddDoctorAsync(doctor, doctor.User);
             var readDoctorDto = _mapper.Map<ReadDoctorDto>(createdDoctor);
-            return Ok(readDoctorDto);
+
+            return CreatedAtAction(nameof(Show), new { id = doctor.Id }, doctorDto);
         }
 
         [HttpPut("{id}")]
         public async Task<ActionResult<ReadDoctorDto>> Update(ReadDoctorDto doctorDto, int id)
         {
             var doctor = _mapper.Map<Doctor>(doctorDto);
-            var successUpdate = await _doctorService.UpdateDoctor(doctor, doctor.User , id);
+            var successUpdate = await _doctorService.UpdateDoctorAsync(doctor, doctor.User , id);
             if (successUpdate)
             {
                 return NoContent();
@@ -62,7 +63,7 @@ namespace VetClinic.API.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> Destroy(int id)
         {
-            var successDelete = await _doctorService.RemoveDoctor(id);
+            var successDelete = await _doctorService.RemoveDoctorAsync(id);
             if (successDelete)
                 return NoContent();
 

@@ -8,9 +8,9 @@ namespace VetClinic.BLL.Services.Interfaces
     {
         public Task<Position> GetPositionAsync(int positionId);
         public Task<ICollection<Position>> GetPositionAsync();
-        public Task<Position> AddPosition(Position position);
-        public Task<bool> RemovePosition(int id);
-        public Task<bool> UpdatePosition(Position position, int id);  
+        public Task<Position> AddPositionAsync(Position position);
+        public Task<bool> RemovePositionAsync(int id);
+        public Task<bool> UpdatePositionAsync(Position position, int id);  
 
     }
 }

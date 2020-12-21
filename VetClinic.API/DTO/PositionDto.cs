@@ -1,6 +1,6 @@
 ﻿namespace VetClinic.API.DTO.PositionDTO
 {
-    public class PositionDTO
+    public class PositionDto
     {
         public int Id { get; set; }
         public string PositionName { get; set; }
