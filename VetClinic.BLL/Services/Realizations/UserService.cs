@@ -4,53 +4,67 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using VetClinic.BLL.Services.Interfaces;
 using VetClinic.DAL.Entities;
-using FluentValidation;
-using FluentValidation.Results;
 
 namespace VetClinic.BLL.Services.Realizations
 {
     public class UserService : IUserService
     {
-        public UserService(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, AbstractValidator<User> validator)
+        public UserService(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
         {
             UserManager = userManager;
             RoleManager = roleManager;
-            Validator = validator;
         }
 
         public UserManager<User> UserManager { get; }
         public RoleManager<IdentityRole> RoleManager { get; }
-        public AbstractValidator<User> Validator { get; }
 
-        public async Task<(bool, string)> CreateUser(User inputUser, IEnumerable<IdentityRole> inputRoles)
+        public async Task<(bool, string)> CreateUserAsync(User inputUser, params IdentityRole[] inputRoles)
         {
             var user = UserManager.FindByNameAsync(inputUser.UserName).Result;
             if(user == null)
             {
-                //validate input user
-                ValidationResult results = Validator.Validate(inputUser);
-                
-                if (results.IsValid)
+                //create user
+                var result = UserManager.CreateAsync(inputUser, inputUser.PasswordHash).Result;
+
+                if (!result.Succeeded)
                 {
-                    //create user
-                    user = new User
-                    {
-                        UserName = inputUser.UserName,
-                        FirstName = inputUser.FirstName,
-                        LastName = inputUser.LastName,
-                        Email = inputUser.Email,
-                        PhoneNumber = inputUser.PhoneNumber,
-                    };
+                    return (false, string.Empty);
+                }
 
-                    var result = UserManager.CreateAsync(user, inputUser.PasswordHash).Result;
-
-                    if (!result.Succeeded)
+                //whitelist roles
+                foreach (IdentityRole role in inputRoles)
+                {
+                    if (RoleManager.RoleExistsAsync(role.Name).Result)
                     {
-                        return (false, string.Empty);
+                        _ = await UserManager.AddToRoleAsync(inputUser, role.Name);
                     }
-
-                    //whitelist roles
+                }
                     
+                return (true, UserManager.FindByNameAsync(inputUser.UserName).Result.Id);
+            }
+             return (false, string.Empty);
+        }
+        
+        public async Task<bool> UpdateUserAsync(string id, User inputUser, params IdentityRole[] inputRoles)
+        {
+            var user = UserManager.FindByIdAsync(id).Result;
+
+            if(user != null)
+            {
+                user.UserName = inputUser.UserName;
+                user.FirstName = inputUser.FirstName;
+                user.LastName = inputUser.LastName;
+                user.Email = inputUser.Email;
+                user.PhoneNumber = inputUser.PhoneNumber;
+                
+                //We need to pull roles explicitly because they are in a different table
+                var MyRoles = await UserManager.GetRolesAsync(user);
+
+                _ = await UserManager.UpdateAsync(user);
+
+                if (!Equals(MyRoles, inputRoles))
+                {
+                    _ = await UserManager.RemoveFromRolesAsync(user, MyRoles);
                     foreach (IdentityRole role in inputRoles)
                     {
                         if (RoleManager.RoleExistsAsync(role.Name).Result)
@@ -58,53 +72,25 @@ namespace VetClinic.BLL.Services.Realizations
                             _ = await UserManager.AddToRoleAsync(user, role.Name);
                         }
                     }
-                    
-                    return (true, UserManager.FindByNameAsync(user.UserName).Result.Id);
                 }
+
+                _ = await UserManager.UpdateSecurityStampAsync(user);
+
+                return true;   
             }
-                return (false, string.Empty);
+            return false;
         }
-        
-        public async Task<bool> UpdateUser(User inputUser, IEnumerable<IdentityRole> inputRoles)
+
+        public async Task<bool> DeleteUserAsync(string id)
         {
-            var user = UserManager.FindByNameAsync(inputUser.UserName).Result;
+            var user = await UserManager.FindByIdAsync(id);
+            var result = await UserManager.DeleteAsync(user);
 
-            if(user != null)
+            if (result.Succeeded)
             {
-                //validate input user
-                ValidationResult results = Validator.Validate(inputUser);
-                
-                if (results.IsValid)
-                {
-
-                    user.UserName = inputUser.UserName;
-                    user.FirstName = inputUser.FirstName;
-                    user.LastName = inputUser.LastName;
-                    user.Email = inputUser.Email;
-                    user.PhoneNumber = inputUser.PhoneNumber;
-
-                    //We need to pull roles explicitly because they are in a different table
-                    var MyRoles = await UserManager.GetRolesAsync(user);
-
-                    _ = await UserManager.UpdateAsync(user);
-
-                    if (!Equals(MyRoles, inputRoles))
-                    {
-                        _ = await UserManager.RemoveFromRolesAsync(user, MyRoles);
-                        foreach (IdentityRole role in inputRoles)
-                        {
-                            if (RoleManager.RoleExistsAsync(role.Name).Result)
-                            {
-                                _ = await UserManager.AddToRoleAsync(user, role.Name);
-                            }
-                        }
-                    }
-
-                    _ = await UserManager.UpdateSecurityStampAsync(user);
-
-                    return true;
-                } 
+                return true;
             }
+
             return false;
         }
         

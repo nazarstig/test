@@ -8,6 +8,8 @@
 
   <ItemGroup>
     <PackageReference Include="AutoFixture" Version="4.14.0" />
+    <PackageReference Include="AutoFixture.AutoMoq" Version="4.14.0" />
+    <PackageReference Include="AutoFixture.Xunit2" Version="4.14.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
     <PackageReference Include="Moq" Version="4.15.2" />
     <PackageReference Include="xunit" Version="2.4.0" />
@@ -16,7 +18,10 @@
   </ItemGroup>
 
   <ItemGroup>
+<<<<<<< HEAD
     <ProjectReference Include="..\VetClinic.API\VetClinic.API.csproj" />
+=======
+>>>>>>> origin/fix/add-delete-to-user-service
     <ProjectReference Include="..\VetClinic.BLL\VetClinic.BLL.csproj" />
   </ItemGroup>
 

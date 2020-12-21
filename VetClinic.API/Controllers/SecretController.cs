@@ -4,7 +4,6 @@ using VetClinic.BLL.Services.Interfaces;
 
 namespace VetClinic.API.Controllers
 {
-    [Authorize]
     public class SecretController : Controller
     {
         public SecretController(IUserService userService)
@@ -17,6 +16,7 @@ namespace VetClinic.API.Controllers
         [HttpGet]
         [Route("/secret")]
         [Authorize(Roles = "admin")]
+        [HttpGet]
         public string Index()
         {
             return "VetClinic Secret";
