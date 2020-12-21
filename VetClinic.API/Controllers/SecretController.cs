@@ -4,7 +4,6 @@ using VetClinic.BLL.Services.Interfaces;
 
 namespace VetClinic.API.Controllers
 {
-    [Authorize]
     public class SecretController : Controller
     {
         public SecretController(IUserService userService)

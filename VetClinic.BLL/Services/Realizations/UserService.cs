@@ -18,7 +18,7 @@ namespace VetClinic.BLL.Services.Realizations
         public UserManager<User> UserManager { get; }
         public RoleManager<IdentityRole> RoleManager { get; }
 
-        public async Task<(bool, string)> CreateUser(User inputUser, IEnumerable<IdentityRole> inputRoles)
+        public async Task<(bool, string)> CreateUserAsync(User inputUser, params IdentityRole[] inputRoles)
         {
             var user = UserManager.FindByNameAsync(inputUser.UserName).Result;
             if(user == null)
@@ -45,7 +45,7 @@ namespace VetClinic.BLL.Services.Realizations
              return (false, string.Empty);
         }
         
-        public async Task<bool> UpdateUser(string id, User inputUser, IEnumerable<IdentityRole> inputRoles)
+        public async Task<bool> UpdateUserAsync(string id, User inputUser, params IdentityRole[] inputRoles)
         {
             var user = UserManager.FindByIdAsync(id).Result;
 
@@ -56,7 +56,7 @@ namespace VetClinic.BLL.Services.Realizations
                 user.LastName = inputUser.LastName;
                 user.Email = inputUser.Email;
                 user.PhoneNumber = inputUser.PhoneNumber;
-
+                
                 //We need to pull roles explicitly because they are in a different table
                 var MyRoles = await UserManager.GetRolesAsync(user);
 
@@ -78,6 +78,19 @@ namespace VetClinic.BLL.Services.Realizations
 
                 return true;   
             }
+            return false;
+        }
+
+        public async Task<bool> DeleteUserAsync(string id)
+        {
+            var user = await UserManager.FindByIdAsync(id);
+            var result = await UserManager.DeleteAsync(user);
+
+            if (result.Succeeded)
+            {
+                return true;
+            }
+
             return false;
         }
         
