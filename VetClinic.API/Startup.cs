@@ -57,13 +57,10 @@ namespace VetClinic.API
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IProcedureService, ProcedureService>();
+            services.AddScoped<IClientService, ClientService>();
             services.AddScoped<AbstractValidator<User>, AppUserValidator>();
-
             services.AddSwaggerConfig();
 
-            services.AddTransient<ProcedureService>();
-            services.AddTransient<ClientService>();
-           // services.AddTransient<UserService>();
         }
 
 
@@ -75,13 +72,7 @@ namespace VetClinic.API
             }
 
             app.UseRouting();
-            //app.UseEndpoints(endpoints =>
-            //{
-            //    endpoints.MapControllerRoute(
-            //        name: "default",
-            //        pattern: "{controller=Procedure}/{action=GetProcedure}/{id=3}");
-            //});
-
+          
             app.UseAuthentication();
 
             app.UseAuthorization();
@@ -90,15 +81,6 @@ namespace VetClinic.API
             {
                 endpoints.MapControllers();
             });
-
-            //app.UseEndpoints(endpoints =>
-            //{
-            //    // ����������� ���������
-            //    endpoints.MapControllerRoute(
-            //        name: "default",
-            //        pattern: "{controller=Client}/{action=GetAllClients}");
-            //});
-
 
             app.UseCustomSwaggerConfig();
 

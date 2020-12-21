@@ -130,9 +130,6 @@ namespace VetClinic.API.Tests.ControllerTests
             Assert.True(result is CreatedAtActionResult);
         }
 
-
-
-
         private ICollection<Procedure> ProceduresList()
         {
             return new List<Procedure>

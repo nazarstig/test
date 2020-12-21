@@ -51,28 +51,30 @@ namespace VetClinic.API.Controllers
             else return NotFound();
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<ICollection<Procedure>>> Index()
+        [HttpGet]
+        public async Task<ActionResult<ICollection<ReadProcedureDTO>>> Index()
         {            
             var res =  await _procedureService.GetAllProcedures();
-            return Ok(res);
+            ICollection<ReadProcedureDTO> readProcedures = new List<ReadProcedureDTO>();
+            ReadProcedureDTO dto;
+            foreach(Procedure procedure in res)
+            {
+                dto = _mapper.Map<ReadProcedureDTO>(procedure);
+                readProcedures.Add(dto);
+            }
+            return Ok(readProcedures);
         }
 
-        [HttpGet]
+        [HttpGet("{id}")]
         public async Task<ActionResult<Procedure>> Show(int id)
         {
-            //CreateProcedureDTO createTemp = new CreateProcedureDTO { ProcedureName = "cleaning", Price = 100M, Description = "for all animals", IsSelectable = true};
-            //AddProcedure(createTemp);
-            //UpdateProcedureDTO updateTemp = new UpdateProcedureDTO { Id = 20, Description = "for cats only", Price = 100M, IsSelectable = false };
-            //var res = await PutProcedure(updateTemp);
-            //DeleteProcedureDTO deleteTemp = new DeleteProcedureDTO { Id = 10 };
-            
-            //int id = deleteTemp.Id;//_mapper.Map<ReadProcedureDTO, int>(dto);
             var result = await _procedureService.GetProcedure(id);
-            DeleteProcedureDTO deleteTemp = new DeleteProcedureDTO { Id = 7};
-            // await DeleteProcedure(20);
-            //if (result == null) return NotFound();
-            return Ok(result);
+            if (result != null)
+            {
+                ReadProcedureDTO readDto = _mapper.Map<ReadProcedureDTO>(result);
+                return Ok(readDto);
+            }
+            else return NotFound();
         }
 
     }

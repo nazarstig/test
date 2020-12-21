@@ -19,10 +19,19 @@ namespace VetClinic.BLL.Services
             _userService = userService; 
         }
 
-        public async Task AddClient(Client client)
-        {
-            _repositoryWrapper.ClientRepository.Add(client);
-            await _repositoryWrapper.SaveAsync();
+        public async Task<Client> AddClient(User user, Client client)
+        {         
+            IdentityRole role = new IdentityRole { Name = "member" };
+            var (res, id) = await _userService.CreateUser(user, new List<IdentityRole> { role });
+            string userId;
+            if (res)
+            {
+                userId = id;
+                client = new Client { UserId = userId };
+                _repositoryWrapper.ClientRepository.Add(client);
+                await _repositoryWrapper.SaveAsync();
+            }
+            return client;
         }
 
         public async Task<ICollection<Client>> GetAllClients()
@@ -38,26 +47,12 @@ namespace VetClinic.BLL.Services
                 );
         }
 
-        public async Task<bool> PutClient(int id, User user, Client client = null)
+        public async Task<bool> PutClient(User user, Client client)
         {
-            var foundClient = await _repositoryWrapper.ClientRepository.GetFirstOrDefaultAsync(filter: c => c.Id == id);
-            if (foundClient == null) return false;
-            //await PutUser(user);
-            await PutClient(client, foundClient);
-            await _repositoryWrapper.SaveAsync();
-            return true;
-        }
-
-        public async Task<bool> PutClient(Client client, Client foundClient)
-        {
-            if (client == null) return false;
-            return true;
-        }
-
-        public async Task PutUser(User user)
-        {          
             IdentityRole role = new IdentityRole { Name = "member" };
-            await _userService.UpdateUser(user, new List<IdentityRole> { role });
+            var res = await _userService.UpdateUser(user, new List<IdentityRole> { role });
+            await _repositoryWrapper.SaveAsync();
+            return res;
         }
 
         public async Task<bool> DeleteClient(int id)
@@ -68,11 +63,6 @@ namespace VetClinic.BLL.Services
             _repositoryWrapper.ClientRepository.Remove(foundClient);
             await _repositoryWrapper.SaveAsync();
             return true;
-        }
-
-        public Task<bool> PutClient(int id, Client client, User user)
-        {
-            throw new System.NotImplementedException();
         }
     }
 }

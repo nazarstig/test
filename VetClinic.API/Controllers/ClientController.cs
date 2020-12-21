@@ -15,45 +15,38 @@ using VetClinic.API.DTO.ClientDto;
 
 namespace VetClinic.API.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class ClientController : ControllerBase
     {
         private IClientService _clientService;
-        private IUserService _userService;
         private IMapper _mapper;
-
-        public ClientController(IClientService clientService, IUserService userService, IMapper mapper)
+     
+        public ClientController(IClientService clientService, IMapper mapper)
         {
-            _clientService = clientService;
-            _userService = userService;
+            _clientService = clientService;           
             _mapper = mapper;
         }
 
+        [HttpPost]
         public async Task<IActionResult> Create(CreateClientDto dto)
         {
             User user =  _mapper.Map<CreateClientDto, User>(dto);
-            IdentityRole role = new IdentityRole { Name = "member" }; 
-            var (res, id) = await _userService.CreateUser(user, new List<IdentityRole> { role });
-            string userId;
-            Client client = new Client { };
-            if (res)
-            {
-                userId = id;
-                client = new Client { UserId = userId };
-                await _clientService.AddClient(client);
-            }
+            Client client = new Client();
+            client = await _clientService.AddClient(user, client);
             return CreatedAtAction(nameof(Show), new { Id = client.Id }, client);
         }
 
+        [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, UpdateClientDto dto)
         {
-            var getClient = await Show(id);
-            if (getClient == null) return NotFound();
+            Client client = await _clientService.GetClient(id);
+            if (client == null) return NotFound();
             else
             {
                 User user = _mapper.Map<User>(dto);
-                IdentityRole role = new IdentityRole { Name = "member" };
-                var resUser = await _userService.UpdateUser(user, new List<IdentityRole> { role });
-                if (resUser)
+                var res = await _clientService.PutClient(user, client);
+                if (res)
                 {
                     return NoContent();
                 }
@@ -61,29 +54,33 @@ namespace VetClinic.API.Controllers
             }
 
         }
+
+        [HttpGet]
         public async Task<ActionResult<ICollection<Client>>> Index()
         {
-            //UpdateClientDto createDto = new UpdateClientDto
-            //{
-            //    UserName = "stepKyrych",
-            //    FirstName = "Stepan",
-            //    LastName = "Kyrychenko",
-            //    Email = "kyrych32@gmail.com",
-            //    PhoneNumber = "4444445444",
-            //    Password = "Rolulu@15"
-            //};
-            //await Update(6, createDto);
-            //var client6 = await Show(6);
             var result = await _clientService.GetAllClients();
-            return Ok(result);
+            ICollection<ReadClientDto> readClients = new List<ReadClientDto>();
+            ReadClientDto dto;
+            foreach(Client client in result)
+            {
+                dto = _mapper.Map<ReadClientDto>(client);
+                readClients.Add(dto);
+            }
+            return Ok(readClients);
         }
 
+        [HttpGet("{id}")]
         public async Task<ActionResult<Client>> Show(int id)
         {
             var res = await _clientService.GetClient(id);
             if (res == null) 
                 return NotFound();
-            else return Ok(res);
+            else
+            {
+                ReadClientDto readClient = _mapper.Map<ReadClientDto>(res);
+                return Ok(readClient);
+            }
+                
         }
     }
 }

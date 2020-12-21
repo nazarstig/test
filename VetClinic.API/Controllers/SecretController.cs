@@ -14,6 +14,7 @@ namespace VetClinic.API.Controllers
 
         public IUserService UserService { get; }
 
+        [HttpGet]
         [Route("/secret")]
         [Authorize(Roles = "admin")]
         public string Index()

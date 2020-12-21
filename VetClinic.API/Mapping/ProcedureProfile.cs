@@ -13,13 +13,13 @@ namespace VetClinic.API.Mapping
         public ProcedureProfile()
         {
             CreateMap<CreateProcedureDTO, Procedure>().
-                 ForMember(dto => dto.ProcedureName,
+                 ForMember(d => d.ProcedureName,
                  opt => opt.MapFrom(src => src.ProcedureName)).
-                 ForMember(dto => dto.Description,
+                 ForMember(d => d.Description,
                  opt => opt.MapFrom(src => src.Description)).
-                 ForMember(dto => dto.Price,
+                 ForMember(d => d.Price,
                  opt => opt.MapFrom(src => src.Price)).
-                  ForMember(dto => dto.IsSelectable,
+                  ForMember(d => d.IsSelectable,
                  opt => opt.MapFrom(src => src.IsSelectable));
             
             //CreateMap<DeleteProcedureDTO, Procedure>().
@@ -30,20 +30,28 @@ namespace VetClinic.API.Mapping
             //     ForMember(obj => obj,
             //     opt => opt.MapFrom(src => src.Id));
 
-            CreateMap<ReadProcedureDTO, Procedure>().
-                 ForMember(dto => dto.Id,
-                 opt => opt.MapFrom(src => src.Id));
+            CreateMap<Procedure, ReadProcedureDTO>().
+                  ForMember(d => d.Id,
+                 opt => opt.MapFrom(src => src.Id)).
+                 ForMember(d => d.ProcedureName,
+                 opt => opt.MapFrom(src => src.ProcedureName)).
+                 ForMember(d => d.Description,
+                 opt => opt.MapFrom(src => src.Description)).
+                 ForMember(d => d.Price,
+                 opt => opt.MapFrom(src => src.Price)).
+                  ForMember(d => d.IsSelectable,
+                 opt => opt.MapFrom(src => src.IsSelectable));
 
             CreateMap<UpdateProcedureDTO, Procedure>().
-                 ForMember(dto => dto.Id,
+                 ForMember(d => d.Id,
                  opt => opt.MapFrom(src => src.Id)).
-                 ForMember(dto => dto.ProcedureName,
+                 ForMember(d => d.ProcedureName,
                  opt => opt.MapFrom(src => src.ProcedureName)).
-                 ForMember(dto => dto.Description,
+                 ForMember(d => d.Description,
                  opt => opt.MapFrom(src => src.Description)).
-                 ForMember(dto => dto.Price,
+                 ForMember(d => d.Price,
                  opt => opt.MapFrom(src => src.Price)).
-                  ForMember(dto => dto.IsSelectable,
+                  ForMember(d => d.IsSelectable,
                  opt => opt.MapFrom(src => src.IsSelectable));
         }
     }

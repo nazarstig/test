@@ -8,10 +8,10 @@ namespace VetClinic.BLL.Services.Interfaces
 {
     public interface IClientService
     {
-        public Task AddClient(Client client);
+        public Task<Client> AddClient(User user, Client client);
         public Task<ICollection<Client>> GetAllClients();
         public Task<Client> GetClient(int id);
-        public Task<bool> PutClient(int id, Client client, User user);
+        public Task<bool> PutClient(User user, Client client);
         public Task<bool> DeleteClient(int id);
     }
 }
