@@ -17,11 +17,6 @@ using VetClinic.DAL;
 using VetClinic.DAL.Entities;
 using VetClinic.DAL.Repositories.Interfaces;
 using VetClinic.DAL.Repositories.Realizations;
-using VetClinic.BLL.Services.Interfaces;
-using VetClinic.BLL.Services.Realizations;
-using VetClinic.API.Filters;
-using FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.Mvc;
 
 namespace VetClinic.API
 {

@@ -7,7 +7,8 @@ namespace VetClinic.API.Validators.ServiceValidators
     {
         public ServiceUpdateDTOValidator()
         {
-            RuleFor(service => service.ServiceName).NotEmpty().MaximumLength(50);
+            RuleFor(service => service.ServiceName).NotEmpty().WithMessage("Ім'я сервісу не може бути порожнім");
+            RuleFor(service => service.ServiceName).MaximumLength(50).WithMessage("Ім'я сервісу не може бути більшим 50 символів");
         }
     }
 }

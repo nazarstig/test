@@ -1,11 +1,11 @@
 ﻿using FluentValidation;
-using VetClinic.API.DTO.Service;
+using VetClinic.API.DTO;
 
-namespace VetClinic.API.Validators.ServiceValidators
+namespace VetClinic.API.Validators
 {
-    public class ServiceCreateDTOValidator : AbstractValidator<ServiceCreateDTO>
+    public class ServiceDTOValidator : AbstractValidator<ServiceDTO>
     {
-        public ServiceCreateDTOValidator()
+        public ServiceDTOValidator()
         {
             RuleFor(service => service.ServiceName).NotEmpty().WithMessage("Ім'я сервісу не може бути порожнім");
             RuleFor(service => service.ServiceName).MaximumLength(50).WithMessage("Ім'я сервісу не може бути більшим 50 символів");

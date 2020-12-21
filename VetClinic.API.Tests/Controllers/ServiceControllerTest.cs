@@ -50,7 +50,7 @@ namespace VetClinic.API.Tests
             _service.Setup(m => m.GetAllServicesAsync()).ReturnsAsync(GetTestServices());
             
             // Act
-            var okResult = await _controller.Get();
+            var okResult = await _controller.Index();
             
             // Assert
             Assert.IsType<OkObjectResult>(okResult.Result);
@@ -63,7 +63,7 @@ namespace VetClinic.API.Tests
             _service.Setup(m => m.GetAllServicesAsync()).ReturnsAsync(GetTestServices());
 
             // Act
-            var result = await _controller.Get();
+            var result = await _controller.Index();
             var okResult = result.Result as OkObjectResult;
 
             // Assert
@@ -81,7 +81,7 @@ namespace VetClinic.API.Tests
             _service.Setup(m => m.GetServiceByIdAsync(testId)).ReturnsAsync(new Service { Id = 2, ServiceName = "Makeup", Appointments = new List<Appointment>() { new Appointment() { Id = 2, AppointmentDate = DateTime.Now, ServiceId = 2 } } });
 
             // Act
-            var notFoundResult = await _controller.Get(testId + new Random().Next(1,100));
+            var notFoundResult = await _controller.Show(testId + new Random().Next(1,100));
             
             // Assert
             Assert.IsType<NotFoundResult>(notFoundResult.Result);
@@ -94,7 +94,7 @@ namespace VetClinic.API.Tests
             _service.Setup(m => m.GetServiceByIdAsync(It.IsAny<int>())).ReturnsAsync(new Service { Id = 2, ServiceName = "Makeup", Appointments = new List<Appointment>() { new Appointment() { Id = 2, AppointmentDate = DateTime.Now, ServiceId = 2 } } });
             
             // Act
-            var okResult = await _controller.Get(It.IsAny<int>());
+            var okResult = await _controller.Show(It.IsAny<int>());
             
             // Assert
             Assert.IsType<OkObjectResult>(okResult.Result);
@@ -113,7 +113,7 @@ namespace VetClinic.API.Tests
             _service.Setup(m => m.GetServiceByIdAsync(testService.Id)).ReturnsAsync(testService);
 
             // Act
-            var result = await _controller.Get(testService.Id);
+            var result = await _controller.Show(testService.Id);
             var okResult = result.Result as OkObjectResult;
             
             // Assert
@@ -123,7 +123,7 @@ namespace VetClinic.API.Tests
         }
 
         [Fact]
-        public async Task Add_ValidObjectPassed_ReturnsCreatedResponse()
+        public async Task Create_ValidObjectPassed_ReturnsCreatedResponse()
         {
             // Arrange
             Service testItem = new Service()
@@ -134,14 +134,14 @@ namespace VetClinic.API.Tests
             _service.Setup(s => s.AddAsync(It.IsAny<Service>())).ReturnsAsync(testItem);
 
             // Act           
-            var createdResponse = await _controller.PostService(It.IsAny<ServiceCreateDTO>());
+            var createdResponse = await _controller.Create(It.IsAny<ServiceCreateDTO>());
 
             // Assert
             Assert.IsType<CreatedAtActionResult>(createdResponse.Result);
         }
        
         [Fact]
-        public async Task Add_ValidObjectPassed_ReturnedResponseHasCreatedItem()
+        public async Task Create_ValidObjectPassed_ReturnedResponseHasCreatedItem()
         {
             // Arrange
             var testItem = new Service()
@@ -151,7 +151,7 @@ namespace VetClinic.API.Tests
             _service.Setup(s => s.AddAsync(It.IsAny<Service>())).ReturnsAsync(testItem);
             
             // Act
-            var createdAtActionResult = await _controller.PostService(It.IsAny<ServiceCreateDTO>());
+            var createdAtActionResult = await _controller.Create(It.IsAny<ServiceCreateDTO>());
             var result = (ServiceDTO)((CreatedAtActionResult)createdAtActionResult.Result).Value;
             
             // Assert
@@ -166,7 +166,7 @@ namespace VetClinic.API.Tests
             _service.Setup(s => s.RemoveAsync(It.IsAny<int>())).ReturnsAsync(false);
 
             // Act
-            var result = await _controller.DeleteService(It.IsAny<int>());
+            var result = await _controller.Destroy(It.IsAny<int>());
 
             // Assert
             Assert.IsType<NotFoundResult>(result);
@@ -179,33 +179,33 @@ namespace VetClinic.API.Tests
             _service.Setup(s => s.RemoveAsync(It.IsAny<int>())).ReturnsAsync(true);
             
             // Act
-            var result = await _controller.DeleteService(It.IsAny<int>());
+            var result = await _controller.Destroy(It.IsAny<int>());
             
             // Assert
             Assert.IsType<NoContentResult>(result);
         }
 
         [Fact]
-        public async Task PutService_ServiceExists_ReturnsNoContent()
+        public async Task UpdateService_ServiceExists_ReturnsNoContent()
         {   
             // Arrange
             _service.Setup(s => s.UpdateAsync(It.IsAny<int>(),It.IsAny<Service>())).ReturnsAsync(true);
 
             // Act
-            var result = await _controller.UpdateService(It.IsAny<int>(),It.IsAny<ServiceUpdateDTO>());
+            var result = await _controller.Update(It.IsAny<int>(),It.IsAny<ServiceUpdateDTO>());
 
             // Assert
             Assert.IsType<NoContentResult>(result);
         }
 
         [Fact]
-        public async Task PutService_ServiceDoesNotExist_ReturnNotFound()
+        public async Task UpdateService_ServiceDoesNotExist_ReturnNotFound()
         {
             // Arrange
             _service.Setup(s => s.UpdateAsync(It.IsAny<int>(),It.IsAny<Service>())).ReturnsAsync(false);
            
             // Act
-            var result = await _controller.UpdateService(It.IsAny<int>(),It.IsAny<ServiceUpdateDTO>());
+            var result = await _controller.Update(It.IsAny<int>(),It.IsAny<ServiceUpdateDTO>());
 
             // Assert
             Assert.IsType<NotFoundResult>(result);
