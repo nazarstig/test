@@ -39,17 +39,17 @@ namespace VetClinic.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ReadDoctorDto>> Create(CreateDoctorDto doctorDto)
+        public async Task<ActionResult<ReadDoctorDto>> Create(ReadDoctorDto doctorDto)
         {
             var doctor = _mapper.Map<Doctor>(doctorDto);
             var createdDoctor = await _doctorService.AddDoctorAsync(doctor, doctor.User);
             var readDoctorDto = _mapper.Map<ReadDoctorDto>(createdDoctor);
 
-            return CreatedAtAction(nameof(Show), new { id = doctor.Id }, doctorDto);
+            return CreatedAtAction(nameof(Show), new { id = doctor.Id }, readDoctorDto);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<ReadDoctorDto>> Update(ReadDoctorDto doctorDto, int id)
+        public async Task<ActionResult<CreateDoctorDto>> Update(CreateDoctorDto doctorDto, int id)
         {
             var doctor = _mapper.Map<Doctor>(doctorDto);
             var successUpdate = await _doctorService.UpdateDoctorAsync(doctor, doctor.User , id);

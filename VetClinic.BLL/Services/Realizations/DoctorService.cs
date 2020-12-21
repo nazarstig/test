@@ -30,8 +30,8 @@ namespace VetClinic.BLL.Services.Realizations
                 role = await _roleManager.FindByNameAsync("doctor");
             }
                         
-            List<IdentityRole> roles = new List<IdentityRole> { role};
-            var (sucssess, userId) =await _userService.CreateUser(user, roles);
+            
+            var (sucssess, userId) =await _userService.CreateUserAsync(user, role);
             if (sucssess)
             {
                 _repositoryWrapper.DoctorRepository.Add(doctor);
@@ -64,6 +64,7 @@ namespace VetClinic.BLL.Services.Realizations
             if (doctor != null)
             {
                 _repositoryWrapper.DoctorRepository.Remove(doctor);
+                await _userService.DeleteUserAsync(doctor.UserId);
 
                 await _repositoryWrapper.SaveAsync();
                 return true;
@@ -80,10 +81,11 @@ namespace VetClinic.BLL.Services.Realizations
                 await _roleManager.CreateAsync(new IdentityRole() { Name = "doctor" });
                 role = await _roleManager.FindByNameAsync("doctor");
             }
+            
+            var doctor= await _repositoryWrapper.DoctorRepository.GetFirstOrDefaultAsync(
+                filter: c => c.Id == doctorId,
+                include: c=>c.Include(d=>d.User));
 
-            List<IdentityRole> roles = new List<IdentityRole> { role };
-            var doctor= await _repositoryWrapper.DoctorRepository.GetFirstOrDefaultAsync(c => c.Id == doctorId
-            );
             if (doctor==null)             
                 return false;
 
@@ -92,9 +94,21 @@ namespace VetClinic.BLL.Services.Realizations
 
             if (inputDoctor != null)
             {
-                inputDoctor.Id = doctorId;                
-                inputDoctor.User = null;
-                _repositoryWrapper.DoctorRepository.Update(inputDoctor);                
+                doctor.Education = inputDoctor.Education;
+                doctor.Biography = inputDoctor.Biography;
+                doctor.Experience = inputDoctor.Experience;
+                doctor.Photo = inputDoctor.Photo;
+                doctor.PositionId = inputDoctor.PositionId;
+
+                doctor.User.UserName = inputUser.UserName;
+                doctor.User.FirstName = inputUser.FirstName;
+                doctor.User.LastName = inputUser.LastName;
+                doctor.User.Email = inputUser.Email;
+                doctor.User.PhoneNumber = inputUser.PhoneNumber;                              
+
+                _repositoryWrapper.DoctorRepository.Update(doctor);
+                await _userService.UpdateUserAsync(doctor.UserId, doctor.User, role);
+
                 await _repositoryWrapper.SaveAsync();
                 return true;
             }

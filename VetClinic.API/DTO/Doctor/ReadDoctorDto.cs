@@ -4,6 +4,7 @@ namespace VetClinic.API.DTO.Doctor
 {
     public class ReadDoctorDto
     {       
+        public int Id { get; set; }
         public string Education { get; set; }
         public string Biography { get; set; }
         public string Experience { get; set; }

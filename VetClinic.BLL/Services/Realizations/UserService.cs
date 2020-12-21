@@ -39,12 +39,12 @@ namespace VetClinic.BLL.Services.Realizations
                         _ = await UserManager.AddToRoleAsync(inputUser, role.Name);
                     }
                 }
-                    
+
                 return (true, UserManager.FindByNameAsync(inputUser.UserName).Result.Id);
             }
-             return (false, string.Empty);
+            return (false, string.Empty);
         }
-        
+
         public async Task<bool> UpdateUserAsync(string id, User inputUser, params IdentityRole[] inputRoles)
         {
             var user = UserManager.FindByIdAsync(id).Result;
@@ -56,7 +56,7 @@ namespace VetClinic.BLL.Services.Realizations
                 user.LastName = inputUser.LastName;
                 user.Email = inputUser.Email;
                 user.PhoneNumber = inputUser.PhoneNumber;
-                
+
                 //We need to pull roles explicitly because they are in a different table
                 var MyRoles = await UserManager.GetRolesAsync(user);
 
@@ -76,11 +76,24 @@ namespace VetClinic.BLL.Services.Realizations
 
                 _ = await UserManager.UpdateSecurityStampAsync(user);
 
-                return true;   
+                return true;
             }
             return false;
         }
-        
+
+        public async Task<bool> DeleteUserAsync(string id)
+        {
+            var user = await UserManager.FindByIdAsync(id);
+            var result = await UserManager.DeleteAsync(user);
+
+            if (result.Succeeded)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         private bool Equals(IEnumerable<string> arr1, IEnumerable<IdentityRole> arr2)
         {
             IEnumerable<string> roles = arr2.Select(arr2 => arr2.Name);
