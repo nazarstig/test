@@ -31,8 +31,4 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\VetClinic.BLL.Tests\VetClinic.BLL.Tests.csproj" />
-  </ItemGroup>
-
 </Project>

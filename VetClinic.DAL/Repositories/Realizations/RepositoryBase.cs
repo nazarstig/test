@@ -83,7 +83,6 @@ namespace VetClinic.DAL.Repositories.Realizations
             if (filter != null)
                 query = query.Where(filter);
             
-
             return query;
         }
     }

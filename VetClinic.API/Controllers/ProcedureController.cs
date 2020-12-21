@@ -7,71 +7,71 @@ using VetClinic.DAL.Entities;
 using VetClinic.BLL.Services;
 using VetClinic.API.DTO.ProcedureDTO;
 using AutoMapper;
+using System.Net;
+using VetClinic.BLL.Services.Interfaces;
 
 namespace VetClinic.API.Controllers
 {
-    public class ProcedureController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class ProcedureController : ControllerBase
     {
-        private ProcedureService _procedureService;
+        private IProcedureService _procedureService;
 
         private IMapper _mapper;
-        public ProcedureController(ProcedureService procedureService, IMapper mapper)
+
+       
+        public ProcedureController(IProcedureService procedureService, IMapper mapper)
         {
             _procedureService = procedureService;
             _mapper = mapper;
         }
-        public void AddProcedure(CreateProcedureDTO procedureDTO)
+        [HttpPost]
+        public async Task<IActionResult> Create(CreateProcedureDTO procedureDTO)
         {
             Procedure procedure = _mapper.Map<CreateProcedureDTO, Procedure>(procedureDTO);
-            _procedureService.AddProcedure(procedure);            
+            await _procedureService.AddProcedure(procedure);
+            return CreatedAtAction(nameof(Show), new { id = procedure.Id }, procedure);
         }
 
         [HttpPut]
-        public async Task<IActionResult> PutProcedure(UpdateProcedureDTO procedureDTO)
+        public async Task<IActionResult> Update(UpdateProcedureDTO procedureDTO)
         {
             Procedure procedure = _mapper.Map<UpdateProcedureDTO, Procedure>(procedureDTO);
             if (await _procedureService.PutProcedure(procedure))
-                return Ok();
+                return NoContent();
             else return NotFound();
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteProcedure(DeleteProcedureDTO procedureDTO)
+        public async Task<IActionResult> Destroy(int id)
         {
-            Procedure procedure = _mapper.Map<DeleteProcedureDTO, Procedure>(procedureDTO);
-            if (await _procedureService.DeleteProcedure(procedure))
-                return Ok();
+            if (await _procedureService.DeleteProcedure(id))
+                return NoContent();
             else return NotFound();
         }
 
-        [HttpGet]
-        public ActionResult<ICollection<string>> GetAllProceduresNames()
-        {
-            var names = _procedureService.GetAllProceduresNames();
-            if (names == null) return NotFound();
-            else return Ok(names);
-        }
-
-        [HttpGet]
-        public async Task<ActionResult<ICollection<Procedure>>> GetAllProcedures()
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ICollection<Procedure>>> Index()
         {            
             var res =  await _procedureService.GetAllProcedures();
-            if (res == null) return NotFound();
-            else return Ok(res);
+            return Ok(res);
         }
 
         [HttpGet]
-        public async Task<ActionResult<Procedure>> GetProcedure(ReadProcedureDTO dto)
+        public async Task<ActionResult<Procedure>> Show(int id)
         {
             //CreateProcedureDTO createTemp = new CreateProcedureDTO { ProcedureName = "cleaning", Price = 100M, Description = "for all animals", IsSelectable = true};
             //AddProcedure(createTemp);
-            //UpdateProcedureDTO updateTemp = new UpdateProcedureDTO { Id = 9, Description = "for cats only", Price = 100M, IsSelectable = false };
+            //UpdateProcedureDTO updateTemp = new UpdateProcedureDTO { Id = 20, Description = "for cats only", Price = 100M, IsSelectable = false };
             //var res = await PutProcedure(updateTemp);
             //DeleteProcedureDTO deleteTemp = new DeleteProcedureDTO { Id = 10 };
-            DeleteProcedureDTO deleteTemp = new DeleteProcedureDTO { Id = 3};
-            int id = deleteTemp.Id;//_mapper.Map<ReadProcedureDTO, int>(dto);
+            
+            //int id = deleteTemp.Id;//_mapper.Map<ReadProcedureDTO, int>(dto);
             var result = await _procedureService.GetProcedure(id);
-            if (result == null) return NotFound();
+            DeleteProcedureDTO deleteTemp = new DeleteProcedureDTO { Id = 7};
+            // await DeleteProcedure(20);
+            //if (result == null) return NotFound();
             return Ok(result);
         }
 
