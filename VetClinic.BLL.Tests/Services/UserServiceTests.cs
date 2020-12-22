@@ -17,27 +17,27 @@ namespace VetClinic.BLL.Tests.Services
             RoleManager<IdentityRole> roleManager,
             [Frozen] Mock<UserManager<User>> userManager)
         {
-            //arrange
+            //Arrange
             userManager.Setup(c => c.FindByNameAsync(It.IsAny<string>()))
                 .ReturnsAsync(user);
 
             var sut = new UserService(userManager.Object, roleManager);
 
-            //act
+            //Act
             var (result, id) = await sut.CreateUserAsync(user, roles);
 
-            //assert
+            //Assert
             Assert.False(result);
             Assert.Equal(string.Empty, id);
         }
-        
+
         [Theory, AutoMoqData]
         public async Task CreateUser_CreateFailure_ReturnFalse(User user,
             IdentityRole[] roles,
             RoleManager<IdentityRole> roleManager,
             [Frozen] Mock<UserManager<User>> userManager)
         {
-            //arrange
+            //Arrange
             userManager.Setup(c => c.FindByNameAsync(It.IsAny<string>()))
                 .ReturnsAsync((User)null);
 
@@ -46,10 +46,10 @@ namespace VetClinic.BLL.Tests.Services
 
             var sut = new UserService(userManager.Object, roleManager);
 
-            //act
+            //Act
             var (result, id) = await sut.CreateUserAsync(user, roles);
 
-            //assert
+            //Assert
             Assert.False(result);
             Assert.Equal(string.Empty, id);
         }
@@ -60,7 +60,7 @@ namespace VetClinic.BLL.Tests.Services
             [Frozen] Mock<RoleManager<IdentityRole>> roleManager,
             [Frozen] Mock<UserManager<User>> userManager)
         {
-            //arrange
+            //Arrange
             userManager.SetupSequence(c => c.FindByNameAsync(It.IsAny<string>()))
                 .ReturnsAsync((User)null)
                 .ReturnsAsync(user);
@@ -76,10 +76,10 @@ namespace VetClinic.BLL.Tests.Services
 
             var sut = new UserService(userManager.Object, roleManager.Object);
 
-            //act
+            //Act
             var (result, id) = await sut.CreateUserAsync(user, roles);
 
-            //assert
+            //Assert
             Assert.True(result);
             Assert.NotEqual(string.Empty, id);
         }
@@ -90,16 +90,16 @@ namespace VetClinic.BLL.Tests.Services
             RoleManager<IdentityRole> roleManager,
             [Frozen] Mock<UserManager<User>> userManager)
         {
-            //arrange
+            //Arrange
             userManager.Setup(c => c.FindByIdAsync(It.IsAny<string>()))
                 .ReturnsAsync((User)null);
 
             var sut = new UserService(userManager.Object, roleManager);
 
-            //act
+            //Act
             var result = await sut.UpdateUserAsync("42", user, roles);
 
-            //assert
+            //Assert
             Assert.False(result);
         }
 
@@ -108,7 +108,7 @@ namespace VetClinic.BLL.Tests.Services
             RoleManager<IdentityRole> roleManager,
             [Frozen] Mock<UserManager<User>> userManager)
         {
-            //arrange
+            //Arrange
             userManager.Setup(c => c.FindByIdAsync(It.IsAny<string>()))
                 .ReturnsAsync(user);
 
@@ -117,10 +117,10 @@ namespace VetClinic.BLL.Tests.Services
 
             var sut = new UserService(userManager.Object, roleManager);
 
-            //act
+            //Act
             var result = await sut.DeleteUserAsync("42");
 
-            //assert
+            //Assert
             Assert.True(result);
         }
 
@@ -129,7 +129,7 @@ namespace VetClinic.BLL.Tests.Services
            RoleManager<IdentityRole> roleManager,
            [Frozen] Mock<UserManager<User>> userManager)
         {
-            //arrange
+            //Arrange
             userManager.Setup(c => c.FindByIdAsync(It.IsAny<string>()))
                 .ReturnsAsync(user);
 
@@ -138,12 +138,11 @@ namespace VetClinic.BLL.Tests.Services
 
             var sut = new UserService(userManager.Object, roleManager);
 
-            //act
+            //Act
             var result = await sut.DeleteUserAsync("42");
 
-            //assert
+            //Assert
             Assert.False(result);
         }
-        
     }
 }

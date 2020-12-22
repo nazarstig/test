@@ -68,6 +68,8 @@ namespace VetClinic.API
             services.AddScoped<IUserService, UserService>();            
 
 
+            services.AddServices();
+
             services.AddSwaggerConfig();
         }
 
