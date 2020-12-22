@@ -112,11 +112,9 @@ namespace VetClinic.API.Tests.Controllers
                .Returns(positionDTO);
 
             // Act
-            var actualResult = await positionController.PostAsync(positionDTO);
+            await positionController.PostAsync(positionDTO);
 
-            // Assert 
-            var result = actualResult as CreatedAtActionResult;
-            Assert.Equal(positionDTO, result.Value);
+            // Assert                        
             positionServiceMock.Verify(m => m.AddPositionAsync(position), Times.Once);
         }
 

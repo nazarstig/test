@@ -45,7 +45,7 @@ namespace VetClinic.API.Controllers
             var createdPosition =await _positionService.AddPositionAsync(_mapper.Map<Position>(position));
             var positionDto = _mapper.Map<PositionDto>(createdPosition);
 
-            return CreatedAtAction(nameof(GetAsync), new { id = positionDto.Id }, positionDto);
+            return Created(nameof(GetAsync), positionDto);
         }    
 
         [HttpPut("{id}")]

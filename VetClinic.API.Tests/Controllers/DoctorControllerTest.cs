@@ -111,11 +111,10 @@ namespace VetClinic.API.Tests.Controllers
                .Returns(readDoctorDto);
 
             // Act
-            var actualResult = await doctorController.PostAsync(createDoctorDto);
+            await doctorController.PostAsync(createDoctorDto);
 
-            // Assert 
-            var result = actualResult as CreatedAtActionResult;
-            Assert.Equal(readDoctorDto, result.Value);
+            // Assert
+                       
             doctorServiceMock.Verify(m => m.AddDoctorAsync(doctor,doctor.User), Times.Once);
         }
 

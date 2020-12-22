@@ -47,7 +47,7 @@ namespace VetClinic.API.Controllers
             var createdDoctor = await _doctorService.AddDoctorAsync(doctor, doctor.User);
             var readDoctorDto = _mapper.Map<ReadDoctorDto>(createdDoctor);
 
-            return CreatedAtAction(nameof(GetAsync), new { id = doctor.Id }, readDoctorDto);
+            return Created(nameof(GetAsync),readDoctorDto);
         }
 
         [HttpPut("{id}")]
