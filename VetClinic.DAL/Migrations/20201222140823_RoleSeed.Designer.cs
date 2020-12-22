@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VetClinic.DAL;
 
 namespace VetClinic.DAL.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20201222140823_RoleSeed")]
+    partial class RoleSeed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -419,9 +421,7 @@ namespace VetClinic.DAL.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Complaints")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("DoctorId")
                         .HasColumnType("int");
@@ -430,13 +430,10 @@ namespace VetClinic.DAL.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("StatusId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(3);
+                        .HasColumnType("int");
 
                     b.Property<string>("TreatmentDescription")
-                        .HasColumnType("nvarchar(500)")
-                        .HasMaxLength(500);
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -938,13 +935,13 @@ namespace VetClinic.DAL.Migrations
                         {
                             Id = "1",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "c56a3bcf-57cf-499f-9ca6-80348c31ab15",
+                            ConcurrencyStamp = "0a0ff5c7-813b-4b82-9025-27c744feab01",
                             Email = "KolesoAnastasiya@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             PhoneNumber = "0984112333",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "e3411cc0-4999-4bf6-9561-846b9f4c0150",
+                            SecurityStamp = "5f06386c-ff3b-47e8-8235-b1cbe88b8c91",
                             TwoFactorEnabled = false,
                             UserName = "Koleso Anastasiya"
                         },
@@ -952,13 +949,13 @@ namespace VetClinic.DAL.Migrations
                         {
                             Id = "2",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "f565619f-d9c3-4748-ae44-5347e661d365",
+                            ConcurrencyStamp = "56184e50-dc1e-4fde-be73-03e765af11e3",
                             Email = "NazarenkoOleh@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             PhoneNumber = "0954453374",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "20917fd6-8e62-4bee-af36-c086f1f1bf4a",
+                            SecurityStamp = "8a74c4a3-cf05-41d1-86f0-a9d857ccf526",
                             TwoFactorEnabled = false,
                             UserName = "Nazarenko Oleh"
                         },
@@ -966,13 +963,13 @@ namespace VetClinic.DAL.Migrations
                         {
                             Id = "3",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "d5d2a95c-6261-4029-aadc-2e3cc7326be4",
+                            ConcurrencyStamp = "e9cd709f-1237-4cf5-83df-30259405c658",
                             Email = "NoorkovaShuba@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             PhoneNumber = "0934453214",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "7fab7a3f-170e-4708-9d9b-47af9b78c7cf",
+                            SecurityStamp = "944a4ec1-6204-4977-8b21-4f583e089a58",
                             TwoFactorEnabled = false,
                             UserName = "Noorkova Shuba"
                         },
@@ -980,13 +977,13 @@ namespace VetClinic.DAL.Migrations
                         {
                             Id = "4",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "b7495af9-dc67-4367-a5e1-32b476a0c1d8",
+                            ConcurrencyStamp = "7ef436e8-2ee7-4d43-9f78-9168b351490a",
                             Email = "VozniyAndriy@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             PhoneNumber = "0931412622",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "36fe0377-d9f9-43fa-b63d-369a45ffbc95",
+                            SecurityStamp = "b1fa9873-1201-4149-9783-0fe6a20578a0",
                             TwoFactorEnabled = false,
                             UserName = "Vozniy Andriy"
                         },
@@ -994,13 +991,13 @@ namespace VetClinic.DAL.Migrations
                         {
                             Id = "5",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "c5d4238c-cdd8-46f2-a6a3-eabdd8045c1d",
+                            ConcurrencyStamp = "e31961c7-cb87-49e8-9a87-f99558ad7e11",
                             Email = "KosovichMaruna@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             PhoneNumber = "0681236324",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "2dbf6734-49a7-4739-878b-816ef112e114",
+                            SecurityStamp = "1f2e1b93-65ee-4bd2-886c-d2bf11666152",
                             TwoFactorEnabled = false,
                             UserName = "Kosovich Maruna"
                         },
@@ -1008,13 +1005,13 @@ namespace VetClinic.DAL.Migrations
                         {
                             Id = "6",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "fc6f8d6a-fb30-4f19-9f7d-eacfcacea582",
+                            ConcurrencyStamp = "e1225141-a969-448a-8ee2-9b17a2f3005a",
                             Email = "WernudubIvan@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             PhoneNumber = "0982123654",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "537ae340-1672-4a5b-8e1d-344833baf40c",
+                            SecurityStamp = "4ff494b0-bebc-43c0-a408-382ddf6c9b05",
                             TwoFactorEnabled = false,
                             UserName = "Wernudub Ivan"
                         },
@@ -1022,13 +1019,13 @@ namespace VetClinic.DAL.Migrations
                         {
                             Id = "7",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "090f8de9-8eb0-4c9b-ada4-a5e86f083896",
+                            ConcurrencyStamp = "ddf5515d-0024-43e3-96f2-340387ba9a9a",
                             Email = "MukolenkoNadiya@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             PhoneNumber = "0982131254",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "7ec707cd-d54b-42fe-abf0-1fb692911782",
+                            SecurityStamp = "0bb7f018-73f2-4e94-beb8-4db71532fbdb",
                             TwoFactorEnabled = false,
                             UserName = "Mukolenko Nadiya"
                         });
@@ -1103,7 +1100,7 @@ namespace VetClinic.DAL.Migrations
             modelBuilder.Entity("VetClinic.DAL.Entities.Appointment", b =>
                 {
                     b.HasOne("VetClinic.DAL.Entities.Animal", "Animal")
-                        .WithMany("Appointments")
+                        .WithMany()
                         .HasForeignKey("AnimalId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
