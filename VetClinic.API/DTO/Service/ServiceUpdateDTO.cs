@@ -1,6 +1,6 @@
 ﻿namespace VetClinic.API.DTO.Service
 {
-    public class ServiceUpdateDTO
+    public class ServiceUpdateDto
     {
         public string ServiceName { get; set; }
     }

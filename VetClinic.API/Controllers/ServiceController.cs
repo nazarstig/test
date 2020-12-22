@@ -24,16 +24,16 @@ namespace VetClinic.API.Controllers
 
         //GET api/service
         [HttpGet]
-        public async Task<ActionResult<ICollection<ServiceDTO>>> Index()
+        public async Task<ActionResult<ICollection<ServiceDto>>> Index()
         {
             var services = await _serviceService.GetAllServicesAsync();
-            var servicesDTO = _mapper.Map<ICollection<ServiceDTO>>(services);
+            var servicesDTO = _mapper.Map<ICollection<ServiceDto>>(services);
             return Ok(servicesDTO);
         }
 
         // GET api/service/3
         [HttpGet("{id:min(1)}")]
-        public async Task<ActionResult<ServiceDTO>> Show([FromRoute] int id)
+        public async Task<ActionResult<ServiceDto>> Show([FromRoute] int id)
         {
             var service = await _serviceService.GetServiceByIdAsync(id);
 
@@ -42,23 +42,23 @@ namespace VetClinic.API.Controllers
                 return NotFound();
             }
 
-            var serviceDTO = _mapper.Map<ServiceDTO>(service);
+            var serviceDTO = _mapper.Map<ServiceDto>(service);
             return Ok(serviceDTO);
         }
 
         // POST api/service
         [HttpPost]
-        public async Task<ActionResult<ServiceDTO>> Create([FromBody] ServiceCreateDTO serviceCreateDTO)
+        public async Task<ActionResult<ServiceDto>> Create([FromBody] ServiceCreateDto serviceCreateDTO)
         {
             var service = _mapper.Map<Service>(serviceCreateDTO);
             var insertedService  =  await _serviceService.AddAsync(service);
-            var insertedServiceDTO = _mapper.Map<ServiceDTO>(insertedService);
+            var insertedServiceDTO = _mapper.Map<ServiceDto>(insertedService);
             return CreatedAtAction("Get", new { id = insertedServiceDTO.Id }, insertedServiceDTO);
         }
 
         // PUT api/service/id
         [HttpPut("{id:min(1)}")]
-        public async Task<IActionResult> Update([FromRoute] int id, [FromBody]ServiceUpdateDTO serviceUpdateDTO)
+        public async Task<IActionResult> Update([FromRoute] int id, [FromBody]ServiceUpdateDto serviceUpdateDTO)
         {
             var service = _mapper.Map<Service>(serviceUpdateDTO);
             var updated = await _serviceService.UpdateAsync(id, service);

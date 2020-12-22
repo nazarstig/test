@@ -68,7 +68,7 @@ namespace VetClinic.API.Tests
 
             // Assert
             Assert.IsType<OkObjectResult>(okResult);
-            var items = Assert.IsType<List<ServiceDTO>>(okResult.Value);
+            var items = Assert.IsType<List<ServiceDto>>(okResult.Value);
             Assert.Equal(3, items.Count);           
         }
 
@@ -117,9 +117,9 @@ namespace VetClinic.API.Tests
             var okResult = result.Result as OkObjectResult;
             
             // Assert
-            Assert.IsType<ServiceDTO>(okResult.Value);
-            Assert.Equal(testService.Id, (okResult.Value as ServiceDTO).Id);
-            Assert.Equal(testService.ServiceName, (okResult.Value as ServiceDTO).ServiceName);
+            Assert.IsType<ServiceDto>(okResult.Value);
+            Assert.Equal(testService.Id, (okResult.Value as ServiceDto).Id);
+            Assert.Equal(testService.ServiceName, (okResult.Value as ServiceDto).ServiceName);
         }
 
         [Fact]
@@ -134,7 +134,7 @@ namespace VetClinic.API.Tests
             _service.Setup(s => s.AddAsync(It.IsAny<Service>())).ReturnsAsync(testItem);
 
             // Act           
-            var createdResponse = await _controller.Create(It.IsAny<ServiceCreateDTO>());
+            var createdResponse = await _controller.Create(It.IsAny<ServiceCreateDto>());
 
             // Assert
             Assert.IsType<CreatedAtActionResult>(createdResponse.Result);
@@ -151,11 +151,11 @@ namespace VetClinic.API.Tests
             _service.Setup(s => s.AddAsync(It.IsAny<Service>())).ReturnsAsync(testItem);
             
             // Act
-            var createdAtActionResult = await _controller.Create(It.IsAny<ServiceCreateDTO>());
-            var result = (ServiceDTO)((CreatedAtActionResult)createdAtActionResult.Result).Value;
+            var createdAtActionResult = await _controller.Create(It.IsAny<ServiceCreateDto>());
+            var result = (ServiceDto)((CreatedAtActionResult)createdAtActionResult.Result).Value;
             
             // Assert
-            Assert.IsType<ServiceDTO>(result);
+            Assert.IsType<ServiceDto>(result);
             Assert.Equal(testItem.ServiceName, result.ServiceName);
         }
 
@@ -192,7 +192,7 @@ namespace VetClinic.API.Tests
             _service.Setup(s => s.UpdateAsync(It.IsAny<int>(),It.IsAny<Service>())).ReturnsAsync(true);
 
             // Act
-            var result = await _controller.Update(It.IsAny<int>(),It.IsAny<ServiceUpdateDTO>());
+            var result = await _controller.Update(It.IsAny<int>(),It.IsAny<ServiceUpdateDto>());
 
             // Assert
             Assert.IsType<NoContentResult>(result);
@@ -205,7 +205,7 @@ namespace VetClinic.API.Tests
             _service.Setup(s => s.UpdateAsync(It.IsAny<int>(),It.IsAny<Service>())).ReturnsAsync(false);
            
             // Act
-            var result = await _controller.Update(It.IsAny<int>(),It.IsAny<ServiceUpdateDTO>());
+            var result = await _controller.Update(It.IsAny<int>(),It.IsAny<ServiceUpdateDto>());
 
             // Assert
             Assert.IsType<NotFoundResult>(result);
