@@ -22,16 +22,15 @@ namespace VetClinic.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<ICollection<ReadDoctorDto>>> Index()
+        public async Task<IActionResult> GetAsync()
         {
             var doctors = await _doctorService.GetDoctorAsync();
             var doctorsDto = _mapper.Map<ICollection<ReadDoctorDto>>(doctors);        
             return Ok(doctorsDto);
         }
 
-
         [HttpGet("{id}")]
-        public async Task<ActionResult<ReadDoctorDto>> Show(int id)
+        public async Task<IActionResult> GetAsync(int id)
         {
             Doctor doctor = await _doctorService.GetDoctorAsync(id);
             ReadDoctorDto doctorDto = _mapper.Map<ReadDoctorDto>(doctor);
@@ -42,29 +41,28 @@ namespace VetClinic.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ReadDoctorDto>> Create(CreateDoctorDto doctorDto)
+        public async Task<IActionResult> PostAsync(CreateDoctorDto doctorDto)
         {
             var doctor = _mapper.Map<Doctor>(doctorDto);
             var createdDoctor = await _doctorService.AddDoctorAsync(doctor, doctor.User);
             var readDoctorDto = _mapper.Map<ReadDoctorDto>(createdDoctor);
 
-            return CreatedAtAction(nameof(Show), new { id = doctor.Id }, readDoctorDto);
+            return CreatedAtAction(nameof(GetAsync), new { id = doctor.Id }, readDoctorDto);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<ReadDoctorDto>> Update(ReadDoctorDto doctorDto, int id)
+        public async Task<IActionResult> PutAsync(ReadDoctorDto doctorDto, int id)
         {
             var doctor = _mapper.Map<Doctor>(doctorDto);
             var successUpdate = await _doctorService.UpdateDoctorAsync(doctor, doctor.User , id);
-            if (successUpdate)
-            {
+            if (successUpdate)            
                 return NoContent();
-            }
+            
             return NotFound();
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Destroy(int id)
+        public async Task<IActionResult> DeleteAsync(int id)
         {
             var successDelete = await _doctorService.RemoveDoctorAsync(id);
             if (successDelete)

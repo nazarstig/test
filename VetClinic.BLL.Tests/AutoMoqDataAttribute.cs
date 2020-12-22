@@ -7,8 +7,6 @@ namespace VetClinic.API.Tests
 {
     internal class AutoMoqDataAttribute : AutoDataAttribute
     {
-
-
         public AutoMoqDataAttribute() : base(() =>
         {
             var fixture = new Fixture().Customize(new CompositeCustomization(

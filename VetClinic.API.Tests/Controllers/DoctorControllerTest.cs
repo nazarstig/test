@@ -15,8 +15,6 @@ namespace VetClinic.API.Tests.Controllers
 {
     public class DoctorControllerTest
     {
-
-
         private readonly Mock<IDoctorService> doctorServiceMock ;
         private readonly Mock<IMapper> mapper;
         private readonly DoctorController doctorController;
@@ -41,13 +39,13 @@ namespace VetClinic.API.Tests.Controllers
                 .Returns(doctorDto);
 
             // Act
-            var actualResult = await doctorController.Index();
+            var actualResult = await doctorController.GetAsync();
 
             // Assert      
-            var result = actualResult.Result as OkObjectResult;
+            var result = actualResult as OkObjectResult;
 
             Assert.Equal(doctorDto, result.Value);
-            Assert.True(actualResult.Result is OkObjectResult);
+            Assert.True(actualResult is OkObjectResult);
             doctorServiceMock.Verify(m => m.GetDoctorAsync(), Times.Once);
         }
 
@@ -64,12 +62,12 @@ namespace VetClinic.API.Tests.Controllers
                 .Returns(doctorDto);
 
             // Act
-            var actualResult = await doctorController.Show(doctor.Id);
+            var actualResult = await doctorController.GetAsync(doctor.Id);
 
             // Assert    
-            var result = actualResult.Result as OkObjectResult;
+            var result = actualResult as OkObjectResult;
             Assert.Equal(doctorDto, result.Value);
-            Assert.True(actualResult.Result is OkObjectResult);
+            Assert.True(actualResult is OkObjectResult);
             doctorServiceMock.Verify(m => m.GetDoctorAsync(doctor.Id), Times.Once);
         }
 
@@ -85,18 +83,16 @@ namespace VetClinic.API.Tests.Controllers
             mapper1.Setup(m => m.Map<ReadDoctorDto>(docotr))
                 .Returns(null as ReadDoctorDto);
             doctorServiceMock1.Setup(p => p.GetDoctorAsync(docotr.Id))
-                .ReturnsAsync(null as Doctor);
-            
+                .ReturnsAsync(null as Doctor);            
 
             var doctorController1 = new DoctorController(doctorServiceMock1.Object, mapper1.Object);
 
             // Act
-            var actualResult = await doctorController1.Show(docotr.Id);
+            var actualResult = await doctorController1.GetAsync(docotr.Id);
 
             // Assert                          
-            Assert.True(actualResult.Result is NotFoundResult);
+            Assert.True(actualResult is NotFoundResult);
             doctorServiceMock1.Verify(m => m.GetDoctorAsync(docotr.Id), Times.Once);
-
         }
 
 
@@ -115,10 +111,10 @@ namespace VetClinic.API.Tests.Controllers
                .Returns(readDoctorDto);
 
             // Act
-            var actualResult = await doctorController.Create(createDoctorDto);
+            var actualResult = await doctorController.PostAsync(createDoctorDto);
 
             // Assert 
-            var result = actualResult.Result as CreatedAtActionResult;
+            var result = actualResult as CreatedAtActionResult;
             Assert.Equal(readDoctorDto, result.Value);
             doctorServiceMock.Verify(m => m.AddDoctorAsync(doctor,doctor.User), Times.Once);
         }
@@ -136,10 +132,10 @@ namespace VetClinic.API.Tests.Controllers
                 .Returns(doctor);
 
             // Act
-            var actualResult = await doctorController.Update(doctorDto, doctor.Id);
+            var actualResult = await doctorController.PutAsync(doctorDto, doctor.Id);
 
             // Assert             
-            Assert.True(actualResult.Result is NoContentResult);
+            Assert.True(actualResult is NoContentResult);
             doctorServiceMock.Verify(m => m.UpdateDoctorAsync(doctor, doctor.User, doctor.Id), Times.Once);
         }
 
@@ -156,12 +152,13 @@ namespace VetClinic.API.Tests.Controllers
                 .Returns(doctor);
 
             // Act
-            var actualResult = await doctorController.Update(doctorDto, doctor.Id);
+            var actualResult = await doctorController.PutAsync(doctorDto, doctor.Id);
 
             // Assert             
-            Assert.True(actualResult.Result is NotFoundResult);
+            Assert.True(actualResult is NotFoundResult);
             Assert.NotNull(actualResult);
         }
+
 
         [Theory, AutoMoqData]
         public async Task Delete_DocotrId_ReturnsNoContent(
@@ -172,7 +169,7 @@ namespace VetClinic.API.Tests.Controllers
                 .ReturnsAsync(true);
 
             // Act
-            var actualResult = await doctorController.Destroy(id);
+            var actualResult = await doctorController.DeleteAsync(id);
 
             // Assert             
             Assert.True(actualResult is NoContentResult);
@@ -189,12 +186,11 @@ namespace VetClinic.API.Tests.Controllers
                 .ReturnsAsync(false);
 
             // Act
-            var actualResult = await doctorController.Destroy(id);
+            var actualResult = await doctorController.DeleteAsync(id);
 
             // Assert             
             Assert.True(actualResult is NotFoundResult);
             doctorServiceMock.Verify(m => m.RemoveDoctorAsync(id), Times.Once);
         }
-
     }
 }

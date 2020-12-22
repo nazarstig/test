@@ -7,7 +7,7 @@ namespace VetClinic.API.Validators.Doctor
     {
         public CreateDoctorDtoValidator()
         {
-            
+            //TO DO validation rules for CreateDoctorDto   
         }
     }
 }

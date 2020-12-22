@@ -22,6 +22,7 @@ namespace VetClinic.API.Tests.Services
             positionService = new PositionService(repositoryMock.Object);
         }
 
+
         [Theory, AutoMoqData]
         public async Task GetAll_EqualCount([Frozen]List<Position> positions )
         {
@@ -35,9 +36,9 @@ namespace VetClinic.API.Tests.Services
 
             // Assert
             Assert.Equal(positions.Count, actual.Count);
-            repositoryMock.Verify(m => m.PositionRepository.GetAsync(null,null,null,false), Times.Once);
-            
+            repositoryMock.Verify(m => m.PositionRepository.GetAsync(null,null,null,false), Times.Once);            
         }
+
 
         [Theory, AutoMoqData]
         public async Task GetById_PositionId_ReturnsPositionWithRequestedId([Frozen] Position position)
@@ -54,8 +55,8 @@ namespace VetClinic.API.Tests.Services
             // Assert
             Assert.Equal(position.Id, actual.Id);
             repositoryMock.Verify(m => m.PositionRepository.GetFirstOrDefaultAsync(p => p.Id == id, null, false), Times.Once);
-
         }
+
 
         [Theory, AutoMoqData]
         public async Task Add_Position_ReturnsAdedPosition([Frozen] Position position)
@@ -71,8 +72,8 @@ namespace VetClinic.API.Tests.Services
             Assert.Equal(position.Id, actual.Id);
             repositoryMock.Verify(m => m.PositionRepository.Add(position), Times.Once);
             repositoryMock.Verify(m => m.SaveAsync(), Times.Once);
-
         }
+
 
         [Theory, AutoMoqData]
         public async Task Remove_Position_ReturnsTrue([Frozen] Position position)
@@ -88,9 +89,9 @@ namespace VetClinic.API.Tests.Services
 
             // Assert      
             Assert.True(actual);
-            repositoryMock.Verify(m => m.PositionRepository.Remove(position), Times.Once);            
-
+            repositoryMock.Verify(m => m.PositionRepository.Remove(position), Times.Once);        
         }
+
 
         [Theory, AutoMoqData]
         public async Task Removee_PositionId_ReturnsFalce([Frozen]int id)
@@ -108,6 +109,7 @@ namespace VetClinic.API.Tests.Services
             repositoryMock.Verify(m => m.PositionRepository.Remove(null), Times.Never);
         }
 
+
         [Theory, AutoMoqData]
         public async Task Update_NullPosition_ReturnsFalce(Position position)
         {
@@ -121,6 +123,7 @@ namespace VetClinic.API.Tests.Services
             Assert.False(actual);
             repositoryMock.Verify(m => m.PositionRepository.Update(null), Times.Never);
         }
+
 
         [Theory, AutoMoqData]
         public async Task Update_Position_ReturnsTrue([Frozen] Position position)
@@ -139,6 +142,7 @@ namespace VetClinic.API.Tests.Services
             repositoryMock.Verify(m => m.PositionRepository.Update(position), Times.Once);
         }
 
+
         [Theory, AutoMoqData]
         public async Task Update_PositionUnableId_ReturnsFalce([Frozen] Position position)
         {
@@ -155,8 +159,5 @@ namespace VetClinic.API.Tests.Services
             Assert.False(actual);
             repositoryMock.Verify(m => m.PositionRepository.Update(position), Times.Never);
         }
-
     }
-
-
 }

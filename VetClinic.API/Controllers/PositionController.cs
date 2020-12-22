@@ -18,51 +18,48 @@ namespace VetClinic.API.Controllers
         public PositionController(IPositionService positionService, IMapper mapper )
         {
             _positionService = positionService;
-            _mapper = mapper;            
-
+            _mapper = mapper;          
         }
 
         [HttpGet]
-        public async Task<ActionResult<ICollection<PositionDto>>> Index()
+        public async Task<IActionResult> GetAsync()
         {
             var positionsDTO = _mapper.Map<ICollection<PositionDto>>(await _positionService.GetPositionAsync());
             return Ok(positionsDTO);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<PositionDto>> Show(int id)
+        public async Task<IActionResult> GetAsync(int id)
         {
             var position = await _positionService.GetPositionAsync(id);
             var positionDTO = _mapper.Map<PositionDto>(position);
             if (positionDTO == null)
                 return NotFound();
+
             return Ok(positionDTO);
         }
 
         [HttpPost]
-        public async Task<ActionResult<PositionDto>> Create(PositionDto position)
+        public async Task<IActionResult> PostAsync(PositionDto position)
         {
             var createdPosition =await _positionService.AddPositionAsync(_mapper.Map<Position>(position));
             var positionDto = _mapper.Map<PositionDto>(createdPosition);
 
-            return CreatedAtAction(nameof(Show), new { id = positionDto.Id }, positionDto);
-        }
-    
+            return CreatedAtAction(nameof(GetAsync), new { id = positionDto.Id }, positionDto);
+        }    
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<PositionDto>> Update(PositionDto position, int id)
+        public async Task<IActionResult> PutAsync(PositionDto position, int id)
         {
             var successUpdate = await _positionService.UpdatePositionAsync((_mapper.Map<Position>(position)), id);
-            if (successUpdate)
-            {
+            if (successUpdate)            
                 return NoContent();
-            }
+            
             return NotFound();
         }
 
-
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Destroy(int id)
+        public async Task<IActionResult> DeleteAsync(int id)
         {
             var successDelete = await _positionService.RemovePositionAsync(id);
             if (successDelete)
@@ -70,6 +67,5 @@ namespace VetClinic.API.Controllers
 
             return NotFound();
         }
-
     }
 }

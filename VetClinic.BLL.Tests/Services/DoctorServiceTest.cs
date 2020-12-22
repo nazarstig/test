@@ -17,7 +17,6 @@ namespace VetClinic.BLL.Tests.Services
 {
     public class DoctorServiceTest
     {
-
         [Theory, AutoMoqData]
         public async Task GetAll_EqualCount(List<Doctor> doctors,
             [Frozen] Mock<IUserService> _userServiceMock,
@@ -35,8 +34,11 @@ namespace VetClinic.BLL.Tests.Services
 
             // Assert
             Assert.Equal(doctors.Count, actual.Count);
-            _repositoryMock.Verify(m => m.DoctorRepository.GetAsync(null, It.IsAny<Func<IQueryable<Doctor>, IIncludableQueryable<Doctor, object>>>(), null, false), Times.Once);
-
+            _repositoryMock.Verify(m => m.DoctorRepository
+                .GetAsync(null,
+                It.IsAny<Func<IQueryable<Doctor>, IIncludableQueryable<Doctor, object>>>(),
+                null, false),
+                Times.Once);
         }
 
 
@@ -60,9 +62,13 @@ namespace VetClinic.BLL.Tests.Services
 
             // Assert
             Assert.Equal(doctor.Id, actual.Id);
-            _repositoryMock.Verify(m => m.DoctorRepository.GetFirstOrDefaultAsync(c => c.Id == id, It.IsAny<Func<IQueryable<Doctor>, IIncludableQueryable<Doctor, object>>>(), false), Times.Once);
-
+            _repositoryMock.Verify(m => m.DoctorRepository
+                .GetFirstOrDefaultAsync(c => c.Id == id,
+                    It.IsAny<Func<IQueryable<Doctor>, IIncludableQueryable<Doctor, object>>>(),
+                    false),
+                    Times.Once);
         }
+
 
         [Theory, AutoMoqData]
         public async Task GetById_DoctorId_ReturnNull(Doctor doctor,
@@ -82,11 +88,13 @@ namespace VetClinic.BLL.Tests.Services
             // Act
             var actual = await _doctorService.GetDoctorAsync(id);
 
-
             // Assert
             Assert.Null(actual);
-            _repositoryMock.Verify(m => m.DoctorRepository.GetFirstOrDefaultAsync(c => c.Id == id, It.IsAny<Func<IQueryable<Doctor>, IIncludableQueryable<Doctor, object>>>(), false), Times.Once);
-
+            _repositoryMock.Verify(m => m.DoctorRepository
+                .GetFirstOrDefaultAsync(c => c.Id == id,
+                    It.IsAny<Func<IQueryable<Doctor>, IIncludableQueryable<Doctor, object>>>(),
+                    false),
+                    Times.Once);
         }
 
 
@@ -104,17 +112,15 @@ namespace VetClinic.BLL.Tests.Services
             _userServiceMock.Setup(x => x.CreateUserAsync(user, role))
                 .ReturnsAsync((true, doctor.UserId));
 
-
             var _doctorService = new DoctorService(_repositoryMock.Object, _userServiceMock.Object, _roleManagerMock.Object);
 
             // Act    
             var actual= await _doctorService.AddDoctorAsync(doctor, user);
 
             // Assert            
-            Assert.Equal(doctor, actual);            
-            
-
+            Assert.Equal(doctor, actual); 
         }
+
 
         [Theory, AutoMoqData]
         public async Task RemoveDoctor_DoctorId_ReturnTrue(Doctor doctor,
@@ -123,7 +129,6 @@ namespace VetClinic.BLL.Tests.Services
             [Frozen] Mock<RoleManager<IdentityRole>> _roleManagerMock)
         {
             // Arrange
-
             int doctorid = doctor.Id;
             string userId = doctor.UserId;
 
@@ -142,8 +147,8 @@ namespace VetClinic.BLL.Tests.Services
             Assert.True(actual);
             _repositoryMock.Verify(m => m.DoctorRepository.Remove(doctor), Times.Once);
             _userServiceMock.Verify(m => m.DeleteUserAsync(userId), Times.Once);
-
         }
+
 
         [Theory, AutoMoqData]
         public async Task RemoveDoctor_DoctorId_ReturnFalce(Doctor doctor,
@@ -152,7 +157,6 @@ namespace VetClinic.BLL.Tests.Services
             [Frozen] Mock<RoleManager<IdentityRole>> _roleManagerMock)
         {
             // Arrange
-
             int doctorid = doctor.Id;
             string userId = doctor.UserId;
 
@@ -171,7 +175,6 @@ namespace VetClinic.BLL.Tests.Services
             Assert.False(actual);
             _repositoryMock.Verify(m => m.DoctorRepository.Remove(doctor), Times.Never);
             _userServiceMock.Verify(m => m.DeleteUserAsync(userId), Times.Never);
-
         }
 
 
@@ -182,7 +185,6 @@ namespace VetClinic.BLL.Tests.Services
             [Frozen] Mock<IRepositoryWrapper> _repositoryMock,
             [Frozen] Mock<RoleManager<IdentityRole>> _roleManagerMock)
         {
-
             // Arrange
             int doctorid = doctor.Id;            
 
@@ -199,9 +201,9 @@ namespace VetClinic.BLL.Tests.Services
             var actual = await _doctorService.UpdateDoctorAsync(doctor,user,doctorid);
 
             // Assert            
-            Assert.False(actual);      
-
+            Assert.False(actual); 
         }
+
 
         [Theory, AutoMoqData]
         public async Task Update_InputDoctorIsNull_ReturnFalce(Doctor doctor,
@@ -210,7 +212,6 @@ namespace VetClinic.BLL.Tests.Services
             [Frozen] Mock<IRepositoryWrapper> _repositoryMock,
             [Frozen] Mock<RoleManager<IdentityRole>> _roleManagerMock)
         {
-
             // Arrange
             int doctorid = doctor.Id;
             Doctor inputDoctor = null;
@@ -229,8 +230,8 @@ namespace VetClinic.BLL.Tests.Services
 
             // Assert            
             Assert.False(actual);
-
         }
+
 
         [Theory, AutoMoqData]
         public async Task Update_InputDoctorUserDocotrId_ReturnTrue(Doctor doctor,
@@ -240,7 +241,6 @@ namespace VetClinic.BLL.Tests.Services
             [Frozen] Mock<IRepositoryWrapper> _repositoryMock,
             [Frozen] Mock<RoleManager<IdentityRole>> _roleManagerMock)
         {
-
             // Arrange
             int doctorid = doctor.Id;
             
@@ -264,7 +264,6 @@ namespace VetClinic.BLL.Tests.Services
             Assert.True(actual);
             _repositoryMock.Verify(c => c.DoctorRepository.Update(doctor),Times.Once);
             _repositoryMock.Verify(c => c.SaveAsync(), Times.Once);
-
         }
     }
 }

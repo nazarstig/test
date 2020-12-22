@@ -13,6 +13,7 @@ namespace VetClinic.BLL.Services.Realizations
         {
             _repositoryWrapper = repositoryWrapper;
         }
+
         public async Task<Position> AddPositionAsync(Position position)
         {
             _repositoryWrapper.PositionRepository.Add(position);
@@ -22,14 +23,12 @@ namespace VetClinic.BLL.Services.Realizations
 
         public async Task<Position> GetPositionAsync(int positionId)
         {            
-           return await _repositoryWrapper.PositionRepository.GetFirstOrDefaultAsync(p => p.Id == positionId);
-                      
+           return await _repositoryWrapper.PositionRepository.GetFirstOrDefaultAsync(p => p.Id == positionId);                      
         }
 
         public async Task<ICollection<Position>> GetPositionAsync()
         {
             return await _repositoryWrapper.PositionRepository.GetAsync();
-
         }
        
         public async Task<bool> RemovePositionAsync(int id)
@@ -43,7 +42,6 @@ namespace VetClinic.BLL.Services.Realizations
             }
 
             return false;
-
         }
 
         public async Task<bool> UpdatePositionAsync(Position position, int id)
@@ -59,8 +57,7 @@ namespace VetClinic.BLL.Services.Realizations
                 return true;
             }
 
-            return false;
-            
+            return false;            
         }
     }
 }
