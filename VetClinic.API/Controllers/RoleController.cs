@@ -7,7 +7,7 @@ using VetClinic.API.DTO.Role;
 
 namespace VetClinic.API.Controllers
 {
-    [Route("roles")]
+    [Route("api/[controller]")]
     public class RoleController : Controller
     {
         public RoleController(RoleManager<IdentityRole> roleManager, IMapper mapper)
@@ -21,7 +21,7 @@ namespace VetClinic.API.Controllers
 
         [Route("")]
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> GetAsync()
         {
             var roles = RoleManager.Roles;
             IEnumerable<RoleDto> roleDtos = Mapper.Map<IEnumerable<IdentityRole>, IEnumerable<RoleDto>>(roles);
@@ -31,7 +31,7 @@ namespace VetClinic.API.Controllers
 
         [Route("{id}")]
         [HttpGet]
-        public async Task<IActionResult> Show(string id)
+        public async Task<IActionResult> GetAsync(string id)
         {
             IdentityRole role = await RoleManager.FindByIdAsync(id);
             if (role == null)
@@ -45,7 +45,7 @@ namespace VetClinic.API.Controllers
 
         [Route("")]
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateRoleDto dto)
+        public async Task<IActionResult> PostAsync([FromBody] CreateRoleDto dto)
         {
             IdentityRole role = Mapper.Map<CreateRoleDto, IdentityRole>(dto);
 
@@ -56,7 +56,7 @@ namespace VetClinic.API.Controllers
 
         [Route("{id}")]
         [HttpPut]
-        public async Task<IActionResult> Update(string id, [FromBody] CreateRoleDto dto)
+        public async Task<IActionResult> PutAsync(string id, [FromBody] CreateRoleDto dto)
         {
             IdentityRole inputRole = Mapper.Map<CreateRoleDto, IdentityRole>(dto);
 
@@ -72,7 +72,7 @@ namespace VetClinic.API.Controllers
 
         [Route("{id}")]
         [HttpDelete]
-        public async Task<IActionResult> Destroy(string id)
+        public async Task<IActionResult> DeleteAsync(string id)
         {
             var role = await RoleManager.FindByIdAsync(id);
             _ = await RoleManager.DeleteAsync(role);

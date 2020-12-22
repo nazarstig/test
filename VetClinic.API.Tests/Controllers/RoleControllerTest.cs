@@ -15,7 +15,7 @@ namespace VetClinic.API.Tests.Controllers
     public class RoleControllerTest
     {
         [Theory, AutoMoqData]
-        public void Index_NoParams_ReturnOk(IQueryable<IdentityRole> roles,
+        public async Task Index_NoParams_ReturnOk(IQueryable<IdentityRole> roles,
             [Frozen] Mock<RoleManager<IdentityRole>> roleManagerMock,
             [Frozen] Mock<IMapper> mapper)
         {
@@ -25,7 +25,7 @@ namespace VetClinic.API.Tests.Controllers
             var sut = new RoleController(roleManagerMock.Object, mapper.Object);
 
             //Act
-            var result = sut.Index();
+            var result = await sut.GetAsync();
             var contentResult = result as ObjectResult;
 
             //Assert
@@ -50,7 +50,7 @@ namespace VetClinic.API.Tests.Controllers
             var sut = new RoleController(roleManagerMock.Object, mapper.Object);
 
             //Act
-            var result = await sut.Show("test");
+            var result = await sut.GetAsync("test");
             var contentResult = result as OkObjectResult;
 
             //Assert
@@ -72,7 +72,7 @@ namespace VetClinic.API.Tests.Controllers
             var sut = new RoleController(roleManagerMock.Object, mapper.Object);
 
             //Act
-            var result = await sut.Show("test");
+            var result = await sut.GetAsync("test");
 
             //Assert
             Assert.NotNull(result);
@@ -92,7 +92,7 @@ namespace VetClinic.API.Tests.Controllers
             var sut = new RoleController(roleManagerMock.Object, mapper.Object);
 
             //Act
-            var result = await sut.Create(dto);
+            var result = await sut.PostAsync(dto);
             var contentResult = result as ObjectResult;
 
             //Assert
@@ -119,7 +119,7 @@ namespace VetClinic.API.Tests.Controllers
             var sut = new RoleController(roleManagerMock.Object, mapper.Object);
 
             //Act
-            var result = await sut.Update(It.IsAny<string>(), dto);
+            var result = await sut.PutAsync(It.IsAny<string>(), dto);
 
             //Assign
             Assert.NotNull(result);
@@ -137,7 +137,7 @@ namespace VetClinic.API.Tests.Controllers
             var sut = new RoleController(roleManagerMock.Object, mapper.Object);
 
             //Act
-            var result = await sut.Destroy(It.IsAny<string>());
+            var result = await sut.DeleteAsync(It.IsAny<string>());
 
             //Assign
             Assert.NotNull(result);
