@@ -4,7 +4,7 @@ using Newtonsoft.Json.Serialization;
 using System;
 using System.Threading.Tasks;
 using VetClinic.API.DTO.Error;
-using VetClinic.API.Exceptions;
+using VetClinic.BLL.Exceptions;
 
 namespace VetClinic.API.Middlewares
 {
