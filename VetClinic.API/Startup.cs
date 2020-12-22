@@ -65,6 +65,8 @@ namespace VetClinic.API
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
             services.AddScoped<IUserService, UserService>();
 
+            services.AddServices();
+
             services.AddSwaggerConfig();
         }
 
