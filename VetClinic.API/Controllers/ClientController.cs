@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using VetClinic.DAL.Entities;
 using VetClinic.API.DTO.ClientDto;
 using VetClinic.BLL.Services.Interfaces;
-using VetClinic.API.DTO.ClientDto;
 
 namespace VetClinic.API.Controllers
 {
@@ -47,7 +46,6 @@ namespace VetClinic.API.Controllers
                 }
                 else return NotFound();
             }
-
         }
 
         [HttpGet]
@@ -74,8 +72,7 @@ namespace VetClinic.API.Controllers
             {
                 ReadClientDto readClient = _mapper.Map<ReadClientDto>(res);
                 return Ok(readClient);
-            }
-                
+            }               
         }
 
         [HttpDelete("{id}")]

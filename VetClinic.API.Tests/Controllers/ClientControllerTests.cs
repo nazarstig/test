@@ -12,13 +12,11 @@ using VetClinic.DAL.Entities;
 using VetClinic.DAL.Repositories.Interfaces;
 using VetClinic.API.DTO.ClientDto;
 using Xunit;
-using VetClinic.API.DTO.ClientDto;
 
 namespace VetClinic.API.Tests.ControllerTests
 {
     public class ClientControllerTests
-    {
-      
+    {     
             ClientController _clientController;
             Mock<IRepositoryWrapper> _repositoryWrapper;
             Mock<IClientRepository> _clientRepository;
@@ -38,73 +36,95 @@ namespace VetClinic.API.Tests.ControllerTests
                     m.AddProfile(new UserProfile());
                 }
                 );
-
                 _mapper = mapperConfig.CreateMapper();
                 _clientService = new Mock<IClientService>();
                 _userService = new Mock<IUserService>();
                 _clientController = new ClientController(_clientService.Object, _mapper);
-
                 _client = new Client
                 {
                     Id = 9,
                     UserId = "4"
-                };
-                           
+                };                          
             }
 
             [Fact]
             public async Task GetAll_ReturnsResult()
             {
+                //Arrange
                 ICollection<Client> collection = ClientsList();
                 _clientService.Setup(p => p.GetAllClients()).ReturnsAsync(collection);
+
+                //Action
                 var result = await _clientController.GetAsync();
+
+                //Assert
                 Assert.True(result.Result is OkObjectResult);
             }
 
-        [Fact]
-        public async Task Get_Succeded()
-        {
-            _clientService.Setup(p => p.GetClient(9)).ReturnsAsync(_client);
-            var result = await _clientController.GetAsync(9);
-            Assert.True(result.Result is OkObjectResult);
-        }
-
-        [Fact]
-        public async Task Get_Failed()
-        {
-            _clientService.Setup(p => p.GetClient(9)).ReturnsAsync(_client);
-            var result = await _clientController.GetAsync(6);
-            Assert.True(result.Result is NotFoundResult);
-        }
-
-        [Fact]
-        public async Task Put_ReturnsResult()
-        {
-            UpdateClientDto dto = new UpdateClientDto { };
-            User user = new User { };
-            _clientService.Setup(p => p.PutClient(user, _client)).ReturnsAsync(false);
-            var result = await _clientController.PutAsync(3, dto);
-            Assert.False(result is null);
-        }
-
-        [Fact]
-        public async Task Put_Failed()
-        {
-            UpdateClientDto dto = new UpdateClientDto { };
-            User user = new User { };
-            _clientService.Setup(p => p.PutClient(user, _client)).ReturnsAsync(false);
-            var result = await _clientController.PutAsync(3, dto);
-            Assert.True(result is NotFoundResult);
-        }
-
-        private ICollection<Client> ClientsList()
+            [Fact]
+            public async Task Get_Succeded()
             {
-                return new List<Client>
-                {
-                    new Client{Id=1, UserId = "1"},
-                    new Client{Id=1, UserId = "1"},
-                    new Client{Id=1, UserId = "1"},
-                };
+                //Arrange
+                _clientService.Setup(p => p.GetClient(9)).ReturnsAsync(_client);
+             
+                //Action
+                var result = await _clientController.GetAsync(9);
+
+                //Assert
+                Assert.True(result.Result is OkObjectResult);
             }
-        }
+            
+            [Fact]
+            public async Task Get_Failed()
+            {   
+                //Assert
+                _clientService.Setup(p => p.GetClient(9)).ReturnsAsync(_client);
+
+                //Action
+                var result = await _clientController.GetAsync(6);
+
+                //Assert
+                Assert.True(result.Result is NotFoundResult);
+            }
+            
+            [Fact]
+            public async Task Put_ReturnsResult()
+            {
+                //Arrange
+                UpdateClientDto dto = new UpdateClientDto { };
+                User user = new User { };
+                _clientService.Setup(p => p.PutClient(user, _client)).ReturnsAsync(false);
+
+                //Action
+                var result = await _clientController.PutAsync(3, dto);
+
+                //Assert
+                Assert.False(result is null);
+            }
+            
+            [Fact]
+            public async Task Put_Failed()
+            {
+                //Arrange
+                UpdateClientDto dto = new UpdateClientDto { };
+                User user = new User { };
+                _clientService.Setup(p => p.PutClient(user, _client)).ReturnsAsync(false);
+
+                //Action
+                var result = await _clientController.PutAsync(3, dto);
+
+                //Assert
+                Assert.True(result is NotFoundResult);
+            }
+            
+            private ICollection<Client> ClientsList()
+            {
+               return new List<Client>
+               {
+                   new Client{Id=1, UserId = "1"},
+                   new Client{Id=1, UserId = "1"},
+                   new Client{Id=1, UserId = "1"},
+               };
+            }
+    }
 }

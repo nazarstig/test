@@ -7,13 +7,12 @@ namespace VetClinic.API.Validators.Procedure
     {
         public CreateProcedureDtoValidator()
         {
-            RuleFor(proc => proc.ProcedureName).NotEmpty().WithMessage("Ім'я процедури не може бути порожнім")
-                .MaximumLength(100).WithMessage("Нікнейм не може бути довшим ніж 100 символів");
+            RuleFor(proc => proc.ProcedureName).NotEmpty().WithMessage("Procedure name cannot be empty")
+                .MaximumLength(100).WithMessage("Procedure name cannot be longer than 100 symbols");
 
-            RuleFor(proc => proc.Description).NotEmpty().WithMessage("Опис процедури не може бути порожнім");
+            RuleFor(proc => proc.Description).NotEmpty().WithMessage("Description cannot be empty");
 
-            RuleFor(proc => proc.Price).GreaterThan(0M).WithMessage("Ціна не може бути від'ємною");
-
+            RuleFor(proc => proc.Price).GreaterThan(0M).WithMessage("Price cannot be negative");
         }
     }
 }

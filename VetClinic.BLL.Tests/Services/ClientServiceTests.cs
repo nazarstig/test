@@ -46,24 +46,24 @@ namespace VetClinic.BLL.Tests.ServiceTests.ClientServiceTests
         [Fact]
         public async void GetClient_ReturnsResult()
         {
-            //arrange
+            //Arrange
             _repositoryWrapper.Setup(r => r.ClientRepository.GetFirstOrDefaultAsync(
                 It.IsAny<Expression<Func<Client, bool>>>(),
                 It.IsAny<Func<IQueryable<Client>, IIncludableQueryable<Client, object>>>(),
                 It.IsAny<bool>()
                 )).ReturnsAsync(_client);
 
-            //action
+            //Action
             var result = await _clientService.GetClient(134);
 
-            //assert
+            //Assert
             Assert.Equal(_client.Id, result.Id);
         }
 
         [Fact]
         public async void GetAllClients_ReturnsResult()
         {
-            //arrange
+            //Arrange
             _repositoryWrapper.Setup(r => r.ClientRepository.GetAsync(
                It.IsAny<Expression<Func<Client, bool>>>(),
                It.IsAny<Func<IQueryable<Client>, IIncludableQueryable<Client, object>>>(),
@@ -71,53 +71,54 @@ namespace VetClinic.BLL.Tests.ServiceTests.ClientServiceTests
                It.IsAny<bool>()
                )).ReturnsAsync(ClientsList());
 
-            //action
+            //Action
             var result = await _clientService.GetAllClients();
 
-            //assert
+            //Assert
             Assert.Equal(result.Count, ClientsList().Count);
         }
 
         [Fact]
         public async Task PutOperation_ReturnsResult()
         {
-            //arrange
+            //Arrange
             _clientRepository.Setup(repo => repo.Update(_client)); 
 
-            //action
+            //Action
             var result = await _clientService.PutClient(_user, _client);
 
-            //assert
+            //Assert
             Assert.NotNull(result);
         }
       
         [Fact]
         public async void DeleteOperation_ReturnsResult()
         {
-            //arrange
+            //Arrange
             _clientRepository.Setup(repo => repo.Remove(_client));
             Client delClient = new Client { Id = 9, UserId = _user.Id };
 
-            //action
+            //Action
             var result = await _clientService.DeleteClient(9);
 
-            //assert
+            //Assert
             Assert.NotNull(result);
         }
 
         [Fact]
         public async Task DeleteOperation_Succeded()
         {
-            //arrange
+            //Arrange
             _repositoryWrapper.Setup(r => r.ClientRepository.GetFirstOrDefaultAsync(It.IsAny<Expression<Func<Client, bool>>>(),
                It.IsAny<Func<IQueryable<Client>, IIncludableQueryable<Client, object>>>(),
                It.IsAny<bool>()
                )).ReturnsAsync(_client);
             _userService.Setup(s => s.DeleteUserAsync(_user.Id)).ReturnsAsync(true);
-            //action
+            
+            //Action
             var res = await _clientService.DeleteClient(_client.Id);
 
-            //assert
+            //Assert
             Assert.Equal(res, true);
         }
 
@@ -130,6 +131,5 @@ namespace VetClinic.BLL.Tests.ServiceTests.ClientServiceTests
                 new Client { Id = 6, UserId = "7" }
             };
         }
-
     }
 }

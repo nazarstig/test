@@ -43,14 +43,14 @@ namespace VetClinic.API.ExtensionMethods
                     //context.Database.Migrate();
 
                     var roleMgr = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-                    var member = roleMgr.FindByNameAsync("member").Result;
-                    if (member == null)
+                    var client = roleMgr.FindByNameAsync("client").Result;
+                    if (client == null)
                     {
-                        member = new IdentityRole
+                        client = new IdentityRole
                         {
                             Name = "member"
                         };
-                        _ = roleMgr.CreateAsync(member).Result;
+                        _ = roleMgr.CreateAsync(client).Result;
                     }
 
                     var admin = roleMgr.FindByNameAsync("admin").Result;
@@ -129,9 +129,9 @@ namespace VetClinic.API.ExtensionMethods
                             throw new Exception(result.Errors.First().Description);
                         }
 
-                        if (!userMgr.IsInRoleAsync(bob, member.Name).Result)
+                        if (!userMgr.IsInRoleAsync(bob, client.Name).Result)
                         {
-                            _ = userMgr.AddToRoleAsync(bob, member.Name).Result;
+                            _ = userMgr.AddToRoleAsync(bob, client.Name).Result;
                         }
 
                         Log.Debug("bob created");

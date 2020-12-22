@@ -17,8 +17,7 @@ namespace VetClinic.API.Mapping
                  opt => opt.MapFrom(src => src.Price)).
                   ForMember(d => d.IsSelectable,
                  opt => opt.MapFrom(src => src.IsSelectable));
-            
-          
+                      
             CreateMap<Procedure, ReadProcedureDTO>().
                   ForMember(d => d.Id,
                  opt => opt.MapFrom(src => src.Id)).

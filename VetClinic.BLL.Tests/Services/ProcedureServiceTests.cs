@@ -15,7 +15,6 @@ using System.Threading.Tasks;
 
 namespace VetClinic.BLL.Tests.ServiceTests.ProcedureServiceTests
 {
-
     public class ProcedureServiceTests
     {
         IProcedureService _procedureService;
@@ -42,24 +41,24 @@ namespace VetClinic.BLL.Tests.ServiceTests.ProcedureServiceTests
         [Fact]
         public async Task GetProcedure_ReturnsResult()
         {   
-            //arrange
+            //Arrange
             _repositoryWrapper.Setup(r => r.ProcedureRepository.GetFirstOrDefaultAsync(
                 It.IsAny<Expression<Func<Procedure, bool>>>(),
                 It.IsAny<Func<IQueryable<Procedure>, IIncludableQueryable<Procedure, object>>>(), 
                 It.IsAny<bool>()
                 )).ReturnsAsync(_procedure);
            
-            //action
+            //Action
             var result = await _procedureService.GetProcedure(134);
 
-            //assert
+            //Assert
             Assert.Equal(result.Price, _procedure.Price);
         }
 
         [Fact]
         public async Task GetAllProcedures_ReturnsResult()
         {
-            //arrange
+            //Arrange
             _repositoryWrapper.Setup(r => r.ProcedureRepository.GetAsync(
                It.IsAny<Expression<Func<Procedure, bool>>>(),
                It.IsAny<Func<IQueryable<Procedure>, IIncludableQueryable<Procedure, object>>>(),
@@ -67,40 +66,40 @@ namespace VetClinic.BLL.Tests.ServiceTests.ProcedureServiceTests
                It.IsAny<bool>()
                )).ReturnsAsync(ProceduresList());
 
-            //action
+            //Action
             var result = await _procedureService.GetAllProcedures();
 
-            //assert
+            //Assert
             Assert.Equal(result.Count, ProceduresList().Count);
         }
 
         [Fact]
         public async Task AddProcedure_Invoked()
         {
-            //arrange
+            //Arrange
             _procedureRepository.Setup(repo => repo.Add(_procedure));
 
-            //action
+            //Action
             await _procedureService.AddProcedure(_procedure);
 
-            //assert
+            //Assert
             _procedureRepository.Verify(r => r.Add(It.IsAny<Procedure>()), Times.Once);
         }
 
         [Fact]
         public async Task PutProcedure_ReturnsResult()
         {
-            //arrange
+            //Arrange
             _procedureRepository.Setup(repo => repo.Update(_procedure));
             _repositoryWrapper.Setup(r => r.ProcedureRepository.GetFirstOrDefaultAsync(It.IsAny<Expression<Func<Procedure, bool>>>(),
              It.IsAny<Func<IQueryable<Procedure>, IIncludableQueryable<Procedure, object>>>(),
              It.IsAny<bool>()
              )).ReturnsAsync(_procedure);
 
-            //action
+            //Action
             var result = await _procedureService.PutProcedure(_procedure.Id, _procedure);
             
-            //assert
+            //Assert
             Assert.NotNull(result);
         }
 
@@ -120,36 +119,35 @@ namespace VetClinic.BLL.Tests.ServiceTests.ProcedureServiceTests
 
             //asset
             Assert.Equal(_procedure.ProcedureName, procedureUpdated.ProcedureName);
-
         }
 
         [Fact]
         public async Task DeleteProcedure_ReturnsResult()
         {
-            //arrange
+            //Arrange
             _procedureRepository.Setup(repo => repo.Remove(_procedure));
 
-            //action
+            //Action
             var result = await _procedureService.DeleteProcedure(9);
 
-            //assert
+            //Assert
             Assert.NotNull(result);
         }
 
         [Fact]
         public async Task DeleteProcedure_Succeded()
         {
-            //arrange
+            //Arrange
             _repositoryWrapper.Setup(r => r.ProcedureRepository.GetFirstOrDefaultAsync(It.IsAny<Expression<Func<Procedure, bool>>>(),
                It.IsAny<Func<IQueryable<Procedure>, IIncludableQueryable<Procedure, object>>>(),
                It.IsAny<bool>()
                )).ReturnsAsync(_procedure);
             _procedureRepository.Setup(repo => repo.Remove(_procedure));
 
-            //action
+            //Action
             var res = await _procedureService.DeleteProcedure(_procedure.Id);
 
-            //assert
+            //Assert
             Assert.Equal(res, true);
         }
 
@@ -158,12 +156,10 @@ namespace VetClinic.BLL.Tests.ServiceTests.ProcedureServiceTests
         {
             return new List<Procedure>
             {
-                    new Procedure{Id=1, IsSelectable=true, ProcedureName="SPA procedures", Description="Best for your pet", Price=1000},
-                    new Procedure{Id=2, IsSelectable=false, ProcedureName="Operation", Description="Paw fracture", Price=2000},
-                    new Procedure{Id=3, IsSelectable=true, ProcedureName="Examination of animal", Description="Pet inspection", Price=50}
+                new Procedure{Id=1, IsSelectable=true, ProcedureName="SPA procedures", Description="Best for your pet", Price=1000},
+                new Procedure{Id=2, IsSelectable=false, ProcedureName="Operation", Description="Paw fracture", Price=2000},
+                new Procedure{Id=3, IsSelectable=true, ProcedureName="Examination of animal", Description="Pet inspection", Price=50}
             };
         }
-
-
     }
 }

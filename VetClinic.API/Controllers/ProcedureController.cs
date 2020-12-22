@@ -13,15 +13,14 @@ namespace VetClinic.API.Controllers
     public class ProcedureController : ControllerBase
     {
         private IProcedureService _procedureService;
-
-        private IMapper _mapper;
-
-       
+        private IMapper _mapper; 
+        
         public ProcedureController(IProcedureService procedureService, IMapper mapper)
         {
             _procedureService = procedureService;
             _mapper = mapper;
         }
+
         [HttpPost]
         public async Task<IActionResult> PostAsync(CreateProcedureDTO procedureDTO)
         {
@@ -72,6 +71,5 @@ namespace VetClinic.API.Controllers
             }
             else return NotFound();
         }
-
     }
 }
