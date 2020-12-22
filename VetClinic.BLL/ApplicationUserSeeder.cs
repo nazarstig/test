@@ -32,6 +32,7 @@ namespace VetClinic.BLL
                     LastName = "Smith",
                     Email = "AliceSmith@email.com",
                     EmailConfirmed = true,
+                    PhoneNumber = "123456789123",
                 };
                 var result = userManager.CreateAsync(alice, "Pass123$").Result;
                 if (!result.Succeeded)
@@ -71,7 +72,8 @@ namespace VetClinic.BLL
                     FirstName = "Alice",
                     LastName = "Smith",
                     Email = "BobSmith@email.com",
-                    EmailConfirmed = true
+                    EmailConfirmed = true,
+                    PhoneNumber = "123456789321",
                 };
                 var result = userManager.CreateAsync(bob, "Pass123$").Result;
                 if (!result.Succeeded)
