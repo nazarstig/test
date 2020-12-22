@@ -29,6 +29,8 @@
     <Compile Remove="Migrations\20201222172636_FixFirsLastName.Designer.cs" />
     <Compile Remove="Migrations\20201222173008_FixFirsLastName.cs" />
     <Compile Remove="Migrations\20201222173008_FixFirsLastName.Designer.cs" />
+    <Compile Remove="Migrations\20201222173446_FixFirstLastName.cs" />
+    <Compile Remove="Migrations\20201222173446_FixFirstLastName.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

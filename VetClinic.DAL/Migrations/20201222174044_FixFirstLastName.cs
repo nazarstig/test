@@ -2,7 +2,7 @@
 
 namespace VetClinic.DAL.Migrations
 {
-    public partial class FixFirsLastName : Migration
+    public partial class FixFirstLastName : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -37,77 +37,77 @@ namespace VetClinic.DAL.Migrations
                 keyColumn: "Id",
                 keyValue: "542636ae-953e-4e04-a7de-7533f25af173",
                 column: "ConcurrencyStamp",
-                value: "18c6532e-c616-43a7-afd5-26148df56fd9");
+                value: "dd206201-fc8a-4209-9e44-5292ab52c274");
 
             migrationBuilder.UpdateData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
                 keyValue: "9149c77e-5c15-416a-9bed-e361330feb92",
                 column: "ConcurrencyStamp",
-                value: "b2a1118b-f047-4043-8653-bb972883d51c");
+                value: "773c257e-8d96-47f7-8b73-5908872107b2");
 
             migrationBuilder.UpdateData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
                 keyValue: "ced370e3-1401-4190-9960-ab5bf41f162e",
                 column: "ConcurrencyStamp",
-                value: "fcaff323-37cc-45af-b1f5-1b8ac40fe8ea");
+                value: "56590194-6e5a-49ff-8d35-5821ea38d591");
 
             migrationBuilder.UpdateData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
                 keyValue: "e65dd8e1-34f8-4e9d-b535-3b03dde2500e",
                 column: "ConcurrencyStamp",
-                value: "f5a2e403-6b71-4693-b59b-56039dc68970");
+                value: "f62176e0-d1ce-4e07-b775-0902a457b937");
 
             migrationBuilder.UpdateData(
                 table: "AspNetUsers",
                 keyColumn: "Id",
                 keyValue: "1",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp", "FirstName", "LastName" },
-                values: new object[] { "68d7ae39-6ceb-47da-b9de-cef947806a20", "813294b1-6e92-4d91-ac30-430fb9700ed2", "Anastasiya", "Koleso" });
+                values: new object[] { "02c2713c-ea07-4604-9c20-90a2fa32f7de", "69211cf1-77af-46c4-b66f-70bdd3499413", "Anastasiya", "Koleso" });
 
             migrationBuilder.UpdateData(
                 table: "AspNetUsers",
                 keyColumn: "Id",
                 keyValue: "2",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp", "FirstName", "LastName" },
-                values: new object[] { "3f33bedf-5ae9-42ff-81c7-4841d5693913", "dcfa2570-6a74-4f69-82cd-a99f64d40268", "Oleh", "Nazarenko" });
+                values: new object[] { "cefe91c8-1d78-48e5-a52b-14d21b06bd2b", "dca41019-f980-4a79-a167-e220b83093ea", "Oleh", "Nazarenko" });
 
             migrationBuilder.UpdateData(
                 table: "AspNetUsers",
                 keyColumn: "Id",
                 keyValue: "3",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp", "FirstName", "LastName" },
-                values: new object[] { "a5099ec1-398f-4804-a582-5d4e28fde87c", "3b861ddf-baaa-4639-93c6-f39fa01629e2", "Shuba", "Noorkova" });
+                values: new object[] { "678fede0-b293-456c-82f3-db40ed43f5b1", "efdb8b6a-b479-4b5d-a6ac-f33b5b6f7b4b", "Shuba", "Noorkova" });
 
             migrationBuilder.UpdateData(
                 table: "AspNetUsers",
                 keyColumn: "Id",
                 keyValue: "4",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp", "FirstName", "LastName" },
-                values: new object[] { "d3c3ae7e-15df-44b6-b6f4-d3b556efeb27", "5f71babf-6105-4bee-b71b-cdfd0cff41bd", "Andriy", "Vozniy" });
+                values: new object[] { "013ce621-3391-4c1b-bc57-0b3bfa886596", "29018ba6-c102-4647-b53d-bdac94eab571", "Andriy", "Vozniy" });
 
             migrationBuilder.UpdateData(
                 table: "AspNetUsers",
                 keyColumn: "Id",
                 keyValue: "5",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp", "FirstName", "LastName" },
-                values: new object[] { "629b93b5-9a68-4766-8c20-f3d44c1576c2", "bea29d0f-3673-480d-910f-79fd6f17002d", "Maruna", "Kosovich" });
+                values: new object[] { "111801f1-9071-4299-a553-ca71d079d1b2", "6adf87bd-ec01-4cfd-bb87-c11e2ebc7820", "Maruna", "Kosovich" });
 
             migrationBuilder.UpdateData(
                 table: "AspNetUsers",
                 keyColumn: "Id",
                 keyValue: "6",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp", "FirstName", "LastName" },
-                values: new object[] { "7199b91e-da8c-4134-8f3a-cf0fc2b5e2a5", "16638d3d-eccf-44e9-9945-f99aa427e5d5", "Ivan", "Wernudub" });
+                values: new object[] { "bd8cfd29-6bf6-4070-ba45-896f9f2998d2", "1998233a-fbbb-436b-a724-47cb844fb525", "Ivan", "Wernudub" });
 
             migrationBuilder.UpdateData(
                 table: "AspNetUsers",
                 keyColumn: "Id",
                 keyValue: "7",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp", "FirstName", "LastName" },
-                values: new object[] { "b8196e39-928e-4559-9f87-2a44f7167d38", "3ec18b0d-af19-4ed8-bea4-7c3299bacaec", "Nadiya", "Mukolenko" });
+                values: new object[] { "9cf0881d-8f76-497d-9bcb-a8ccde3d8cc4", "d30aa8c7-896b-4a6f-a0b3-ad349d212d09", "Nadiya", "Mukolenko" });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
