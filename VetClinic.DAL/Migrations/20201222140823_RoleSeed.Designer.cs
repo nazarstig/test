@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VetClinic.DAL;
 
 namespace VetClinic.DAL.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20201222140823_RoleSeed")]
+    partial class RoleSeed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -49,28 +51,28 @@ namespace VetClinic.DAL.Migrations
                         new
                         {
                             Id = "542636ae-953e-4e04-a7de-7533f25af173",
-                            ConcurrencyStamp = "dd206201-fc8a-4209-9e44-5292ab52c274",
+                            ConcurrencyStamp = "0fdde684-8fff-43a3-8f29-fa3c417f2e99",
                             Name = "client",
                             NormalizedName = "CLIENT"
                         },
                         new
                         {
                             Id = "e65dd8e1-34f8-4e9d-b535-3b03dde2500e",
-                            ConcurrencyStamp = "f62176e0-d1ce-4e07-b775-0902a457b937",
+                            ConcurrencyStamp = "efc3aeed-6267-49bb-b28a-bc6215c8b97a",
                             Name = "doctor",
                             NormalizedName = "DOCTOR"
                         },
                         new
                         {
                             Id = "9149c77e-5c15-416a-9bed-e361330feb92",
-                            ConcurrencyStamp = "773c257e-8d96-47f7-8b73-5908872107b2",
+                            ConcurrencyStamp = "b3218d73-dce5-4082-8e35-2b93c268ff90",
                             Name = "admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = "ced370e3-1401-4190-9960-ab5bf41f162e",
-                            ConcurrencyStamp = "56590194-6e5a-49ff-8d35-5821ea38d591",
+                            ConcurrencyStamp = "ebe8bf9c-86dd-4c92-9582-74b667a867a8",
                             Name = "accountant",
                             NormalizedName = "ACCOUNTANT"
                         });
@@ -419,9 +421,7 @@ namespace VetClinic.DAL.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Complaints")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("DoctorId")
                         .HasColumnType("int");
@@ -430,13 +430,10 @@ namespace VetClinic.DAL.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("StatusId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(3);
+                        .HasColumnType("int");
 
                     b.Property<string>("TreatmentDescription")
-                        .HasColumnType("nvarchar(500)")
-                        .HasMaxLength(500);
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -938,113 +935,99 @@ namespace VetClinic.DAL.Migrations
                         {
                             Id = "1",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "02c2713c-ea07-4604-9c20-90a2fa32f7de",
+                            ConcurrencyStamp = "0a0ff5c7-813b-4b82-9025-27c744feab01",
                             Email = "KolesoAnastasiya@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             PhoneNumber = "0984112333",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "69211cf1-77af-46c4-b66f-70bdd3499413",
+                            SecurityStamp = "5f06386c-ff3b-47e8-8235-b1cbe88b8c91",
                             TwoFactorEnabled = false,
-                            UserName = "Koleso Anastasiya",
-                            FirstName = "Anastasiya",
-                            LastName = "Koleso"
+                            UserName = "Koleso Anastasiya"
                         },
                         new
                         {
                             Id = "2",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "cefe91c8-1d78-48e5-a52b-14d21b06bd2b",
+                            ConcurrencyStamp = "56184e50-dc1e-4fde-be73-03e765af11e3",
                             Email = "NazarenkoOleh@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             PhoneNumber = "0954453374",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "dca41019-f980-4a79-a167-e220b83093ea",
+                            SecurityStamp = "8a74c4a3-cf05-41d1-86f0-a9d857ccf526",
                             TwoFactorEnabled = false,
-                            UserName = "Nazarenko Oleh",
-                            FirstName = "Oleh",
-                            LastName = "Nazarenko"
+                            UserName = "Nazarenko Oleh"
                         },
                         new
                         {
                             Id = "3",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "678fede0-b293-456c-82f3-db40ed43f5b1",
+                            ConcurrencyStamp = "e9cd709f-1237-4cf5-83df-30259405c658",
                             Email = "NoorkovaShuba@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             PhoneNumber = "0934453214",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "efdb8b6a-b479-4b5d-a6ac-f33b5b6f7b4b",
+                            SecurityStamp = "944a4ec1-6204-4977-8b21-4f583e089a58",
                             TwoFactorEnabled = false,
-                            UserName = "Noorkova Shuba",
-                            FirstName = "Shuba",
-                            LastName = "Noorkova"
+                            UserName = "Noorkova Shuba"
                         },
                         new
                         {
                             Id = "4",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "013ce621-3391-4c1b-bc57-0b3bfa886596",
+                            ConcurrencyStamp = "7ef436e8-2ee7-4d43-9f78-9168b351490a",
                             Email = "VozniyAndriy@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             PhoneNumber = "0931412622",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "29018ba6-c102-4647-b53d-bdac94eab571",
+                            SecurityStamp = "b1fa9873-1201-4149-9783-0fe6a20578a0",
                             TwoFactorEnabled = false,
-                            UserName = "Vozniy Andriy",
-                            FirstName = "Andriy",
-                            LastName = "Vozniy"
+                            UserName = "Vozniy Andriy"
                         },
                         new
                         {
                             Id = "5",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "111801f1-9071-4299-a553-ca71d079d1b2",
+                            ConcurrencyStamp = "e31961c7-cb87-49e8-9a87-f99558ad7e11",
                             Email = "KosovichMaruna@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             PhoneNumber = "0681236324",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "6adf87bd-ec01-4cfd-bb87-c11e2ebc7820",
+                            SecurityStamp = "1f2e1b93-65ee-4bd2-886c-d2bf11666152",
                             TwoFactorEnabled = false,
-                            UserName = "Kosovich Maruna",
-                            FirstName = "Maruna",
-                            LastName = "Kosovich"
+                            UserName = "Kosovich Maruna"
                         },
                         new
                         {
                             Id = "6",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "bd8cfd29-6bf6-4070-ba45-896f9f2998d2",
+                            ConcurrencyStamp = "e1225141-a969-448a-8ee2-9b17a2f3005a",
                             Email = "WernudubIvan@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             PhoneNumber = "0982123654",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "1998233a-fbbb-436b-a724-47cb844fb525",
+                            SecurityStamp = "4ff494b0-bebc-43c0-a408-382ddf6c9b05",
                             TwoFactorEnabled = false,
-                            UserName = "Wernudub Ivan",
-                            FirstName = "Ivan",
-                            LastName = "Wernudub"
+                            UserName = "Wernudub Ivan"
                         },
                         new
                         {
                             Id = "7",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "9cf0881d-8f76-497d-9bcb-a8ccde3d8cc4",
+                            ConcurrencyStamp = "ddf5515d-0024-43e3-96f2-340387ba9a9a",
                             Email = "MukolenkoNadiya@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             PhoneNumber = "0982131254",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "d30aa8c7-896b-4a6f-a0b3-ad349d212d09",
+                            SecurityStamp = "0bb7f018-73f2-4e94-beb8-4db71532fbdb",
                             TwoFactorEnabled = false,
-                            UserName = "Mukolenko Nadiya",
-                            FirstName = "Nadiya",
-                            LastName = "Mukolenko"
+                            UserName = "Mukolenko Nadiya"
                         });
                 });
 
@@ -1117,7 +1100,7 @@ namespace VetClinic.DAL.Migrations
             modelBuilder.Entity("VetClinic.DAL.Entities.Appointment", b =>
                 {
                     b.HasOne("VetClinic.DAL.Entities.Animal", "Animal")
-                        .WithMany("Appointments")
+                        .WithMany()
                         .HasForeignKey("AnimalId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

@@ -11,7 +11,7 @@ using Microsoft.Extensions.Hosting;
 using VetClinic.API.ExtensionMethods;
 using VetClinic.API.Filters;
 using VetClinic.API.Middlewares;
-using VetClinic.BLL.Services;
+using VetClinic.BLL;
 using VetClinic.BLL.Services.Interfaces;
 using VetClinic.BLL.Services.Realizations;
 using VetClinic.DAL;
@@ -56,7 +56,6 @@ namespace VetClinic.API
             services.AddScoped<IRoleValidator<IdentityRole>, RoleValidator<IdentityRole>>();
             services.AddScoped<RoleManager<IdentityRole>, RoleManager<IdentityRole>>();
 
-
             services.AddAutoMapper(typeof(Startup));
 
             services.AddControllers(options => { options.Filters.Add(new ValidationFilter()); })
@@ -70,10 +69,13 @@ namespace VetClinic.API
             services.AddScoped<IProcedureService, ProcedureService>();
             services.AddScoped<IClientService, ClientService>();
 
+            services.AddServices();
+
+            services.AddSwaggerConfig();
         }
 
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, UserManager<User> userManager)
         {
             if (env.IsDevelopment())
             {
@@ -92,7 +94,7 @@ namespace VetClinic.API
 
             app.UseCustomSwaggerConfig();
 
-            app.SeedUsersWithRoles(Configuration);
+            ApplicationUserSeeder.SeedUsers(userManager);
         }
     }
 }

@@ -1,44 +1,33 @@
 ﻿using IdentityModel;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Serilog.Events;
-using System;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
-using VetClinic.DAL;
+using VetClinic.BLL.Exceptions;
 using VetClinic.DAL.Entities;
 
-namespace VetClinic.API.ExtensionMethods
+namespace VetClinic.BLL
 {
-    public static class AppExtensions
+    public static class ApplicationUserSeeder
     {
-        public static void SeedUsersWithRoles(this IApplicationBuilder app, IConfiguration config)
+        public static void SeedUsers(UserManager<User> userManager)
         {
-            
-            string connectionString = config.GetConnectionString("DefaultConnection");
-
             var services = new ServiceCollection();
             services.AddLogging();
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
                 .WriteTo.Console(restrictedToMinimumLevel: LogEventLevel.Debug)
                 .CreateLogger();
-            services.AddDbContext<ApplicationContext>(options =>
-                options.UseSqlServer(connectionString));
 
-            services.AddIdentity<User, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationContext>()
-                .AddDefaultTokenProviders();
-            
-           
-            using (var serviceProvider = services.BuildServiceProvider())
+            var alice = userManager.FindByNameAsync("alice").Result;
+            if (alice == null)
             {
-                using (var scope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope())
+                alice = new User
                 {
+<<<<<<< HEAD:VetClinic.API/ExtensionMethods/AppExtensions.cs
                     var context = scope.ServiceProvider.GetService<ApplicationContext>();
                     //context.Database.Migrate();
 
@@ -78,52 +67,70 @@ namespace VetClinic.API.ExtensionMethods
                         {
                             throw new Exception(result.Errors.First().Description);
                         }
+=======
+                    UserName = "alice",
+                    FirstName = "Alice",
+                    LastName = "Smith",
+                    Email = "AliceSmith@email.com",
+                    EmailConfirmed = true,
+                    PhoneNumber = "123456789123",
+                };
+                var result = userManager.CreateAsync(alice, "Pass123$").Result;
+                if (!result.Succeeded)
+                {
+                    throw new VetClinicException(HttpStatusCode.InternalServerError,result.Errors.First().Description);
+                }
+>>>>>>> master:VetClinic.BLL/ApplicationUserSeeder.cs
 
-                        result = userMgr.AddClaimsAsync(alice, new Claim[]{
+                result = userManager.AddClaimsAsync(alice, new Claim[]{
                         new Claim(JwtClaimTypes.Name, "Alice Smith"),
                         new Claim(JwtClaimTypes.GivenName, "Alice"),
                         new Claim(JwtClaimTypes.FamilyName, "Smith"),
                         new Claim(JwtClaimTypes.WebSite, "http://alice.com"),
                     }).Result;
-                        if (!result.Succeeded)
-                        {
-                            throw new Exception(result.Errors.First().Description);
-                        }
+                if (!result.Succeeded)
+                {
+                    throw new VetClinicException(HttpStatusCode.InternalServerError, result.Errors.First().Description);
+                }
 
-                        if (!userMgr.IsInRoleAsync(alice, admin.Name).Result)
-                        {
-                            _ = userMgr.AddToRoleAsync(alice, admin.Name).Result;
-                        }
+                if (!userManager.IsInRoleAsync(alice, "admin").Result)
+                {
+                    _ = userManager.AddToRoleAsync(alice, "admin").Result;
+                }
 
-                        Log.Debug("alice created");
-                    }
-                    else
-                    {
-                        Log.Debug("alice already exists");
-                    }
+                Log.Debug("alice created");
+            }
+            else
+            {
+                Log.Debug("alice already exists");
+            }
 
-                    var bob = userMgr.FindByNameAsync("bob").Result;
-                    if (bob == null)
-                    {
-                        bob = new User
-                        {
-                            UserName = "bob",
-                            Email = "BobSmith@email.com",
-                            EmailConfirmed = true
-                        };
-                        var result = userMgr.CreateAsync(bob, "Pass123$").Result;
-                        if (!result.Succeeded)
-                        {
-                            throw new Exception(result.Errors.First().Description);
-                        }
+            var bob = userManager.FindByNameAsync("bob").Result;
+            if (bob == null)
+            {
+                bob = new User
+                {
+                    UserName = "bob",
+                    FirstName = "Alice",
+                    LastName = "Smith",
+                    Email = "BobSmith@email.com",
+                    EmailConfirmed = true,
+                    PhoneNumber = "123456789321",
+                };
+                var result = userManager.CreateAsync(bob, "Pass123$").Result;
+                if (!result.Succeeded)
+                {
+                    throw new VetClinicException(HttpStatusCode.InternalServerError, result.Errors.First().Description);
+                }
 
-                        result = userMgr.AddClaimsAsync(bob, new Claim[]{
+                result = userManager.AddClaimsAsync(bob, new Claim[]{
                         new Claim(JwtClaimTypes.Name, "Bob Smith"),
                         new Claim(JwtClaimTypes.GivenName, "Bob"),
                         new Claim(JwtClaimTypes.FamilyName, "Smith"),
                         new Claim(JwtClaimTypes.WebSite, "http://bob.com"),
                         new Claim("location", "somewhere")
                     }).Result;
+<<<<<<< HEAD:VetClinic.API/ExtensionMethods/AppExtensions.cs
                         if (!result.Succeeded)
                         {
                             throw new Exception(result.Errors.First().Description);
@@ -133,17 +140,24 @@ namespace VetClinic.API.ExtensionMethods
                         {
                             _ = userMgr.AddToRoleAsync(bob, client.Name).Result;
                         }
-
-                        Log.Debug("bob created");
-                    }
-                    else
-                    {
-                        Log.Debug("bob already exists");
-                    }
+=======
+                if (!result.Succeeded)
+                {
+                    throw new VetClinicException(HttpStatusCode.InternalServerError, result.Errors.First().Description);
                 }
-            }
+>>>>>>> master:VetClinic.BLL/ApplicationUserSeeder.cs
 
+                if (!userManager.IsInRoleAsync(bob, "client").Result)
+                {
+                    _ = userManager.AddToRoleAsync(bob, "client").Result;
+                }
+
+                Log.Debug("bob created");
+            }
+            else
+            {
+                Log.Debug("bob already exists");
+            }
         }
     }
 }
-
