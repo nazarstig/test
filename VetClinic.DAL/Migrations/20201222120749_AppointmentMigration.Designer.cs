@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VetClinic.DAL;
 
 namespace VetClinic.DAL.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20201222120749_AppointmentMigration")]
+    partial class AppointmentMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,12 +31,12 @@ namespace VetClinic.DAL.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(32)")
-                        .HasMaxLength(32);
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
 
                     b.Property<string>("NormalizedName")
-                        .HasColumnType("nvarchar(32)")
-                        .HasMaxLength(32);
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
 
                     b.HasKey("Id");
 
@@ -44,36 +46,6 @@ namespace VetClinic.DAL.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "542636ae-953e-4e04-a7de-7533f25af173",
-                            ConcurrencyStamp = "0fdde684-8fff-43a3-8f29-fa3c417f2e99",
-                            Name = "client",
-                            NormalizedName = "CLIENT"
-                        },
-                        new
-                        {
-                            Id = "e65dd8e1-34f8-4e9d-b535-3b03dde2500e",
-                            ConcurrencyStamp = "efc3aeed-6267-49bb-b28a-bc6215c8b97a",
-                            Name = "doctor",
-                            NormalizedName = "DOCTOR"
-                        },
-                        new
-                        {
-                            Id = "9149c77e-5c15-416a-9bed-e361330feb92",
-                            ConcurrencyStamp = "b3218d73-dce5-4082-8e35-2b93c268ff90",
-                            Name = "admin",
-                            NormalizedName = "ADMIN"
-                        },
-                        new
-                        {
-                            Id = "ced370e3-1401-4190-9960-ab5bf41f162e",
-                            ConcurrencyStamp = "ebe8bf9c-86dd-4c92-9582-74b667a867a8",
-                            Name = "accountant",
-                            NormalizedName = "ACCOUNTANT"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

@@ -54,7 +54,6 @@ namespace VetClinic.API
             services.AddScoped<IRoleValidator<IdentityRole>, RoleValidator<IdentityRole>>();
             services.AddScoped<RoleManager<IdentityRole>, RoleManager<IdentityRole>>();
 
-
             services.AddAutoMapper(typeof(Startup));
 
             services.AddControllers(options => { options.Filters.Add(new ValidationFilter()); })
@@ -65,6 +64,8 @@ namespace VetClinic.API
 
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
             services.AddScoped<IUserService, UserService>();
+
+            services.AddServices();
 
             services.AddSwaggerConfig();
         }
