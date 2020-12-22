@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using VetClinic.DAL.Entities;
-using VetClinic.API.DTO.ClientDTO;
+using VetClinic.API.DTO.ClientDto;
 using VetClinic.BLL.Services.Interfaces;
 using VetClinic.API.DTO.ClientDto;
 

@@ -12,7 +12,7 @@ using VetClinic.DAL.Entities;
 using VetClinic.DAL.Repositories.Interfaces;
 using VetClinic.API.DTO.ClientDto;
 using Xunit;
-using VetClinic.API.DTO.ClientDTO;
+using VetClinic.API.DTO.ClientDto;
 
 namespace VetClinic.API.Tests.ControllerTests
 {
