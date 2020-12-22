@@ -1,4 +1,4 @@
-﻿namespace VetClinic.API.DTO.Error
+﻿namespace VetClinic.BLL.Exceptions
 {
     public class FieldErrorModel
     {

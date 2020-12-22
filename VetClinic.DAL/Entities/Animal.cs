@@ -1,6 +1,8 @@
-﻿namespace VetClinic.DAL.Entities
+﻿using System.Collections.Generic;
+
+namespace VetClinic.DAL.Entities
 {
-    public class Animal 
+    public class Animal
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -11,5 +13,6 @@
         public Client Client { get; set; }
         public int AnimalTypeId { get; set; }
         public AnimalType AnimalType { get; set; }
+        public ICollection<Appointment> Appointments { get; set; }
     }
 }
