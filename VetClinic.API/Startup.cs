@@ -17,6 +17,7 @@ using VetClinic.DAL;
 using VetClinic.DAL.Entities;
 using VetClinic.DAL.Repositories.Interfaces;
 using VetClinic.DAL.Repositories.Realizations;
+using VetClinic.DAL.Validators;
 
 namespace VetClinic.API
 {
@@ -64,6 +65,8 @@ namespace VetClinic.API
 
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<AbstractValidator<User>, AppUserValidator>();
+            services.AddScoped<IAnimalService, AnimalService>();
 
             services.AddSwaggerConfig();
         }
