@@ -38,6 +38,7 @@ namespace VetClinic.BLL.Services.Realizations
             if (position != null)
             {
                 _repositoryWrapper.PositionRepository.Remove(position);
+                await _repositoryWrapper.SaveAsync();
                 return true;
             }
 

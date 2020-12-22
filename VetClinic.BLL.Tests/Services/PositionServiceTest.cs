@@ -9,7 +9,7 @@ using VetClinic.DAL.Repositories.Interfaces;
 
 using Xunit;
 
-namespace VetClinic.API.Tests
+namespace VetClinic.API.Tests.Services
 {
     public class PositionServiceTest
     {

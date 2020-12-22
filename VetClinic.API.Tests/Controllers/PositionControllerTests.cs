@@ -11,7 +11,7 @@ using VetClinic.BLL.Services.Interfaces;
 using VetClinic.DAL.Entities;
 using Xunit;
 
-namespace VetClinic.API.Tests
+namespace VetClinic.API.Tests.Controllers
 {
     public class PositionControllerTests
     {
@@ -179,7 +179,7 @@ namespace VetClinic.API.Tests
 
 
         [Theory, AutoMoqData]
-        public async Task Delete_PositionId_ReturnsFound(
+        public async Task Delete_PositionId_ReturnsNotFound(
            [Frozen] int id )
         {
             // Arrange            

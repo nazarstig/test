@@ -25,7 +25,7 @@ namespace VetClinic.API.Controllers
         public async Task<ActionResult<ICollection<ReadDoctorDto>>> Index()
         {
             var doctors = await _doctorService.GetDoctorAsync();
-            var doctorsDto = _mapper.Map<ICollection<ReadDoctorDto>>(doctors);
+            var doctorsDto = _mapper.Map<ICollection<ReadDoctorDto>>(doctors);        
             return Ok(doctorsDto);
         }
 
@@ -35,11 +35,14 @@ namespace VetClinic.API.Controllers
         {
             Doctor doctor = await _doctorService.GetDoctorAsync(id);
             ReadDoctorDto doctorDto = _mapper.Map<ReadDoctorDto>(doctor);
+            if (doctorDto == null)
+                return NotFound();
+            
             return Ok(doctorDto);
         }
 
         [HttpPost]
-        public async Task<ActionResult<ReadDoctorDto>> Create(ReadDoctorDto doctorDto)
+        public async Task<ActionResult<ReadDoctorDto>> Create(CreateDoctorDto doctorDto)
         {
             var doctor = _mapper.Map<Doctor>(doctorDto);
             var createdDoctor = await _doctorService.AddDoctorAsync(doctor, doctor.User);
@@ -49,7 +52,7 @@ namespace VetClinic.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<CreateDoctorDto>> Update(CreateDoctorDto doctorDto, int id)
+        public async Task<ActionResult<ReadDoctorDto>> Update(ReadDoctorDto doctorDto, int id)
         {
             var doctor = _mapper.Map<Doctor>(doctorDto);
             var successUpdate = await _doctorService.UpdateDoctorAsync(doctor, doctor.User , id);
