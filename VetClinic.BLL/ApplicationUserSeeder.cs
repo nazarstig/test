@@ -3,9 +3,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Serilog.Events;
-using System;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
+using VetClinic.BLL.Exceptions;
 using VetClinic.DAL.Entities;
 
 namespace VetClinic.BLL
@@ -35,7 +36,7 @@ namespace VetClinic.BLL
                 var result = userManager.CreateAsync(alice, "Pass123$").Result;
                 if (!result.Succeeded)
                 {
-                    throw new Exception(result.Errors.First().Description);
+                    throw new VetClinicException(HttpStatusCode.InternalServerError,result.Errors.First().Description);
                 }
 
                 result = userManager.AddClaimsAsync(alice, new Claim[]{
@@ -46,7 +47,7 @@ namespace VetClinic.BLL
                     }).Result;
                 if (!result.Succeeded)
                 {
-                    throw new Exception(result.Errors.First().Description);
+                    throw new VetClinicException(HttpStatusCode.InternalServerError, result.Errors.First().Description);
                 }
 
                 if (!userManager.IsInRoleAsync(alice, "admin").Result)
@@ -75,7 +76,7 @@ namespace VetClinic.BLL
                 var result = userManager.CreateAsync(bob, "Pass123$").Result;
                 if (!result.Succeeded)
                 {
-                    throw new Exception(result.Errors.First().Description);
+                    throw new VetClinicException(HttpStatusCode.InternalServerError, result.Errors.First().Description);
                 }
 
                 result = userManager.AddClaimsAsync(bob, new Claim[]{
@@ -87,7 +88,7 @@ namespace VetClinic.BLL
                     }).Result;
                 if (!result.Succeeded)
                 {
-                    throw new Exception(result.Errors.First().Description);
+                    throw new VetClinicException(HttpStatusCode.InternalServerError, result.Errors.First().Description);
                 }
 
                 if (!userManager.IsInRoleAsync(bob, "client").Result)
