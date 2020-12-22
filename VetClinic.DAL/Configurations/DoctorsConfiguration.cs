@@ -14,7 +14,6 @@ namespace VetClinic.DAL.Configurations
 
             builder.Property(t => t.Education).HasMaxLength(100);
             builder.Property(t => t.Experience).HasMaxLength(200);
-
             builder.HasData(
                 new Doctor[]
                 {

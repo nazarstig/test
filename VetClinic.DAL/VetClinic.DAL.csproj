@@ -22,15 +22,7 @@
     <Compile Remove="Migrations\20201215095018_NavProps.cs" />
     <Compile Remove="Migrations\20201215095018_NavProps.Designer.cs" />
     <Compile Remove="Migrations\20201219104903_AddUserService.cs" />
-    <Compile Remove="Migrations\20201219104903_AddUserService.Designer.cs" />
-    <Compile Remove="Migrations\20201220174925_CascadeUserDoctor.cs" />
-    <Compile Remove="Migrations\20201220174925_CascadeUserDoctor.Designer.cs" />
-    <Compile Remove="Migrations\20201220175521_CascadeUserDoctor.cs" />
-    <Compile Remove="Migrations\20201220175521_CascadeUserDoctor.Designer.cs" />
-    <Compile Remove="Migrations\20201220182337_CascadeUserDoctor.cs" />
-    <Compile Remove="Migrations\20201220182337_CascadeUserDoctor.Designer.cs" />
-    <Compile Remove="Migrations\20201220183542_CascadeUserDoctor.cs" />
-    <Compile Remove="Migrations\20201220183542_CascadeUserDoctor.Designer.cs" />
+    <Compile Remove="Migrations\20201219104903_AddUserService.Designer.cs" />  
   </ItemGroup>
 
   <ItemGroup>
