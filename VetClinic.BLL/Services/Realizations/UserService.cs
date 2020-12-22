@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using VetClinic.BLL.Services.Interfaces;
 using VetClinic.DAL.Entities;
@@ -21,7 +21,7 @@ namespace VetClinic.BLL.Services.Realizations
         public async Task<(bool, string)> CreateUserAsync(User inputUser, params IdentityRole[] inputRoles)
         {
             var user = UserManager.FindByNameAsync(inputUser.UserName).Result;
-            if(user == null)
+            if (user == null)
             {
                 //create user
                 var result = UserManager.CreateAsync(inputUser, inputUser.PasswordHash).Result;
@@ -39,24 +39,24 @@ namespace VetClinic.BLL.Services.Realizations
                         _ = await UserManager.AddToRoleAsync(inputUser, role.Name);
                     }
                 }
-                    
+
                 return (true, UserManager.FindByNameAsync(inputUser.UserName).Result.Id);
             }
-             return (false, string.Empty);
+            return (false, string.Empty);
         }
-        
+
         public async Task<bool> UpdateUserAsync(string id, User inputUser, params IdentityRole[] inputRoles)
         {
             var user = UserManager.FindByIdAsync(id).Result;
 
-            if(user != null)
+            if (user != null)
             {
                 user.UserName = inputUser.UserName;
                 user.FirstName = inputUser.FirstName;
                 user.LastName = inputUser.LastName;
                 user.Email = inputUser.Email;
                 user.PhoneNumber = inputUser.PhoneNumber;
-                
+
                 //We need to pull roles explicitly because they are in a different table
                 var MyRoles = await UserManager.GetRolesAsync(user);
 
@@ -76,7 +76,7 @@ namespace VetClinic.BLL.Services.Realizations
 
                 _ = await UserManager.UpdateSecurityStampAsync(user);
 
-                return true;   
+                return true;
             }
             return false;
         }
@@ -93,7 +93,7 @@ namespace VetClinic.BLL.Services.Realizations
 
             return false;
         }
-        
+
         private bool Equals(IEnumerable<string> arr1, IEnumerable<IdentityRole> arr2)
         {
             IEnumerable<string> roles = arr2.Select(arr2 => arr2.Name);

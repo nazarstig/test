@@ -7,7 +7,8 @@ namespace VetClinic.BLL.Tests
 {
     class AutoMoqDataAttribute : AutoDataAttribute
     {
-        public AutoMoqDataAttribute() : base(() => {
+        public AutoMoqDataAttribute() : base(() =>
+        {
             var fixture = new Fixture().Customize(new AutoMoqCustomization());
 
             fixture.Behaviors.OfType<ThrowingRecursionBehavior>().ToList().ForEach(b => fixture.Behaviors.Remove(b));
@@ -16,7 +17,6 @@ namespace VetClinic.BLL.Tests
             return fixture;
         })
         {
-        
         }
     }
 }
