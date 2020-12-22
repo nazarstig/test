@@ -22,7 +22,7 @@ namespace VetClinic.BLL.Services
         public async Task<Client> AddClient(User user, Client client)
         {         
             IdentityRole role = new IdentityRole { Name = "member" };
-            var (res, id) = await _userService.CreateUser(user, new List<IdentityRole> { role });
+            var (res, id) = await _userService.CreateUserAsync(user, role);
             string userId;
             if (res)
             {
@@ -50,7 +50,7 @@ namespace VetClinic.BLL.Services
         public async Task<bool> PutClient(User user, Client client)
         {
             IdentityRole role = new IdentityRole { Name = "member" };
-            var res = await _userService.UpdateUser(user, new List<IdentityRole> { role });
+            var res = await _userService.UpdateUserAsync(client.UserId, user, role);
             await _repositoryWrapper.SaveAsync();
             return res;
         }
@@ -60,7 +60,9 @@ namespace VetClinic.BLL.Services
             var foundClient = await _repositoryWrapper.ClientRepository.GetFirstOrDefaultAsync(filter: c => c.Id == id);
             if (foundClient == null)
                 return false;
-            _repositoryWrapper.ClientRepository.Remove(foundClient);
+            var userDeleted = await _userService.DeleteUserAsync(foundClient.UserId);
+            if (!userDeleted) return false;           
+            _repositoryWrapper.ClientRepository.Remove(foundClient);            
             await _repositoryWrapper.SaveAsync();
             return true;
         }

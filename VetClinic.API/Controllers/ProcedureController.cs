@@ -1,13 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using VetClinic.DAL.Entities;
-using VetClinic.BLL.Services;
 using VetClinic.API.DTO.ProcedureDTO;
 using AutoMapper;
-using System.Net;
 using VetClinic.BLL.Services.Interfaces;
 
 namespace VetClinic.API.Controllers
@@ -27,24 +23,24 @@ namespace VetClinic.API.Controllers
             _mapper = mapper;
         }
         [HttpPost]
-        public async Task<IActionResult> Create(CreateProcedureDTO procedureDTO)
+        public async Task<IActionResult> PostAsync(CreateProcedureDTO procedureDTO)
         {
             Procedure procedure = _mapper.Map<CreateProcedureDTO, Procedure>(procedureDTO);
             await _procedureService.AddProcedure(procedure);
-            return CreatedAtAction(nameof(Show), new { id = procedure.Id }, procedure);
+            return CreatedAtAction(nameof(GetAsync), new { id = procedure.Id }, procedure);
         }
 
-        [HttpPut]
-        public async Task<IActionResult> Update(UpdateProcedureDTO procedureDTO)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutAsync(int id, UpdateProcedureDTO procedureDTO)
         {
             Procedure procedure = _mapper.Map<UpdateProcedureDTO, Procedure>(procedureDTO);
-            if (await _procedureService.PutProcedure(procedure))
+            if (await _procedureService.PutProcedure(id, procedure))
                 return NoContent();
             else return NotFound();
         }
 
-        [HttpDelete]
-        public async Task<IActionResult> Destroy(int id)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteAsync(int id)
         {
             if (await _procedureService.DeleteProcedure(id))
                 return NoContent();
@@ -52,7 +48,7 @@ namespace VetClinic.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<ICollection<ReadProcedureDTO>>> Index()
+        public async Task<ActionResult<ICollection<ReadProcedureDTO>>> GetAsync()
         {            
             var res =  await _procedureService.GetAllProcedures();
             ICollection<ReadProcedureDTO> readProcedures = new List<ReadProcedureDTO>();
@@ -66,7 +62,7 @@ namespace VetClinic.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Procedure>> Show(int id)
+        public async Task<ActionResult<Procedure>> GetAsync(int id)
         {
             var result = await _procedureService.GetProcedure(id);
             if (result != null)

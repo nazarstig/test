@@ -1,17 +1,12 @@
 ﻿using Moq;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using VetClinic.API.Controllers;
 using VetClinic.DAL.Entities;
 using VetClinic.DAL.Repositories.Interfaces;
-using VetClinic.DAL.Repositories.Realizations;
 using VetClinic.API.Mapping;
-using VetClinic.BLL.Services;
 using Xunit;
 using VetClinic.BLL.Services.Interfaces;
 using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using VetClinic.API.DTO.ProcedureDTO;
@@ -24,7 +19,6 @@ namespace VetClinic.API.Tests.ControllerTests
         Mock<IProcedureService> _procedureService;
         Mock<IRepositoryWrapper> _repositoryWrapper;
         Mock<IProcedureRepository> _procedureRepository;
-        Mock<DbContext> _appContext;
         IMapper _mapper;
         Procedure _procedure;
 
@@ -63,70 +57,70 @@ namespace VetClinic.API.Tests.ControllerTests
         }
 
         [Fact]
-        public async Task IndexOperationCheck()
+        public async Task GetAll_ReturnsResult()
         {
             ICollection<Procedure> collection = ProceduresList();
             _procedureService.Setup(p => p.GetAllProcedures()).ReturnsAsync(collection);
-            var result = await _procedureController.Index();           
+            var result = await _procedureController.GetAsync();           
             Assert.True(result.Result is OkObjectResult);
         }
 
         [Fact]
-        public async Task ShowOperationCheck_Succeded()
+        public async Task Get_Succeded()
         {
           
             _procedureService.Setup(p => p.GetProcedure(9)).ReturnsAsync(_procedure);
-            var result = await _procedureController.Show(9);
+            var result = await _procedureController.GetAsync(9);
             Assert.True(result.Result is OkObjectResult);
         }
 
-        public async Task ShowOperationCheck_Failed()
+        public async Task Get_Failed()
         {
             _procedureService.Setup(p => p.GetProcedure(9)).ReturnsAsync(_procedure);
-            var result = await _procedureController.Show(6);
+            var result = await _procedureController.GetAsync(6);
             Assert.True(result.Result is NotFoundResult);
         }
 
         [Fact]
-        public async Task DestroyOperationCheck_Failed()
+        public async Task Delete_Failed()
         {
             _procedureService.Setup(p => p.DeleteProcedure(3)).ReturnsAsync(false);
-            var result = await _procedureController.Destroy(3);
+            var result = await _procedureController.DeleteAsync(3);
             Assert.True(result is NotFoundResult);
         }
 
         [Fact]
-        public async Task DestroyOperation_Succeded()
+        public async Task Delete_Succeded()
         {
             _procedureService.Setup(p => p.DeleteProcedure(3)).ReturnsAsync(true);
-            var result = await _procedureController.Destroy(3);
+            var result = await _procedureController.DeleteAsync(3);
             Assert.True(result is NoContentResult);
         }
 
         [Fact]
-        public async Task UpdateOperationCheck_Failed()
+        public async Task Put_Failed()
         {
             UpdateProcedureDTO dto = new UpdateProcedureDTO { };
-            _procedureService.Setup(p => p.PutProcedure(_procedure)).ReturnsAsync(false);
-            var result = await _procedureController.Update(dto);
+            _procedureService.Setup(p => p.PutProcedure(3, _procedure)).ReturnsAsync(false);
+            var result = await _procedureController.PutAsync(3, dto);
             Assert.True(result is NotFoundResult);
         }
 
         [Fact]
-        public async Task UpdateOperation_Succeded()
+        public async Task Put_Succeded()
         {
             UpdateProcedureDTO dto = new UpdateProcedureDTO { };
             _procedureService.Setup(p => p.DeleteProcedure(3)).ReturnsAsync(true);
-            var result = await _procedureController.Destroy(3);
+            var result = await _procedureController.DeleteAsync(3);
             Assert.True(result is NoContentResult);
         }
 
         [Fact]
-        public async Task CreateOperationTest()
+        public async Task Post_Succeded()
         {
             CreateProcedureDTO dto = new CreateProcedureDTO { };
             _procedureService.Setup(p => p.AddProcedure(_procedure));
-            var result = await _procedureController.Create(dto);
+            var result = await _procedureController.PostAsync(dto);
             Assert.True(result is CreatedAtActionResult);
         }
 

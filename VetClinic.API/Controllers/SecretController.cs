@@ -16,7 +16,6 @@ namespace VetClinic.API.Controllers
         [HttpGet]
         [Route("/secret")]
         [Authorize(Roles = "admin")]
-        [HttpGet]
         public string Index()
         {
             return "VetClinic Secret";

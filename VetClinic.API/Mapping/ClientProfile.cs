@@ -1,12 +1,6 @@
 ﻿using AutoMapper;
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using VetClinic.API.DTO.ClientDto;
-using VetClinic.API.DTO.ClientDTO;
 using VetClinic.DAL.Entities;
+using VetClinic.API.DTO.ClientDto;
 
 namespace VetClinic.API.Mapping
 {

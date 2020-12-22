@@ -1,9 +1,6 @@
-
-﻿using Microsoft.AspNetCore.Builder;
-using AutoMapper;
+﻿using AutoMapper;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
-
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -14,21 +11,13 @@ using Microsoft.Extensions.Hosting;
 using VetClinic.API.ExtensionMethods;
 using VetClinic.API.Filters;
 using VetClinic.API.Middlewares;
+using VetClinic.BLL.Services;
 using VetClinic.BLL.Services.Interfaces;
 using VetClinic.BLL.Services.Realizations;
 using VetClinic.DAL;
 using VetClinic.DAL.Entities;
 using VetClinic.DAL.Repositories.Interfaces;
 using VetClinic.DAL.Repositories.Realizations;
-using VetClinic.BLL.Services;
-using Microsoft.AspNetCore.Identity;
-using VetClinic.BLL.Services.Interfaces;
-using VetClinic.BLL.Services.Realizations;
-using FluentValidation;
-using FluentValidation.AspNetCore;
-using AutoMapper;
-using VetClinic.API.Validators;
-
 
 namespace VetClinic.API
 {
@@ -46,7 +35,7 @@ namespace VetClinic.API
             services.AddAuthentication("RefAndJWTToken")
                 .AddIdentityServerAuthentication("RefAndJWTToken", options =>
                 {
-                    options.Authority = "https://localhost:5005";
+                    options.Authority = "https://localhost:5001";
                     options.ApiName = "VetClinicApi";
                     options.ApiSecret = "angular_secret";
                 });
@@ -75,15 +64,11 @@ namespace VetClinic.API
                 .AddNewtonsoftJson();
 
             services.Configure<ApiBehaviorOptions>(options => { options.SuppressModelStateInvalidFilter = true; });
-
+            services.AddSwaggerGen();
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
             services.AddScoped<IUserService, UserService>();
-
             services.AddScoped<IProcedureService, ProcedureService>();
             services.AddScoped<IClientService, ClientService>();
-            //services.AddScoped<AbstractValidator<User>, AppUserValidator>();
-
-            services.AddSwaggerConfig();
 
         }
 

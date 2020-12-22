@@ -18,10 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-<<<<<<< HEAD
     <ProjectReference Include="..\VetClinic.API\VetClinic.API.csproj" />
-=======
->>>>>>> origin/fix/add-delete-to-user-service
     <ProjectReference Include="..\VetClinic.BLL\VetClinic.BLL.csproj" />
   </ItemGroup>
 

@@ -26,14 +26,6 @@ namespace VetClinic.BLL.Services
             return await _repositoryWrapper.ProcedureRepository.GetAsync();
         }
 
-        //public async Task<ICollection<Procedure>> GetProcedure(int id)
-        //{
-        //    Func<Procedure, bool> searchById = (p => p.Id == id);
-        //    Expression<Func<Procedure, bool>> filter = (obj) => searchById(obj);
-        //    var procedures = await _procedureRepository.GetAsync(filter, null);
-        //    return procedures;
-        //}
-
         public async Task<Procedure> GetProcedure(int id)
         {
             return await _repositoryWrapper.ProcedureRepository.GetFirstOrDefaultAsync(
@@ -41,11 +33,10 @@ namespace VetClinic.BLL.Services
                 );
         }
 
-        public async Task<bool> PutProcedure(Procedure procedure)
+        public async Task<bool> PutProcedure(int id, Procedure procedure)
         {
-            var foundProcedure = await _repositoryWrapper.ProcedureRepository.GetFirstOrDefaultAsync(filter: p => p.Id == procedure.Id);
+            var foundProcedure = await _repositoryWrapper.ProcedureRepository.GetFirstOrDefaultAsync(filter: p => p.Id == id);
             if (foundProcedure == null) return false;
-            foundProcedure.Id = procedure.Id;
             foundProcedure.Description = procedure.Description;
             foundProcedure.IsSelectable = procedure.IsSelectable;
             foundProcedure.Price = procedure.Price;

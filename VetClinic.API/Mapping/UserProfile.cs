@@ -1,11 +1,6 @@
 ﻿using AutoMapper;
-
 using VetClinic.API.DTO;
-using VetClinic.API.DTO.User;
 using VetClinic.API.DTO.UserDto;
-
-using VetClinic.API.DTO.User;
-
 using VetClinic.DAL.Entities;
 
 namespace VetClinic.API.Mapping
@@ -14,14 +9,13 @@ namespace VetClinic.API.Mapping
     {
         public UserProfile()
         {
-            CreateMap<DTO.CreateUserDto, User>().ForMember(d => d.UserName, o => o.MapFrom(s => s.UserName))
+            CreateMap<CreateUserDto, User>().ForMember(d => d.UserName, o => o.MapFrom(s => s.UserName))
                 .ForMember(d => d.FirstName, o => o.MapFrom(s => s.FirstName))
                 .ForMember(d => d.LastName, o => o.MapFrom(s => s.LastName))
                 .ForMember(d => d.Email, o => o.MapFrom(s => s.Email))
                 .ForMember(d => d.PhoneNumber, o => o.MapFrom(s => s.PhoneNumber))
                 .ForMember(d => d.PasswordHash, o => o.MapFrom(s => s.Password))
                 .ForAllOtherMembers(o => o.Ignore());
-
 
             CreateMap<UpdateUserDto, User>().ForMember(d => d.UserName, o => o.MapFrom(s => s.UserName))
                .ForMember(d => d.FirstName, o => o.MapFrom(s => s.FirstName))
@@ -30,14 +24,6 @@ namespace VetClinic.API.Mapping
                .ForMember(d => d.PhoneNumber, o => o.MapFrom(s => s.PhoneNumber))
                .ForMember(d => d.PasswordHash, o => o.MapFrom(s => s.Password))
                .ForAllOtherMembers(o => o.Ignore());
-
-            CreateMap<UserDto, User>().ForMember(d => d.UserName, o => o.MapFrom(s => s.UserName))
-                .ForMember(d => d.FirstName, o => o.MapFrom(s => s.FirstName))
-                .ForMember(d => d.LastName, o => o.MapFrom(s => s.LastName))
-                .ForMember(d => d.Email, o => o.MapFrom(s => s.Email))
-                .ForMember(d => d.PhoneNumber, o => o.MapFrom(s => s.PhoneNumber))
-                .ForAllOtherMembers(o => o.Ignore());
-
         }
     }
 }

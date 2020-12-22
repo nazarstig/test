@@ -1,20 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using Xunit;
 using Moq;
 using VetClinic.BLL.Services;
 using VetClinic.DAL.Entities;
 using VetClinic.DAL.Repositories.Interfaces;
-using VetClinic.DAL.Repositories.Realizations;
-using VetClinic.DAL;
 using VetClinic.BLL.Services.Interfaces;
-using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using VetClinic.API.Mapping;
 using System.Linq.Expressions;
 using System.Linq;
 using Microsoft.EntityFrameworkCore.Query;
+using System.Threading.Tasks;
 
 namespace VetClinic.BLL.Tests.ServiceTests.ProcedureServiceTests
 {
@@ -24,8 +21,8 @@ namespace VetClinic.BLL.Tests.ServiceTests.ProcedureServiceTests
         IProcedureService _procedureService;
         Mock<IRepositoryWrapper> _repositoryWrapper;
         Mock<IProcedureRepository> _procedureRepository;
-        Mock<DbContext> _appContext;
         IMapper _mapper;
+        Procedure _procedure;
 
         public ProcedureServiceTests()
         {
@@ -39,28 +36,30 @@ namespace VetClinic.BLL.Tests.ServiceTests.ProcedureServiceTests
             );
             _mapper = mapperConfig.CreateMapper();
             _procedureService = new ProcedureService(_repositoryWrapper.Object);
+            _procedure = new Procedure { Id = 9, ProcedureName = "nail cutting", Description = "for cats only", Price = 100M, IsSelectable = false };
         }
 
         [Fact]
-        public async void GetOperationTest()
-        {
-            //var applicationContext = new Mock<ApplicationContext>();
-            //var repositoryWrapper = new Mock<IRepositoryWrapper>();
-            Procedure procedure = new Procedure { Id = 9, ProcedureName = "nail cutting", Description = "for cats only", Price = 100M, IsSelectable = false };
-            
+        public async Task GetProcedure_ReturnsResult()
+        {   
+            //arrange
             _repositoryWrapper.Setup(r => r.ProcedureRepository.GetFirstOrDefaultAsync(
                 It.IsAny<Expression<Func<Procedure, bool>>>(),
                 It.IsAny<Func<IQueryable<Procedure>, IIncludableQueryable<Procedure, object>>>(), 
                 It.IsAny<bool>()
-                )).ReturnsAsync(procedure);
+                )).ReturnsAsync(_procedure);
            
+            //action
             var result = await _procedureService.GetProcedure(134);
-            Assert.Equal(result.Price, procedure.Price);
+
+            //assert
+            Assert.Equal(result.Price, _procedure.Price);
         }
 
         [Fact]
-        public async void GetAllProceduresOperationTest()
+        public async Task GetAllProcedures_ReturnsResult()
         {
+            //arrange
             _repositoryWrapper.Setup(r => r.ProcedureRepository.GetAsync(
                It.IsAny<Expression<Func<Procedure, bool>>>(),
                It.IsAny<Func<IQueryable<Procedure>, IIncludableQueryable<Procedure, object>>>(),
@@ -68,39 +67,92 @@ namespace VetClinic.BLL.Tests.ServiceTests.ProcedureServiceTests
                It.IsAny<bool>()
                )).ReturnsAsync(ProceduresList());
 
+            //action
             var result = await _procedureService.GetAllProcedures();
+
+            //assert
             Assert.Equal(result.Count, ProceduresList().Count);
         }
 
         [Fact]
-        public async void AddOperationTest()
+        public async Task AddProcedure_Invoked()
         {
             //arrange
-            Procedure procedure = new Procedure { Id = 9, ProcedureName = "nail cutting", Description = "for cats only", Price = 100M, IsSelectable = false };
-            _procedureRepository.Setup(repo => repo.Add(procedure));
-            await _procedureService.AddProcedure(procedure);
+            _procedureRepository.Setup(repo => repo.Add(_procedure));
+
+            //action
+            await _procedureService.AddProcedure(_procedure);
+
+            //assert
             _procedureRepository.Verify(r => r.Add(It.IsAny<Procedure>()), Times.Once);
         }
 
         [Fact]
-        public async void PutOperationTest()
+        public async Task PutProcedure_ReturnsResult()
         {
-            Procedure procedure = new Procedure { Id = 9, ProcedureName = "nail cutting", Description = "for cats only", Price = 100M, IsSelectable = false };
-            _procedureRepository.Setup(repo => repo.Update(procedure));
-     
-            var res = await _procedureService.PutProcedure(procedure);
-            var result = await _procedureService.PutProcedure(procedure);
+            //arrange
+            _procedureRepository.Setup(repo => repo.Update(_procedure));
+            _repositoryWrapper.Setup(r => r.ProcedureRepository.GetFirstOrDefaultAsync(It.IsAny<Expression<Func<Procedure, bool>>>(),
+             It.IsAny<Func<IQueryable<Procedure>, IIncludableQueryable<Procedure, object>>>(),
+             It.IsAny<bool>()
+             )).ReturnsAsync(_procedure);
+
+            //action
+            var result = await _procedureService.PutProcedure(_procedure.Id, _procedure);
+            
+            //assert
             Assert.NotNull(result);
         }
 
         [Fact]
-        public async void DeleteOperationTest()
+        public async Task PutProcedure_UpdatesObject()
         {
-            Procedure procedure = new Procedure { Id = 9, ProcedureName = "nail cutting", Description = "for cats only", Price = 100M, IsSelectable = false };
-            _procedureRepository.Setup(repo => repo.Remove(procedure));
+            //arrange
+            Procedure procedureUpdated = new Procedure { ProcedureName = "nail cleaning", Description = "for cats only", Price = 50M, IsSelectable = false };
+            _procedureRepository.Setup(repo => repo.Update(_procedure));
+            _repositoryWrapper.Setup(r => r.ProcedureRepository.GetFirstOrDefaultAsync(It.IsAny<Expression<Func<Procedure, bool>>>(),
+             It.IsAny<Func<IQueryable<Procedure>, IIncludableQueryable<Procedure, object>>>(),
+             It.IsAny<bool>()
+             )).ReturnsAsync(_procedure);
+
+            //action
+            var res = await _procedureService.PutProcedure(9, procedureUpdated);
+
+            //asset
+            Assert.Equal(_procedure.ProcedureName, procedureUpdated.ProcedureName);
+
+        }
+
+        [Fact]
+        public async Task DeleteProcedure_ReturnsResult()
+        {
+            //arrange
+            _procedureRepository.Setup(repo => repo.Remove(_procedure));
+
+            //action
             var result = await _procedureService.DeleteProcedure(9);
+
+            //assert
             Assert.NotNull(result);
         }
+
+        [Fact]
+        public async Task DeleteProcedure_Succeded()
+        {
+            //arrange
+            _repositoryWrapper.Setup(r => r.ProcedureRepository.GetFirstOrDefaultAsync(It.IsAny<Expression<Func<Procedure, bool>>>(),
+               It.IsAny<Func<IQueryable<Procedure>, IIncludableQueryable<Procedure, object>>>(),
+               It.IsAny<bool>()
+               )).ReturnsAsync(_procedure);
+            _procedureRepository.Setup(repo => repo.Remove(_procedure));
+
+            //action
+            var res = await _procedureService.DeleteProcedure(_procedure.Id);
+
+            //assert
+            Assert.Equal(res, true);
+        }
+
 
         private List<Procedure> ProceduresList()
         {

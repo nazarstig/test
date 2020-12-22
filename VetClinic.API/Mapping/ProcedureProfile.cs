@@ -1,8 +1,4 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using VetClinic.DAL.Entities;
 using VetClinic.API.DTO.ProcedureDTO;
 
@@ -22,14 +18,7 @@ namespace VetClinic.API.Mapping
                   ForMember(d => d.IsSelectable,
                  opt => opt.MapFrom(src => src.IsSelectable));
             
-            //CreateMap<DeleteProcedureDTO, Procedure>().
-            //     ForMember(dto => dto.Id,
-            //     opt => opt.MapFrom(src => src.Id));
-
-            //CreateMap<DeleteProcedureDTO, int>().
-            //     ForMember(obj => obj,
-            //     opt => opt.MapFrom(src => src.Id));
-
+          
             CreateMap<Procedure, ReadProcedureDTO>().
                   ForMember(d => d.Id,
                  opt => opt.MapFrom(src => src.Id)).
@@ -43,8 +32,6 @@ namespace VetClinic.API.Mapping
                  opt => opt.MapFrom(src => src.IsSelectable));
 
             CreateMap<UpdateProcedureDTO, Procedure>().
-                 ForMember(d => d.Id,
-                 opt => opt.MapFrom(src => src.Id)).
                  ForMember(d => d.ProcedureName,
                  opt => opt.MapFrom(src => src.ProcedureName)).
                  ForMember(d => d.Description,

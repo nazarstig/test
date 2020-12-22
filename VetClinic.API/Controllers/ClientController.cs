@@ -3,13 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using VetClinic.API.DTO;
-using VetClinic.BLL.Services;
-using VetClinic.BLL.Services.Realizations;
 using VetClinic.DAL.Entities;
-using VetClinic.API.Mapping;
 using VetClinic.API.DTO.ClientDTO;
-using Microsoft.AspNetCore.Identity;
 using VetClinic.BLL.Services.Interfaces;
 using VetClinic.API.DTO.ClientDto;
 
@@ -29,16 +24,16 @@ namespace VetClinic.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CreateClientDto dto)
+        public async Task<IActionResult> PostAsync(CreateClientDto dto)
         {
             User user =  _mapper.Map<CreateClientDto, User>(dto);
             Client client = new Client();
             client = await _clientService.AddClient(user, client);
-            return CreatedAtAction(nameof(Show), new { Id = client.Id }, client);
+            return CreatedAtAction(nameof(GetAsync), new { Id = client.Id }, client);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, UpdateClientDto dto)
+        public async Task<IActionResult> PutAsync(int id, UpdateClientDto dto)
         {
             Client client = await _clientService.GetClient(id);
             if (client == null) return NotFound();
@@ -56,7 +51,7 @@ namespace VetClinic.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<ICollection<Client>>> Index()
+        public async Task<ActionResult<ICollection<Client>>> GetAsync()
         {
             var result = await _clientService.GetAllClients();
             ICollection<ReadClientDto> readClients = new List<ReadClientDto>();
@@ -70,7 +65,7 @@ namespace VetClinic.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Client>> Show(int id)
+        public async Task<ActionResult<Client>> GetAsync(int id)
         {
             var res = await _clientService.GetClient(id);
             if (res == null) 
@@ -81,6 +76,14 @@ namespace VetClinic.API.Controllers
                 return Ok(readClient);
             }
                 
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteAsync(int id)
+        {
+            if (await _clientService.DeleteClient(id))
+                return NoContent();
+            else return NotFound();
         }
     }
 }

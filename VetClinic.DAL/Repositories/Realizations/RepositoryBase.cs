@@ -5,7 +5,6 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
-using VetClinic.DAL.Entities;
 using VetClinic.DAL.Repositories.Interfaces;
 
 namespace VetClinic.DAL.Repositories.Realizations
@@ -72,8 +71,7 @@ namespace VetClinic.DAL.Repositories.Realizations
             bool asNoTracking = false)
         {
             IQueryable<TEntity> query = Context.Set<TEntity>();
-            ICollection<TEntity> collection;
-            //Expression<Func<Procedure, bool>> func = (e) => (e.IsSelectable);
+
             if (asNoTracking)
                 query = query.AsNoTracking();
 
