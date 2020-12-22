@@ -1,6 +1,4 @@
-﻿using VetClinic.DAL.Entities;
-
-namespace VetClinic.API.DTO.Appointments
+﻿namespace VetClinic.API.DTO.Appointments
 {
     public class StatusDto
     {
