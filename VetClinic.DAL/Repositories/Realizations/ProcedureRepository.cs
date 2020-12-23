@@ -5,6 +5,8 @@ namespace VetClinic.DAL.Repositories.Realizations
 {
     public class ProcedureRepository : RepositoryBase<Procedure>, IProcedureRepository
     {
-        public ProcedureRepository(ApplicationContext context) : base(context) { }
+        public ProcedureRepository(ApplicationContext context) : base(context) {
+        
+        }
     }
 }

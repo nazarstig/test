@@ -10,6 +10,7 @@ using Microsoft.Extensions.Hosting;
 using VetClinic.DAL;
 using VetClinic.DAL.Entities;
 
+
 namespace IdentityServerRoles
 {
     public class Startup

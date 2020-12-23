@@ -38,7 +38,6 @@ namespace VetClinic.DAL.Repositories.Realizations
             bool asNoTracking = false)
         {
             IQueryable<TEntity> query = GetQuery(filter, include, asNoTracking);
-
             return query.FirstOrDefaultAsync();
         }
 
@@ -81,7 +80,7 @@ namespace VetClinic.DAL.Repositories.Realizations
 
             if (filter != null)
                 query = query.Where(filter);
-
+            
             return query;
         }
     }
