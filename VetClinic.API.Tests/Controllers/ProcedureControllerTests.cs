@@ -152,19 +152,19 @@ namespace VetClinic.API.Tests.ControllerTests
             Assert.True(result is NoContentResult);
         }
 
-        [Fact]
-        public async Task Post_Succeded()
-        {
-            //Arrange
-            CreateProcedureDto dto = new CreateProcedureDto { };
-            _procedureService.Setup(p => p.AddProcedure(_procedure));
-
-            //Action
-            var result = await _procedureController.PostAsync(dto);
-
-            //Assert
-            Assert.True(result is CreatedAtActionResult);
-        }
+        // [Fact]
+        // public async Task Post_Succeded()
+        // {
+        //     //Arrange
+        //     CreateProcedureDto dto = new CreateProcedureDto { };
+        //     _procedureService.Setup(p => p.AddProcedure(_procedure));
+        //
+        //     //Action
+        //     var result = await _procedureController.PostAsync(dto);
+        //
+        //     //Assert
+        //     Assert.True(result is CreatedAtActionResult);
+        // }
 
         private ICollection<Procedure> ProceduresList()
         {
