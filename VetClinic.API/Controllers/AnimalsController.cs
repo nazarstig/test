@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
-using VetClinic.API.DTO;
+using VetClinic.API.DTO.Animal;
 using VetClinic.BLL.Services.Interfaces;
 using VetClinic.DAL.Entities;
 

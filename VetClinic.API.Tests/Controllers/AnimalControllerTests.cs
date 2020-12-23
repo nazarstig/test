@@ -4,8 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System.Threading.Tasks;
 using VetClinic.API.Controllers;
-using VetClinic.API.DTO;
-using VetClinic.API.Mapping;
+using VetClinic.API.DTO.Animal;
 using VetClinic.BLL.Services.Interfaces;
 using VetClinic.DAL.Entities;
 using Xunit;
@@ -14,14 +13,12 @@ namespace VetClinic.API.Tests.Controllers
 {
     public class AnimalControllerTests
     {
-        IMapper _mapper;
+        Mock<IMapper> _mapper;
 
         public AnimalControllerTests()
         {
-            var profile = new ReadAnimalProfile();
-            var profile1 = new CreateAnimalProfile();
-            var configuration = new MapperConfiguration(cfg => cfg.AddProfile(profile));
-            _mapper = new Mapper(configuration);
+
+            _mapper = new Mock<IMapper>();
         }
 
         [Theory,AutoMoqData]
@@ -29,7 +26,8 @@ namespace VetClinic.API.Tests.Controllers
             [Frozen] Mock<IAnimalService> _animalService)
         {
             //Arrange
-            var Sut = new AnimalsController(_animalService.Object, _mapper);
+            _mapper.Setup(x => x.Map<ReadAnimalDto>(It.IsAny<Animal>()));
+            var Sut = new AnimalsController(_animalService.Object, _mapper.Object);
 
             //Act
             var actual = await Sut.GetAsync();
@@ -45,7 +43,8 @@ namespace VetClinic.API.Tests.Controllers
         {
             //Arrange
             int id = 2;
-            var Sut = new AnimalsController(_animalService.Object, _mapper);
+            _mapper.Setup(x => x.Map<ReadAnimalDto>(It.IsAny<Animal>()));
+            var Sut = new AnimalsController(_animalService.Object, _mapper.Object);
 
             //Act
             var actual = await Sut.GetAsync(id);
@@ -60,8 +59,9 @@ namespace VetClinic.API.Tests.Controllers
             [Frozen] Mock<IAnimalService> _animalService)
         {
             //Arrange
+            _mapper.Setup(x => x.Map<CreateAnimalDto>(It.IsAny<Animal>()));
             var animalDto = new Mock<CreateAnimalDto>();
-            var Sut = new AnimalsController(_animalService.Object, _mapper);
+            var Sut = new AnimalsController(_animalService.Object, _mapper.Object);
 
             //Act
             var actual = await Sut.PostAsync(animalDto.Object);
@@ -77,9 +77,10 @@ namespace VetClinic.API.Tests.Controllers
             [Frozen] Mock<IAnimalService> _animalService)
         {
             //Arrange
+            _mapper.Setup(x => x.Map<UpdateAnimalDto>(It.IsAny<Animal>()));
             int id = 1;
             var animalDto = new Mock<UpdateAnimalDto>();
-            var Sut = new AnimalsController(_animalService.Object, _mapper);
+            var Sut = new AnimalsController(_animalService.Object, _mapper.Object);
 
             //Act
             var actual = await Sut.PutAsync(id, animalDto.Object);
@@ -96,7 +97,7 @@ namespace VetClinic.API.Tests.Controllers
         {
             //Arrange
             int id = 1;
-            var Sut = new AnimalsController(_animalService.Object, _mapper);
+            var Sut = new AnimalsController(_animalService.Object, _mapper.Object);
 
             //Act
             var actual = await Sut.DeleteAsync(id);
