@@ -113,8 +113,7 @@ namespace VetClinic.API.Tests.Controllers
             // Act
             await doctorController.PostAsync(createDoctorDto);
 
-            // Assert
-                       
+            // Assert                       
             doctorServiceMock.Verify(m => m.AddDoctorAsync(doctor,doctor.User), Times.Once);
         }
 
