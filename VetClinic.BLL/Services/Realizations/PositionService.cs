@@ -16,9 +16,14 @@ namespace VetClinic.BLL.Services.Realizations
 
         public async Task<Position> AddPositionAsync(Position position)
         {
-            _repositoryWrapper.PositionRepository.Add(position);
+            Position createdPosition = new Position();
+
+            createdPosition.PositionName = position.PositionName;
+            createdPosition.Salary = position.Salary;
+
+            _repositoryWrapper.PositionRepository.Add(createdPosition);
             await _repositoryWrapper.SaveAsync();
-            return position;
+            return createdPosition;
         }
 
         public async Task<Position> GetPositionAsync(int positionId)

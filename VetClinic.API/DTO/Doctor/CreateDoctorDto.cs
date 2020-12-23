@@ -9,8 +9,7 @@ namespace VetClinic.API.DTO.Doctor
         public string Experience { get; set; }
         public string Photo { get; set; }
         public int PositionId { get; set; }
-
-        public string UserId { get; set; }
+        
         public CreateUserDto User { get; set; }       
     }
 }
