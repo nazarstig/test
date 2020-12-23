@@ -8,7 +8,7 @@ namespace VetClinic.API.Mapping
     {
         public ProcedureProfile()
         {
-            CreateMap<CreateProcedureDTO, Procedure>().
+            CreateMap<CreateProcedureDto, Procedure>().
                  ForMember(d => d.ProcedureName,
                  opt => opt.MapFrom(src => src.ProcedureName)).
                  ForMember(d => d.Description,
@@ -18,7 +18,7 @@ namespace VetClinic.API.Mapping
                   ForMember(d => d.IsSelectable,
                  opt => opt.MapFrom(src => src.IsSelectable));
                       
-            CreateMap<Procedure, ReadProcedureDTO>().
+            CreateMap<Procedure, ReadProcedureDto>().
                   ForMember(d => d.Id,
                  opt => opt.MapFrom(src => src.Id)).
                  ForMember(d => d.ProcedureName,
@@ -30,7 +30,7 @@ namespace VetClinic.API.Mapping
                   ForMember(d => d.IsSelectable,
                  opt => opt.MapFrom(src => src.IsSelectable));
 
-            CreateMap<UpdateProcedureDTO, Procedure>().
+            CreateMap<UpdateProcedureDto, Procedure>().
                  ForMember(d => d.ProcedureName,
                  opt => opt.MapFrom(src => src.ProcedureName)).
                  ForMember(d => d.Description,

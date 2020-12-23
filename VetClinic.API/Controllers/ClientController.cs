@@ -13,8 +13,8 @@ namespace VetClinic.API.Controllers
     [ApiController]
     public class ClientController : ControllerBase
     {
-        private IClientService _clientService;
-        private IMapper _mapper;
+        private readonly IClientService _clientService;
+        private readonly IMapper _mapper;
      
         public ClientController(IClientService clientService, IMapper mapper)
         {
@@ -28,7 +28,8 @@ namespace VetClinic.API.Controllers
             User user =  _mapper.Map<CreateClientDto, User>(dto);
             Client client = new Client();
             client = await _clientService.AddClient(user, client);
-            return CreatedAtAction(nameof(GetAsync), new { Id = client.Id }, client);
+            ReadClientDto readDto = _mapper.Map<ReadClientDto>(client);
+            return Created("/client/post", readDto);
         }
 
         [HttpPut("{id}")]

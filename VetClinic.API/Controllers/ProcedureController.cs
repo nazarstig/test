@@ -12,8 +12,8 @@ namespace VetClinic.API.Controllers
     [ApiController]
     public class ProcedureController : ControllerBase
     {
-        private IProcedureService _procedureService;
-        private IMapper _mapper; 
+        private readonly IProcedureService _procedureService;
+        private readonly IMapper _mapper; 
         
         public ProcedureController(IProcedureService procedureService, IMapper mapper)
         {
@@ -22,17 +22,17 @@ namespace VetClinic.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostAsync(CreateProcedureDTO procedureDTO)
+        public async Task<IActionResult> PostAsync(CreateProcedureDto procedureDTO)
         {
-            Procedure procedure = _mapper.Map<CreateProcedureDTO, Procedure>(procedureDTO);
+            Procedure procedure = _mapper.Map<CreateProcedureDto, Procedure>(procedureDTO);
             await _procedureService.AddProcedure(procedure);
             return CreatedAtAction(nameof(GetAsync), new { id = procedure.Id }, procedure);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAsync(int id, UpdateProcedureDTO procedureDTO)
+        public async Task<IActionResult> PutAsync(int id, UpdateProcedureDto procedureDTO)
         {
-            Procedure procedure = _mapper.Map<UpdateProcedureDTO, Procedure>(procedureDTO);
+            Procedure procedure = _mapper.Map<UpdateProcedureDto, Procedure>(procedureDTO);
             if (await _procedureService.PutProcedure(id, procedure))
                 return NoContent();
             else return NotFound();
@@ -47,14 +47,14 @@ namespace VetClinic.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<ICollection<ReadProcedureDTO>>> GetAsync()
+        public async Task<ActionResult<ICollection<ReadProcedureDto>>> GetAsync()
         {            
             var res =  await _procedureService.GetAllProcedures();
-            ICollection<ReadProcedureDTO> readProcedures = new List<ReadProcedureDTO>();
-            ReadProcedureDTO dto;
+            ICollection<ReadProcedureDto> readProcedures = new List<ReadProcedureDto>();
+            ReadProcedureDto dto;
             foreach(Procedure procedure in res)
             {
-                dto = _mapper.Map<ReadProcedureDTO>(procedure);
+                dto = _mapper.Map<ReadProcedureDto>(procedure);
                 readProcedures.Add(dto);
             }
             return Ok(readProcedures);
@@ -66,7 +66,7 @@ namespace VetClinic.API.Controllers
             var result = await _procedureService.GetProcedure(id);
             if (result != null)
             {
-                ReadProcedureDTO readDto = _mapper.Map<ReadProcedureDTO>(result);
+                ReadProcedureDto readDto = _mapper.Map<ReadProcedureDto>(result);
                 return Ok(readDto);
             }
             else return NotFound();

@@ -3,7 +3,7 @@ using VetClinic.API.DTO.ProcedureDTO;
 
 namespace VetClinic.API.Validators.Procedure
 {
-    public class CreateProcedureDtoValidator : AbstractValidator<CreateProcedureDTO>
+    public class CreateProcedureDtoValidator : AbstractValidator<CreateProcedureDto>
     {
         public CreateProcedureDtoValidator()
         {

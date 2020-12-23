@@ -128,7 +128,7 @@ namespace VetClinic.API.Tests.ControllerTests
         public async Task Put_Failed()
         {
             //Arrange
-            UpdateProcedureDTO dto = new UpdateProcedureDTO { };
+            UpdateProcedureDto dto = new UpdateProcedureDto { };
             _procedureService.Setup(p => p.PutProcedure(3, _procedure)).ReturnsAsync(false);
 
             //Action
@@ -142,7 +142,7 @@ namespace VetClinic.API.Tests.ControllerTests
         public async Task Put_Succeded()
         {
             //Arrange
-            UpdateProcedureDTO dto = new UpdateProcedureDTO { };
+            UpdateProcedureDto dto = new UpdateProcedureDto { };
             _procedureService.Setup(p => p.DeleteProcedure(3)).ReturnsAsync(true);
 
             //Action
@@ -156,7 +156,7 @@ namespace VetClinic.API.Tests.ControllerTests
         public async Task Post_Succeded()
         {
             //Arrange
-            CreateProcedureDTO dto = new CreateProcedureDTO { };
+            CreateProcedureDto dto = new CreateProcedureDto { };
             _procedureService.Setup(p => p.AddProcedure(_procedure));
 
             //Action

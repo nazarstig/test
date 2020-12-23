@@ -8,7 +8,7 @@ namespace VetClinic.BLL.Services.Realizations
 {
     public class ProcedureService : IProcedureService
     {
-        private IRepositoryWrapper _repositoryWrapper;
+        private readonly IRepositoryWrapper _repositoryWrapper;
               
         public ProcedureService(IRepositoryWrapper repositoryWrapper)
         {           

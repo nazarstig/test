@@ -1,6 +1,6 @@
 ﻿namespace VetClinic.API.DTO.ProcedureDTO
 {
-    public class UpdateProcedureDTO
+    public class UpdateProcedureDto
     {
         public string ProcedureName { get; set; }
         public string Description { get; set; }

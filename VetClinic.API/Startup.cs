@@ -35,7 +35,7 @@ namespace VetClinic.API
             services.AddAuthentication("RefAndJWTToken")
                 .AddIdentityServerAuthentication("RefAndJWTToken", options =>
                 {
-                    options.Authority = "https://localhost:5001";
+                    options.Authority = "https://localhost:5005";
                     options.ApiName = "VetClinicApi";
                     options.ApiSecret = "angular_secret";
                 });
@@ -85,11 +85,11 @@ namespace VetClinic.API
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.UseMiddleware<ExceptionMiddleware>();
+            else
+                app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseRouting();
-          
+
             app.UseAuthentication();
 
             app.UseAuthorization();

@@ -10,8 +10,8 @@ namespace VetClinic.BLL.Services.Realizations
 {
     public class ClientService : IClientService
     {
-        private IRepositoryWrapper _repositoryWrapper;
-        private IUserService _userService;
+        private readonly IRepositoryWrapper _repositoryWrapper;
+        private readonly IUserService _userService;
 
         public ClientService(IRepositoryWrapper repositoryWrapper, IUserService userService)
         {
