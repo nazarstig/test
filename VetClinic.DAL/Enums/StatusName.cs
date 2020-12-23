@@ -1,4 +1,4 @@
-﻿namespace VetClinic.DAL.Entities
+﻿namespace VetClinic.DAL.Enums
 {
     public enum StatusName
     {

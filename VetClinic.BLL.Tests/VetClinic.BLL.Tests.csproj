@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\VetClinic.API\VetClinic.API.csproj" />
     <ProjectReference Include="..\VetClinic.BLL\VetClinic.BLL.csproj" />
     <ProjectReference Include="..\VetClinic.DAL\VetClinic.DAL.csproj" />
   </ItemGroup>

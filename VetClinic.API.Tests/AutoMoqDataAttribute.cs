@@ -1,14 +1,20 @@
 ﻿using AutoFixture;
 using AutoFixture.AutoMoq;
 using AutoFixture.Xunit2;
+using System.Linq;
 
 namespace VetClinic.API.Tests
 {
-    class AutoMoqDataAttribute : AutoDataAttribute
+    internal class AutoMoqDataAttribute : AutoDataAttribute
     {
         public AutoMoqDataAttribute() : base(() =>
         {
-            var fixture = new Fixture().Customize(new AutoMoqCustomization());
+            var fixture = new Fixture().Customize(new CompositeCustomization(
+                new AutoMoqCustomization(),
+                new SupportMutableValueTypesCustomization()));
+
+            fixture.Behaviors.OfType<ThrowingRecursionBehavior>().ToList().ForEach(b => fixture.Behaviors.Remove(b));
+            fixture.Behaviors.Add(new OmitOnRecursionBehavior());
 
             return fixture;
         })

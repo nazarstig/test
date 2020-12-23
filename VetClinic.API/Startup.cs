@@ -1,4 +1,4 @@
-using AutoMapper;
+﻿using AutoMapper;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -40,6 +40,8 @@ namespace VetClinic.API
                     options.ApiSecret = "angular_secret";
                 });
 
+
+
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<ApplicationContext>(options =>
                 options.UseSqlServer(connection, builder =>
@@ -61,10 +63,16 @@ namespace VetClinic.API
                 .AddNewtonsoftJson();
 
             services.Configure<ApiBehaviorOptions>(options => { options.SuppressModelStateInvalidFilter = true; });
-
+            services.AddSwaggerGen();
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IProcedureService, ProcedureService>();
+            services.AddScoped<IClientService, ClientService>();
+            services.AddScoped<IPositionService, PositionService>();
+            services.AddScoped<IDoctorService, DoctorService>();
+            services.AddScoped<IServiceService, ServiceService>();
             services.AddScoped<IAnimalService, AnimalService>();
+
 
             services.AddServices();
 
@@ -78,8 +86,8 @@ namespace VetClinic.API
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.UseMiddleware<ExceptionMiddleware>();
+            else
+                app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseRouting();
 

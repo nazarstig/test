@@ -37,7 +37,7 @@ namespace VetClinic.BLL
                 var result = userManager.CreateAsync(alice, "Pass123$").Result;
                 if (!result.Succeeded)
                 {
-                    throw new VetClinicException(HttpStatusCode.InternalServerError,result.Errors.First().Description);
+                    throw new VetClinicException(HttpStatusCode.InternalServerError, result.Errors.First().Description);
                 }
 
                 result = userManager.AddClaimsAsync(alice, new Claim[]{
