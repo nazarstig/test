@@ -62,6 +62,11 @@ namespace VetClinic.API.Controllers
 
             var role = await RoleManager.FindByIdAsync(id);
 
+            if(role == null)
+            {
+                return NotFound();
+            }
+
             role.Name = inputRole.Name;
             role.NormalizedName = inputRole.Name.ToUpper();
 

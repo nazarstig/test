@@ -103,6 +103,27 @@ namespace VetClinic.API.Tests.Controllers
         }
 
         [Theory, AutoMoqData]
+        public async Task Update_NoSuchId_ReturnNotFound(IdentityRole role, CreateRoleDto dto,
+            [Frozen] Mock<RoleManager<IdentityRole>> roleManagerMock,
+            [Frozen] Mock<IMapper> mapper)
+        {
+            //Arrange
+            roleManagerMock.Setup(c => c.FindByIdAsync(It.IsAny<string>()))
+                .ReturnsAsync((IdentityRole)null);
+
+            mapper.Setup(m => m.Map<CreateRoleDto, IdentityRole>(It.IsAny<CreateRoleDto>())).Returns(role);
+
+            var sut = new RoleController(roleManagerMock.Object, mapper.Object);
+
+            //Act
+            var result = await sut.PutAsync(It.IsAny<string>(), dto);
+
+            //Assign
+            Assert.NotNull(result);
+            Assert.IsType<NotFoundResult>(result);
+        }
+
+        [Theory, AutoMoqData]
         public async Task Update_IdDto_ReturnNoContent(IdentityRole role, CreateRoleDto dto,
             [Frozen] Mock<RoleManager<IdentityRole>> roleManagerMock,
             [Frozen] Mock<IMapper> mapper)
