@@ -10,25 +10,27 @@ namespace VetClinic.DAL.Configurations
         public void Configure(EntityTypeBuilder<Appointment> builder)
         {
             builder.HasKey(a => a.Id);
-            
+
             builder
                 .HasOne(a => a.Doctor)
                 .WithMany(d => d.Appointments)
                 .HasForeignKey(a => a.DoctorId);
-            
+
             builder
                 .HasOne(a => a.Animal)
                 .WithMany(a => a.Appointments)
                 .HasForeignKey(a => a.AnimalId);
-            
+
             builder
                 .HasOne(a => a.Status)
                 .WithMany(s => s.Appointments)
                 .HasForeignKey(a => a.StatusId);
+            
             builder
                 .HasOne(a => a.Service)
                 .WithMany(s => s.Appointments)
                 .HasForeignKey(a => a.ServiceId);
+            
             builder
                 .HasMany(a => a.AppointmentProcedures)
                 .WithOne(a => a.Appointment)

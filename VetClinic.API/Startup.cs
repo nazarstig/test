@@ -41,7 +41,6 @@ namespace VetClinic.API
                 });
 
 
-
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<ApplicationContext>(options =>
                 options.UseSqlServer(connection, builder =>
@@ -71,6 +70,7 @@ namespace VetClinic.API
             services.AddScoped<IPositionService, PositionService>();
             services.AddScoped<IDoctorService, DoctorService>();
             services.AddScoped<IServiceService, ServiceService>();
+            services.AddScoped<IAnimalService, AnimalService>();
 
 
             services.AddServices();
@@ -85,8 +85,8 @@ namespace VetClinic.API
             {
                 app.UseDeveloperExceptionPage();
             }
-            else
-                app.UseMiddleware<ExceptionMiddleware>();
+
+            app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseRouting();
 
