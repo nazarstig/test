@@ -2,7 +2,5 @@
 
 namespace VetClinic.DAL.Repositories.Interfaces
 {
-    public interface IProcedureRepository : IRepositoryBase<Procedure>
-    {
-    }
+    public interface IProcedureRepository : IRepositoryBase<Procedure> { }
 }

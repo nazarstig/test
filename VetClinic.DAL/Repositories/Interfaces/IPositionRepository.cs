@@ -2,7 +2,5 @@
 
 namespace VetClinic.DAL.Repositories.Interfaces
 {
-    public interface IPositionRepository:IRepositoryBase<Position>
-    {
-    }
+    public interface IPositionRepository : IRepositoryBase<Position> { }
 }

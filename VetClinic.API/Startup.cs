@@ -41,7 +41,6 @@ namespace VetClinic.API
                 });
 
 
-
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<ApplicationContext>(options =>
                 options.UseSqlServer(connection, builder =>

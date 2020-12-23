@@ -2,7 +2,5 @@
 
 namespace VetClinic.DAL.Repositories.Interfaces
 {
-    public interface IAnimalRepository : IRepositoryBase<Animal>
-    {
-    }
+    public interface IAnimalRepository : IRepositoryBase<Animal> { }
 }

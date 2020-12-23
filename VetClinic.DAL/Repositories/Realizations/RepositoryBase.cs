@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query;
 using VetClinic.DAL.Repositories.Interfaces;
 
 namespace VetClinic.DAL.Repositories.Realizations
@@ -80,7 +80,7 @@ namespace VetClinic.DAL.Repositories.Realizations
 
             if (filter != null)
                 query = query.Where(filter);
-            
+
             return query;
         }
     }
