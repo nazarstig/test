@@ -85,8 +85,8 @@ namespace VetClinic.API
             {
                 app.UseDeveloperExceptionPage();
             }
-            else
-                app.UseMiddleware<ExceptionMiddleware>();
+
+            app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseRouting();
 
