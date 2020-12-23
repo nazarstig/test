@@ -14,6 +14,6 @@ namespace VetClinic.DAL.Repositories.Interfaces
         IProcedureRepository ProcedureRepository { get; }
         IServiceRepository ServiceRepository { get; }
         IStatusRepository StatusRepository { get; }
-        Task<int> SaveAsync();
+        Task SaveAsync();
     }
 }

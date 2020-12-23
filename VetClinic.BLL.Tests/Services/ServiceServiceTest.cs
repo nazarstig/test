@@ -1,8 +1,9 @@
-﻿using Moq;
+﻿using AutoFixture.Xunit2;
+using Moq;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using VetClinic.API.Tests;
 using VetClinic.BLL.Services.Realizations;
 using VetClinic.DAL.Entities;
 using VetClinic.DAL.Repositories.Interfaces;
@@ -21,20 +22,11 @@ namespace VetClinic.BLL.Tests.Services
             _serviceService = new ServiceService(_wrapper.Object);
         }
 
-        private List<Service> GetTestServices()
-        {
-            return new List<Service>(){
-                new Service { Id = 1, ServiceName = "Urgently", Appointments = new List<Appointment>(){ new Appointment() { Id = 1, AppointmentDate = DateTime.Now, ServiceId = 1} } },
-                new Service { Id = 2, ServiceName = "Makeup", Appointments = new List<Appointment>(){ new Appointment() { Id = 2, AppointmentDate = DateTime.Now, ServiceId = 2} } },
-                new Service { Id = 3, ServiceName = "Inspection", Appointments = new List<Appointment>(){ new Appointment() { Id = 3, AppointmentDate = DateTime.Now, ServiceId = 3} } }
-            };
-        }
-
-        [Fact]
-        public async Task GetAllServices_ReturnsAllItemsAsync()
+        [Theory, AutoMoqData]
+        public async Task GetAllServices_ReturnsAllItemsAsync(
+            [Frozen] List<Service> services)
         {
             // Arrange
-            var services = GetTestServices();
             _wrapper.Setup(s => s.ServiceRepository.GetAsync(null,null,null,false)).ReturnsAsync(services);
 
             // Act 
@@ -42,109 +34,107 @@ namespace VetClinic.BLL.Tests.Services
 
             // Assert
             Assert.IsAssignableFrom<ICollection<Service>>(result);
-            Assert.Equal(3, result.Count);
+            Assert.Equal(services.Count, result.Count);
         }
 
-        [Fact]
-        public async Task GetServiceById_ReturnsRightItem()
+        [Theory, AutoMoqData]
+        public async Task GetServiceById_ReturnsRightItem(
+            [Frozen] Service testService)
         {
             // Arrange
-            var testId = 1;
-            var service = GetTestServices().Find(s => s.Id == testId);
-            _wrapper.Setup(s => s.ServiceRepository.GetFirstOrDefaultAsync(s => s.Id == testId, null, false)).ReturnsAsync(service);
+            var testId = testService.Id;
+            _wrapper.Setup(s => s.ServiceRepository.GetFirstOrDefaultAsync(s => s.Id == testId, null, false)).ReturnsAsync(testService);
 
             // Act 
-            var result =  await _serviceService.GetServiceByIdAsync(service.Id);
+            var result =  await _serviceService.GetServiceByIdAsync(testService.Id);
 
             // Assert
             Assert.IsType<Service>(result);
-            Assert.Equal(GetTestServices().Find(s => s.Id == testId).ServiceName, result.ServiceName);
+            Assert.Equal(testService.ServiceName, result.ServiceName);
         }
 
-        [Fact]
-        public async Task GetServiceById_ReturnsNullIfNoFind()
+        [Theory, AutoMoqData]
+        public async Task GetServiceById_ReturnsNullIfNoFind(
+            [Frozen] Service testService)
         {
             // Arrange
-            int maxId = GetTestServices().Max(s => s.Id);
-            var service = GetTestServices().Find(s => s.Id == maxId + 1);
-            _wrapper.Setup(s => s.ServiceRepository.GetFirstOrDefaultAsync(s => s.Id == maxId + 1, null, false)).ReturnsAsync(service);
+            _wrapper.Setup(s => s.ServiceRepository.GetFirstOrDefaultAsync(s => s.Id == testService.Id, null, false)).ReturnsAsync(value: null);
 
             // Act 
-            Service result = await _serviceService.GetServiceByIdAsync(maxId + 1);
+            Service result = await _serviceService.GetServiceByIdAsync(testService.Id);
 
             // Assert
             Assert.Null(result);
         }
 
-        [Fact]
-        public async Task AddService_ReturnsAddedItem()
+        [Theory, AutoMoqData]
+        public async Task AddService_ReturnsAddedItem(
+            [Frozen] Service testService)
         {
             // Arrange
-            var service = GetTestServices().Find(s => s.Id == 1);
             _wrapper.Setup(s => s.ServiceRepository.Add(It.IsAny<Service>()));
 
             // Act
-            var result = await _serviceService.AddAsync(service);
+            var result = await _serviceService.AddAsync(testService);
 
             // Assert
             Assert.IsType<Service>(result);
-            Assert.Equal(service,result);
+            Assert.Equal(testService, result);
         }
 
-        [Fact]
-        public async Task UpdateService_ReturnsFalseIfNoFind()
+        [Theory, AutoMoqData]
+        public async Task UpdateService_ReturnsFalseIfNoFind(
+            [Frozen] Service testService)
         {
             // Arrange
-            int maxId = GetTestServices().Max(s => s.Id);
-            var service = GetTestServices().Find(s => s.Id == maxId + 1);
-            _wrapper.Setup(s => s.ServiceRepository.GetFirstOrDefaultAsync(s => s.Id == maxId + 1, null, false)).ReturnsAsync(service);
+            var testId = testService.Id;
+            _wrapper.Setup(s => s.ServiceRepository.GetFirstOrDefaultAsync(s => s.Id == testId, null, false)).ReturnsAsync(value: null);
 
             // Act
-            var result = await _serviceService.UpdateAsync(maxId + 1, It.IsAny<Service>());
+            var result = await _serviceService.UpdateAsync(testId, It.IsAny<Service>());
 
             // Assert
             Assert.False(result);
         }
 
-        [Fact]
-        public async Task UpdateService_ReturnsTrueIfUpdated()
+        [Theory, AutoMoqData]
+        public async Task UpdateService_ReturnsTrueIfUpdated(
+            [Frozen] Service testService)
         {
             // Arrange
-            var testId = 1;
-            var service = GetTestServices().Find(s => s.Id == testId);
-            _wrapper.Setup(s => s.ServiceRepository.GetFirstOrDefaultAsync(s => s.Id == testId, null, false)).ReturnsAsync(service);           
-            _wrapper.Setup(s => s.SaveAsync()).ReturnsAsync(1);
+            var testId = testService.Id;
+            _wrapper.Setup(s => s.ServiceRepository.GetFirstOrDefaultAsync(s => s.Id == testId, null, false)).ReturnsAsync(testService);           
 
             // Act
-            var result = await _serviceService.UpdateAsync(testId, service);
+            var result = await _serviceService.UpdateAsync(testId, testService);
 
             // Assert
             Assert.True(result);
         }
 
 
-        [Fact]
-        public async Task RemoveService_ReturnsFalseIfNoFind()
+        [Theory, AutoMoqData]
+        public async Task RemoveService_ReturnsFalseIfNoFind(
+            [Frozen] Service testService)
         {
             // Arrange
-            int maxId = GetTestServices().Max(s => s.Id);
-            var service = GetTestServices().Find(s => s.Id == maxId + 1);
-            _wrapper.Setup(s => s.ServiceRepository.GetFirstOrDefaultAsync(s => s.Id == maxId + 1, null, false)).ReturnsAsync(service);
+            var testId = testService.Id;
+            _wrapper.Setup(s => s.ServiceRepository.GetFirstOrDefaultAsync(s => s.Id == testId, null, false)).ReturnsAsync(value: null);
 
             // Act
-            var result = await _serviceService.RemoveAsync(maxId + 1);
+            var result = await _serviceService.RemoveAsync(testId);
 
             // Assert
             Assert.False(result);
         }
 
-        [Fact]
-        public async Task RemoveService_ReturnsTrueIfExists()
+        [Theory, AutoMoqData]
+        public async Task RemoveService_ReturnsTrueIfExists(
+            [Frozen] Service testService)
         {
             // Arrange
-            var testId = 1;
-            var service = GetTestServices().Find(s => s.Id == testId);
-            _wrapper.Setup(s => s.ServiceRepository.GetFirstOrDefaultAsync(s => s.Id == testId, null, false)).ReturnsAsync(service);
+            var testId = testService.Id;
+            _wrapper.Setup(s => s.ServiceRepository.GetFirstOrDefaultAsync(s => s.Id == testId, null, false)).ReturnsAsync(testService);
 
             // Act
             var result = await _serviceService.RemoveAsync(testId);

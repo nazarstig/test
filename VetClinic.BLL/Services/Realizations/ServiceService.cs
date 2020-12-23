@@ -47,8 +47,8 @@ namespace VetClinic.BLL.Services.Realizations
             serviceUpdated.Appointments = service.Appointments;
 
             _repositoryWrapper.ServiceRepository.Update(serviceUpdated);
-            int affectedRows =  await _repositoryWrapper.SaveAsync();
-            return affectedRows > 0;
+            await _repositoryWrapper.SaveAsync();
+            return true;
         }
 
         public async Task<bool> RemoveAsync(int serviceId)

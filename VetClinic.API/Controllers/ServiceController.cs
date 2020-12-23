@@ -24,7 +24,7 @@ namespace VetClinic.API.Controllers
 
         //GET api/service
         [HttpGet]
-        public async Task<ActionResult<ICollection<ServiceDto>>> Index()
+        public async Task<ActionResult<ICollection<ServiceDto>>> GetAsync()
         {
             var services = await _serviceService.GetAllServicesAsync();
             var servicesDTO = _mapper.Map<ICollection<ServiceDto>>(services);
@@ -33,7 +33,7 @@ namespace VetClinic.API.Controllers
 
         // GET api/service/3
         [HttpGet("{id:min(1)}")]
-        public async Task<ActionResult<ServiceDto>> Show([FromRoute] int id)
+        public async Task<ActionResult<ServiceDto>> GetAsync([FromRoute] int id)
         {
             var service = await _serviceService.GetServiceByIdAsync(id);
 
@@ -48,7 +48,7 @@ namespace VetClinic.API.Controllers
 
         // POST api/service
         [HttpPost]
-        public async Task<ActionResult<ServiceDto>> Create([FromBody] ServiceCreateDto serviceCreateDTO)
+        public async Task<ActionResult<ServiceDto>> PostAsync([FromBody] ServiceCreateDto serviceCreateDTO)
         {
             var service = _mapper.Map<Service>(serviceCreateDTO);
             var insertedService  =  await _serviceService.AddAsync(service);
@@ -58,7 +58,7 @@ namespace VetClinic.API.Controllers
 
         // PUT api/service/id
         [HttpPut("{id:min(1)}")]
-        public async Task<IActionResult> Update([FromRoute] int id, [FromBody]ServiceUpdateDto serviceUpdateDTO)
+        public async Task<IActionResult> PutAsync([FromRoute] int id, [FromBody]ServiceUpdateDto serviceUpdateDTO)
         {
             var service = _mapper.Map<Service>(serviceUpdateDTO);
             var updated = await _serviceService.UpdateAsync(id, service);
@@ -72,7 +72,7 @@ namespace VetClinic.API.Controllers
 
         // DELETE api/service/id
         [HttpDelete("{id:min(1)}")]
-        public async Task<IActionResult> Destroy(int id)
+        public async Task<IActionResult> DeleteAsync(int id)
         {
             var service = await _serviceService.RemoveAsync(id);
             if(!service)

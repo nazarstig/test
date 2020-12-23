@@ -73,10 +73,9 @@ namespace VetClinic.DAL.Repositories.Realizations
             get { return _statusRepository ??= new StatusRepository(_context); }
         }
 
-        public async Task<int> SaveAsync()
+        public async Task SaveAsync()
         {
-
-             return await _context.SaveChangesAsync();
+             await _context.SaveChangesAsync();
         }
     }
 }
