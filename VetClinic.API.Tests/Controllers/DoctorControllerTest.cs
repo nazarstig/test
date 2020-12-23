@@ -121,7 +121,7 @@ namespace VetClinic.API.Tests.Controllers
         [Theory, AutoMoqData]
         public async Task Put_DoctorDTO_ReturnsNoContent(
            [Frozen] Doctor doctor,
-           [Frozen] ReadDoctorDto doctorDto)
+           [Frozen] UpdateDoctorDto doctorDto)
         {
             // Arrange            
             doctorServiceMock.Setup(m => m.UpdateDoctorAsync(doctor, doctor.User, doctor.Id))
@@ -141,7 +141,7 @@ namespace VetClinic.API.Tests.Controllers
         [Theory, AutoMoqData]
         public async Task Put_DoctorDTO_ReturnsNotFound(
            [Frozen] Doctor doctor,
-           [Frozen] ReadDoctorDto doctorDto)
+           [Frozen] UpdateDoctorDto doctorDto)
         {
             // Arrange            
             doctorServiceMock.Setup(m => m.UpdateDoctorAsync(doctor, doctor.User, doctor.Id))
