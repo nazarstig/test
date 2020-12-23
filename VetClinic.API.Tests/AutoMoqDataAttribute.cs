@@ -18,7 +18,7 @@ namespace VetClinic.API.Tests
 
             return fixture;
         })
-        { }
-        
+        {
+        }
     }
 }

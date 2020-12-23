@@ -1,4 +1,6 @@
-﻿namespace VetClinic.API.DTO.Error
+﻿using VetClinic.BLL.Exceptions;
+
+namespace VetClinic.API.DTO.Error
 {
     public class ErrorDto
     {

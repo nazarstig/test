@@ -10,10 +10,10 @@ namespace VetClinic.DAL.Configurations
         {
             builder.HasMany(d => d.Appointments)
                 .WithOne(d => d.Doctor)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.NoAction);            
+
             builder.Property(t => t.Education).HasMaxLength(100);
             builder.Property(t => t.Experience).HasMaxLength(200);
-
             builder.HasData(
                 new Doctor[]
                 {
