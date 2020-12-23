@@ -1,6 +1,9 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
 using VetClinic.BLL.Services.Interfaces;
 using VetClinic.BLL.Services.Realizations;
+using VetClinic.DAL;
+using VetClinic.DAL.Entities;
 
 namespace VetClinic.API.ExtensionMethods
 {
@@ -16,6 +19,17 @@ namespace VetClinic.API.ExtensionMethods
             services.AddScoped<IDoctorService, DoctorService>();
             services.AddScoped<IServiceService, ServiceService>();
             services.AddScoped<IAnimalService, AnimalService>();
+        }
+
+        public static void AddIdentity(this IServiceCollection services)
+        {
+            IdentityBuilder builder = services.AddIdentityCore<User>();
+            builder = new IdentityBuilder(typeof(User), typeof(IdentityRole), builder.Services);
+            builder.AddEntityFrameworkStores<ApplicationContext>()
+                .AddDefaultTokenProviders();
+
+            services.AddScoped<IRoleValidator<IdentityRole>, RoleValidator<IdentityRole>>();
+            services.AddScoped<RoleManager<IdentityRole>, RoleManager<IdentityRole>>();
         }
     }
 }
