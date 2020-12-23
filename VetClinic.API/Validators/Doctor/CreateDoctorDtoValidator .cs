@@ -7,7 +7,7 @@ namespace VetClinic.API.Validators.Doctor
     {
         public CreateDoctorDtoValidator()
         {
-            //TO DO validation rules for CreateDoctorDto   
+            RuleFor(doctor => doctor.PositionId).NotEqual(0).WithMessage("Procedure name cannot be 0");
         }
     }
 }

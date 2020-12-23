@@ -24,19 +24,19 @@ namespace VetClinic.API.Tests.Services
 
 
         [Theory, AutoMoqData]
-        public async Task GetAll_EqualCount([Frozen]List<Position> positions )
+        public async Task GetAll_EqualCount([Frozen] List<Position> positions)
         {
             // Arrange
             repositoryMock.Setup(x => x.PositionRepository
             .GetAsync(null, null, null, false))
-                .ReturnsAsync(positions);             
+                .ReturnsAsync(positions);
 
             // Act
             var actual = await positionService.GetPositionAsync();
 
             // Assert
             Assert.Equal(positions.Count, actual.Count);
-            repositoryMock.Verify(m => m.PositionRepository.GetAsync(null,null,null,false), Times.Once);            
+            repositoryMock.Verify(m => m.PositionRepository.GetAsync(null, null, null, false), Times.Once);
         }
 
 
@@ -46,8 +46,8 @@ namespace VetClinic.API.Tests.Services
             // Arrange
             int id = position.Id;
             repositoryMock.Setup(x => x.PositionRepository
-            .GetFirstOrDefaultAsync(p=>p.Id==id, null, false))
-                .ReturnsAsync(position);            
+            .GetFirstOrDefaultAsync(p => p.Id == id, null, false))
+                .ReturnsAsync(position);
 
             // Act
             var actual = await positionService.GetPositionAsync(id);
@@ -63,15 +63,15 @@ namespace VetClinic.API.Tests.Services
         {
             // Arrange            
             repositoryMock.Setup(x => x.PositionRepository
-            .Add(position));             
+            .Add(position));
 
             // Act
-            var actual = await positionService.AddPositionAsync(position);
+            var result = await positionService.AddPositionAsync(position);
 
-            // Assert
-            Assert.Equal(position.Id, actual.Id);
-            repositoryMock.Verify(m => m.PositionRepository.Add(position), Times.Once);
-            repositoryMock.Verify(m => m.SaveAsync(), Times.Once);
+            // Assert 
+            Assert.Equal(result.PositionName, position.PositionName);
+            Assert.Equal(result.Salary, position.Salary);
+
         }
 
 
@@ -81,25 +81,25 @@ namespace VetClinic.API.Tests.Services
             // Arrange
             int id = position.Id;
             repositoryMock.Setup(x => x.PositionRepository
-            .GetFirstOrDefaultAsync(p=>p.Id==id, null, false))
+            .GetFirstOrDefaultAsync(p => p.Id == id, null, false))
                 .ReturnsAsync(position);
-           
+
             // Act
             var actual = await positionService.RemovePositionAsync(position.Id);
 
             // Assert      
             Assert.True(actual);
-            repositoryMock.Verify(m => m.PositionRepository.Remove(position), Times.Once);        
+            repositoryMock.Verify(m => m.PositionRepository.Remove(position), Times.Once);
         }
 
 
         [Theory, AutoMoqData]
-        public async Task Removee_PositionId_ReturnsFalce([Frozen]int id)
+        public async Task Removee_PositionId_ReturnsFalce([Frozen] int id)
         {
             // Arrange 
-             repositoryMock.Setup(x => x.PositionRepository
-            .GetFirstOrDefaultAsync(p => p.Id == id, null, false))
-                .ReturnsAsync(value: null);            
+            repositoryMock.Setup(x => x.PositionRepository
+           .GetFirstOrDefaultAsync(p => p.Id == id, null, false))
+               .ReturnsAsync(value: null);
 
             // Act
             var actual = await positionService.RemovePositionAsync(id);
@@ -117,7 +117,7 @@ namespace VetClinic.API.Tests.Services
             position = null;
 
             // Act
-            var actual = await positionService.UpdatePositionAsync(position,1);
+            var actual = await positionService.UpdatePositionAsync(position, 1);
 
             // Assert      
             Assert.False(actual);
@@ -132,7 +132,7 @@ namespace VetClinic.API.Tests.Services
             int id = position.Id;
             repositoryMock.Setup(m => m.PositionRepository
             .IsAnyAsync(p => p.Id == id))
-                .ReturnsAsync(true); 
+                .ReturnsAsync(true);
 
             // Act
             var actual = await positionService.UpdatePositionAsync(position, id);
@@ -150,7 +150,7 @@ namespace VetClinic.API.Tests.Services
             int id = position.Id;
             repositoryMock.Setup(m => m.PositionRepository
             .IsAnyAsync(p => p.Id == id))
-                .ReturnsAsync(false);            
+                .ReturnsAsync(false);
 
             // Act
             var actual = await positionService.UpdatePositionAsync(position, id);

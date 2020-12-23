@@ -15,7 +15,7 @@ namespace VetClinic.API.Tests.Controllers
 {
     public class DoctorControllerTest
     {
-        private readonly Mock<IDoctorService> doctorServiceMock ;
+        private readonly Mock<IDoctorService> doctorServiceMock;
         private readonly Mock<IMapper> mapper;
         private readonly DoctorController doctorController;
         public DoctorControllerTest()
@@ -78,12 +78,12 @@ namespace VetClinic.API.Tests.Controllers
             // Arrange     
             var doctorServiceMock1 = new Mock<IDoctorService>();
             var mapper1 = new Mock<IMapper>();
-            Doctor docotr = new Doctor { Id = 1 };            
+            Doctor docotr = new Doctor { Id = 1 };
 
             mapper1.Setup(m => m.Map<ReadDoctorDto>(docotr))
                 .Returns(null as ReadDoctorDto);
             doctorServiceMock1.Setup(p => p.GetDoctorAsync(docotr.Id))
-                .ReturnsAsync(null as Doctor);            
+                .ReturnsAsync(null as Doctor);
 
             var doctorController1 = new DoctorController(doctorServiceMock1.Object, mapper1.Object);
 
@@ -103,7 +103,7 @@ namespace VetClinic.API.Tests.Controllers
            [Frozen] CreateDoctorDto createDoctorDto)
         {
             // Arrange            
-            doctorServiceMock.Setup(m => m.AddDoctorAsync(doctor,doctor.User))
+            doctorServiceMock.Setup(m => m.AddDoctorAsync(doctor, doctor.User))
                 .ReturnsAsync(doctor);
             mapper.Setup(m => m.Map<Doctor>(createDoctorDto))
                 .Returns(doctor);
@@ -114,7 +114,7 @@ namespace VetClinic.API.Tests.Controllers
             await doctorController.PostAsync(createDoctorDto);
 
             // Assert                       
-            doctorServiceMock.Verify(m => m.AddDoctorAsync(doctor,doctor.User), Times.Once);
+            doctorServiceMock.Verify(m => m.AddDoctorAsync(doctor, doctor.User), Times.Once);
         }
 
 
@@ -144,7 +144,7 @@ namespace VetClinic.API.Tests.Controllers
            [Frozen] ReadDoctorDto doctorDto)
         {
             // Arrange            
-            doctorServiceMock.Setup(m => m.UpdateDoctorAsync(doctor, doctor.User , doctor.Id))
+            doctorServiceMock.Setup(m => m.UpdateDoctorAsync(doctor, doctor.User, doctor.Id))
                 .ReturnsAsync(false);
             mapper.Setup(m => m.Map<Doctor>(doctorDto))
                 .Returns(doctor);
