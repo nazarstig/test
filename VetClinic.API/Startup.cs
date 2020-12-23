@@ -64,15 +64,7 @@ namespace VetClinic.API
             services.Configure<ApiBehaviorOptions>(options => { options.SuppressModelStateInvalidFilter = true; });
             services.AddSwaggerGen();
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IProcedureService, ProcedureService>();
-            services.AddScoped<IClientService, ClientService>();
-            services.AddScoped<IPositionService, PositionService>();
-            services.AddScoped<IDoctorService, DoctorService>();
-            services.AddScoped<IServiceService, ServiceService>();
-            services.AddScoped<IAnimalService, AnimalService>();
-
-
+           
             services.AddServices();
 
             services.AddSwaggerConfig();
