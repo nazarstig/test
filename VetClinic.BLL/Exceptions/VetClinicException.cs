@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Net;
-using VetClinic.BLL.Exceptions;
 
-namespace VetClinic.API.Exceptions
+namespace VetClinic.BLL.Exceptions
 {
     public class VetClinicException : Exception
     {

@@ -1,8 +1,6 @@
-﻿using AutoFixture;
-using AutoFixture.AutoMoq;
+﻿using AutoFixture.Xunit2;
 using Microsoft.AspNetCore.Identity;
 using Moq;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using VetClinic.BLL.Services.Realizations;
 using VetClinic.DAL.Entities;
@@ -12,99 +10,137 @@ namespace VetClinic.BLL.Tests.Services
 {
     public class UserServiceTests
     {
-        public User AppUser { get; set; }
-        public IEnumerable<IdentityRole> Roles { get; set; }
-        public IFixture Fixture { get; set; }
-        public Mock<IUserStore<User>> UserStore { get; set; }
-
-        public UserServiceTests()
+        [Theory, AutoMoqData]
+        public async Task CreateUser_UserExsists_ReturnFalse(User user,
+            IdentityRole[] roles,
+            RoleManager<IdentityRole> roleManager,
+            [Frozen] Mock<UserManager<User>> userManager)
         {
-            Fixture = new Fixture().Customize(new AutoMoqCustomization());
-            AppUser = new User() { };
-            Roles = Fixture.CreateMany<IdentityRole>();
-            UserStore = new Mock<IUserStore<User>>();
-        }
+            //Arrange
+            userManager.Setup(c => c.FindByNameAsync(It.IsAny<string>()))
+                .ReturnsAsync(user);
 
-        [Fact]
-        public async Task CreateUser_UserExsists_ReturnFalse()
-        {
-            //arrange
-            var mgr = new Mock<UserManager<User>>(UserStore.Object, null, null, null, null, null, null, null, null);
-            mgr.Setup(c => c.FindByNameAsync(It.IsAny<string>()))
-                .ReturnsAsync(new User());
+            var sut = new UserService(userManager.Object, roleManager);
 
-            var userService = new UserService(mgr.Object, Fixture.Create<RoleManager<IdentityRole>>());
-            
-            //act
-            var (result, id) = await userService.CreateUser(AppUser, Roles);
+            //Act
+            var (result, id) = await sut.CreateUserAsync(user, roles);
 
-            //assert
+            //Assert
             Assert.False(result);
             Assert.Equal(string.Empty, id);
         }
-       
-        [Fact]
-        public async Task CreateUser_CreateFailure_ReturnFalse()
-        {
-            //arrange
-            var mgr = new Mock<UserManager<User>>(UserStore.Object, null, null, null, null, null, null, null, null);
 
-            mgr.Setup(c => c.FindByNameAsync(It.IsAny<string>()))
+        [Theory, AutoMoqData]
+        public async Task CreateUser_CreateFailure_ReturnFalse(User user,
+            IdentityRole[] roles,
+            RoleManager<IdentityRole> roleManager,
+            [Frozen] Mock<UserManager<User>> userManager)
+        {
+            //Arrange
+            userManager.Setup(c => c.FindByNameAsync(It.IsAny<string>()))
                 .ReturnsAsync((User)null);
 
-            mgr.Setup(c => c.CreateAsync(It.IsAny<User>(), It.IsAny<string>()))
+            userManager.Setup(c => c.CreateAsync(It.IsAny<User>(), It.IsAny<string>()))
                 .ReturnsAsync(IdentityResult.Failed());
 
-            var userService = new UserService(mgr.Object, Fixture.Create<RoleManager<IdentityRole>>());
+            var sut = new UserService(userManager.Object, roleManager);
 
-            //act
-            var (result, id) = await userService.CreateUser(AppUser, Roles);
+            //Act
+            var (result, id) = await sut.CreateUserAsync(user, roles);
 
-            //assert
+            //Assert
             Assert.False(result);
             Assert.Equal(string.Empty, id);
         }
 
-        [Fact]
-        public async Task CreateUser_CreateSuccess_ReturnTrue()
+        [Theory, AutoMoqData]
+        public async Task CreateUser_CreateSuccess_ReturnTrue(User user,
+            IdentityRole roles,
+            [Frozen] Mock<RoleManager<IdentityRole>> roleManager,
+            [Frozen] Mock<UserManager<User>> userManager)
         {
-            //arrange
-            var mgr = new Mock<UserManager<User>>(UserStore.Object, null, null, null, null, null, null, null, null);
-
-            mgr.SetupSequence(c => c.FindByNameAsync(It.IsAny<string>()))
+            //Arrange
+            userManager.SetupSequence(c => c.FindByNameAsync(It.IsAny<string>()))
                 .ReturnsAsync((User)null)
-                .ReturnsAsync(new User());
+                .ReturnsAsync(user);
 
-            mgr.Setup(c => c.CreateAsync(It.IsAny<User>(), It.IsAny<string>()))
+            userManager.Setup(c => c.CreateAsync(It.IsAny<User>(), It.IsAny<string>()))
             .ReturnsAsync(IdentityResult.Success);
 
-            var roleStore = new Mock<IRoleStore<IdentityRole>>();
-            var roleMock = new Mock<RoleManager<IdentityRole>>(roleStore.Object, null, null, null, null);
+            userManager.Setup(c => c.AddToRoleAsync(It.IsAny<User>(), It.IsAny<string>()))
+                .ReturnsAsync(IdentityResult.Success);
 
-            var userService = new UserService(mgr.Object, roleMock.Object);
+            roleManager.Setup(c => c.RoleExistsAsync(It.IsAny<string>()))
+                .ReturnsAsync(true);
 
-            //act
-            var (result, id) = await userService.CreateUser(AppUser, Roles);
+            var sut = new UserService(userManager.Object, roleManager.Object);
 
-            //assert
+            //Act
+            var (result, id) = await sut.CreateUserAsync(user, roles);
+
+            //Assert
             Assert.True(result);
             Assert.NotEqual(string.Empty, id);
         }
 
-        [Fact]
-        public async Task UpdateUser_UserNotExsists_ReturnFalse()
+        [Theory, AutoMoqData]
+        public async Task UpdateUser_UserNotExsists_ReturnFalse(User user,
+            IdentityRole[] roles,
+            RoleManager<IdentityRole> roleManager,
+            [Frozen] Mock<UserManager<User>> userManager)
         {
-            //arrange
-            var mgr = new Mock<UserManager<User>>(UserStore.Object, null, null, null, null, null, null, null, null);
-            mgr.Setup(c => c.FindByNameAsync(It.IsAny<string>()))
+            //Arrange
+            userManager.Setup(c => c.FindByIdAsync(It.IsAny<string>()))
                 .ReturnsAsync((User)null);
 
-            var userService = new UserService(mgr.Object, Fixture.Create<RoleManager<IdentityRole>>());
+            var sut = new UserService(userManager.Object, roleManager);
 
-            //act
-            var result = await userService.UpdateUser("2",AppUser, Roles);
+            //Act
+            var result = await sut.UpdateUserAsync("42", user, roles);
 
-            //assert
+            //Assert
+            Assert.False(result);
+        }
+
+        [Theory, AutoMoqData]
+        public async Task DeleteUser_Success_ReturnTrue(User user,
+            RoleManager<IdentityRole> roleManager,
+            [Frozen] Mock<UserManager<User>> userManager)
+        {
+            //Arrange
+            userManager.Setup(c => c.FindByIdAsync(It.IsAny<string>()))
+                .ReturnsAsync(user);
+
+            userManager.Setup(c => c.DeleteAsync(It.IsAny<User>()))
+                .ReturnsAsync(IdentityResult.Success);
+
+            var sut = new UserService(userManager.Object, roleManager);
+
+            //Act
+            var result = await sut.DeleteUserAsync("42");
+
+            //Assert
+            Assert.True(result);
+        }
+
+        [Theory, AutoMoqData]
+        public async Task DeleteUser_Fail_ReturnFalse(User user,
+           RoleManager<IdentityRole> roleManager,
+           [Frozen] Mock<UserManager<User>> userManager)
+        {
+            //Arrange
+            userManager.Setup(c => c.FindByIdAsync(It.IsAny<string>()))
+                .ReturnsAsync(user);
+
+            userManager.Setup(c => c.DeleteAsync(It.IsAny<User>()))
+                .ReturnsAsync(IdentityResult.Failed());
+
+            var sut = new UserService(userManager.Object, roleManager);
+
+            //Act
+            var result = await sut.DeleteUserAsync("42");
+
+            //Assert
             Assert.False(result);
         }
     }

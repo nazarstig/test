@@ -23,6 +23,14 @@
     <Compile Remove="Migrations\20201215095018_NavProps.Designer.cs" />
     <Compile Remove="Migrations\20201219104903_AddUserService.cs" />
     <Compile Remove="Migrations\20201219104903_AddUserService.Designer.cs" />
+    <Compile Remove="Migrations\20201222140249_RoleSeed.cs" />
+    <Compile Remove="Migrations\20201222140249_RoleSeed.Designer.cs" />
+    <Compile Remove="Migrations\20201222172636_FixFirsLastName.cs" />
+    <Compile Remove="Migrations\20201222172636_FixFirsLastName.Designer.cs" />
+    <Compile Remove="Migrations\20201222173008_FixFirsLastName.cs" />
+    <Compile Remove="Migrations\20201222173008_FixFirsLastName.Designer.cs" />
+    <Compile Remove="Migrations\20201222173446_FixFirstLastName.cs" />
+    <Compile Remove="Migrations\20201222173446_FixFirstLastName.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
