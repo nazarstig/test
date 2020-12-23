@@ -51,7 +51,7 @@ namespace VetClinic.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAsync([FromBody] ReadDoctorDto doctorDto, [FromRoute] int id)
+        public async Task<IActionResult> PutAsync([FromBody] UpdateDoctorDto doctorDto, [FromRoute] int id)
         {
             var doctor = _mapper.Map<Doctor>(doctorDto);
             var successUpdate = await _doctorService.UpdateDoctorAsync(doctor, doctor.User, id);
