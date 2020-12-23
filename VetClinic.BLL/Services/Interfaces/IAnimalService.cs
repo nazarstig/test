@@ -6,10 +6,10 @@ namespace VetClinic.BLL.Services.Interfaces
 {
     public interface IAnimalService
     {
-        void CreateAnimal(Animal animal);
+        Task CreateAnimal(Animal animal);
         Task<ICollection<Animal>> GetAllAsync();
-        void UpdateAnimal(Animal animal);
+        Task UpdateAnimal(Animal animal);
         Task<Animal> GetAsync(int id);
-        void RemoveAnimal(Animal animal);
+        Task RemoveAnimal(Animal animal);
     }
 }
