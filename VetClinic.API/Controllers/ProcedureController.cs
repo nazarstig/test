@@ -21,13 +21,13 @@ namespace VetClinic.API.Controllers
             _mapper = mapper;
         }
 
-        // [HttpPost]
-        // public async Task<IActionResult> PostAsync(CreateProcedureDto procedureDTO)
-        // {
-        //     Procedure procedure = _mapper.Map<CreateProcedureDto, Procedure>(procedureDTO);
-        //     await _procedureService.AddProcedure(procedure);
-        //     return CreatedAtAction(nameof(GetAsync), new { id = procedure.Id }, procedure);
-        // }
+        [HttpPost]
+        public async Task<IActionResult> PostAsync(CreateProcedureDto procedureDTO)
+        {
+            Procedure procedure = _mapper.Map<CreateProcedureDto, Procedure>(procedureDTO);
+            await _procedureService.AddProcedure(procedure);
+            return Created("/client/post", procedureDTO);
+        }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> PutAsync(int id, UpdateProcedureDto procedureDTO)
