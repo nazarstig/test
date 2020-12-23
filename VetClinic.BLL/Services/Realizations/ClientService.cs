@@ -6,7 +6,7 @@ using VetClinic.BLL.Services.Interfaces;
 using VetClinic.DAL.Entities;
 using VetClinic.DAL.Repositories.Interfaces;
 
-namespace VetClinic.BLL.Services
+namespace VetClinic.BLL.Services.Realizations
 {
     public class ClientService : IClientService
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Xunit;
 using Moq;
-using VetClinic.BLL.Services;
+using VetClinic.BLL.Services.Realizations;
 using VetClinic.DAL.Entities;
 using VetClinic.DAL.Repositories.Interfaces;
 using VetClinic.BLL.Services.Interfaces;

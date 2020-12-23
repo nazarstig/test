@@ -4,7 +4,7 @@ using VetClinic.DAL.Entities;
 using System.Threading.Tasks;
 using VetClinic.BLL.Services.Interfaces;
 
-namespace VetClinic.BLL.Services
+namespace VetClinic.BLL.Services.Realizations
 {
     public class ProcedureService : IProcedureService
     {

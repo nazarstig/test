@@ -27,47 +27,6 @@ namespace VetClinic.BLL
             {
                 alice = new User
                 {
-<<<<<<< HEAD:VetClinic.API/ExtensionMethods/AppExtensions.cs
-                    var context = scope.ServiceProvider.GetService<ApplicationContext>();
-                    //context.Database.Migrate();
-
-                    var roleMgr = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-                    var client = roleMgr.FindByNameAsync("client").Result;
-                    if (client == null)
-                    {
-                        client = new IdentityRole
-                        {
-                            Name = "member"
-                        };
-                        _ = roleMgr.CreateAsync(client).Result;
-                    }
-
-                    var admin = roleMgr.FindByNameAsync("admin").Result;
-                    if (admin == null)
-                    {
-                        admin = new IdentityRole
-                        {
-                            Name = "admin"
-                        };
-                        _ = roleMgr.CreateAsync(admin).Result;
-                    }
-
-                    var userMgr = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
-                    var alice = userMgr.FindByNameAsync("alice").Result;
-                    if (alice == null)
-                    {
-                        alice = new User
-                        {
-                            UserName = "alice",
-                            Email = "AliceSmith@email.com",
-                            EmailConfirmed = true,
-                        };
-                        var result = userMgr.CreateAsync(alice, "Pass123$").Result;
-                        if (!result.Succeeded)
-                        {
-                            throw new Exception(result.Errors.First().Description);
-                        }
-=======
                     UserName = "alice",
                     FirstName = "Alice",
                     LastName = "Smith",
@@ -78,9 +37,8 @@ namespace VetClinic.BLL
                 var result = userManager.CreateAsync(alice, "Pass123$").Result;
                 if (!result.Succeeded)
                 {
-                    throw new VetClinicException(HttpStatusCode.InternalServerError,result.Errors.First().Description);
+                    throw new VetClinicException(HttpStatusCode.InternalServerError, result.Errors.First().Description);
                 }
->>>>>>> master:VetClinic.BLL/ApplicationUserSeeder.cs
 
                 result = userManager.AddClaimsAsync(alice, new Claim[]{
                         new Claim(JwtClaimTypes.Name, "Alice Smith"),
@@ -130,22 +88,10 @@ namespace VetClinic.BLL
                         new Claim(JwtClaimTypes.WebSite, "http://bob.com"),
                         new Claim("location", "somewhere")
                     }).Result;
-<<<<<<< HEAD:VetClinic.API/ExtensionMethods/AppExtensions.cs
-                        if (!result.Succeeded)
-                        {
-                            throw new Exception(result.Errors.First().Description);
-                        }
-
-                        if (!userMgr.IsInRoleAsync(bob, client.Name).Result)
-                        {
-                            _ = userMgr.AddToRoleAsync(bob, client.Name).Result;
-                        }
-=======
                 if (!result.Succeeded)
                 {
                     throw new VetClinicException(HttpStatusCode.InternalServerError, result.Errors.First().Description);
                 }
->>>>>>> master:VetClinic.BLL/ApplicationUserSeeder.cs
 
                 if (!userManager.IsInRoleAsync(bob, "client").Result)
                 {

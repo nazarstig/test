@@ -24,10 +24,6 @@ namespace VetClinic.API.Validators.Client
             RuleFor(user => user.PhoneNumber).NotEmpty().WithMessage("Phone cannot be empty")
                 .MaximumLength(12).WithMessage("Phone number cannot be longer than 12 numbers")
                 .Matches("^[0-9]").WithMessage("Phone number can contain numbers");
-
-            RuleFor(user => user.Password).NotEmpty().WithMessage("Password cannot be empty")
-                .MinimumLength(6).WithMessage("Password is too small")
-                .MaximumLength(300).WithMessage("Password is too long");
         }
     }
 }
