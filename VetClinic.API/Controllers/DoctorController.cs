@@ -8,7 +8,7 @@ using VetClinic.DAL.Entities;
 
 namespace VetClinic.API.Controllers
 {
-    [Route("/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class DoctorController : ControllerBase
     {
