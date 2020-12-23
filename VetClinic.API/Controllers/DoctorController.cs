@@ -8,7 +8,7 @@ using VetClinic.DAL.Entities;
 
 namespace VetClinic.API.Controllers
 {
-    [Route("/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class DoctorController : ControllerBase
     {
@@ -25,44 +25,44 @@ namespace VetClinic.API.Controllers
         public async Task<IActionResult> GetAsync()
         {
             var doctors = await _doctorService.GetDoctorAsync();
-            var doctorsDto = _mapper.Map<ICollection<ReadDoctorDto>>(doctors);        
+            var doctorsDto = _mapper.Map<ICollection<ReadDoctorDto>>(doctors);
             return Ok(doctorsDto);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetAsync(int id)
+        public async Task<IActionResult> GetAsync([FromRoute] int id)
         {
             Doctor doctor = await _doctorService.GetDoctorAsync(id);
             ReadDoctorDto doctorDto = _mapper.Map<ReadDoctorDto>(doctor);
             if (doctorDto == null)
                 return NotFound();
-            
+
             return Ok(doctorDto);
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostAsync(CreateDoctorDto doctorDto)
+        public async Task<IActionResult> PostAsync([FromBody] CreateDoctorDto doctorDto)
         {
             var doctor = _mapper.Map<Doctor>(doctorDto);
             var createdDoctor = await _doctorService.AddDoctorAsync(doctor, doctor.User);
             var readDoctorDto = _mapper.Map<ReadDoctorDto>(createdDoctor);
 
-            return Created(nameof(GetAsync),readDoctorDto);
+            return Created(nameof(GetAsync), readDoctorDto);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAsync(ReadDoctorDto doctorDto, int id)
+        public async Task<IActionResult> PutAsync([FromBody] UpdateDoctorDto doctorDto, [FromRoute] int id)
         {
             var doctor = _mapper.Map<Doctor>(doctorDto);
-            var successUpdate = await _doctorService.UpdateDoctorAsync(doctor, doctor.User , id);
-            if (successUpdate)            
+            var successUpdate = await _doctorService.UpdateDoctorAsync(doctor, doctor.User, id);
+            if (successUpdate)
                 return NoContent();
-            
+
             return NotFound();
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAsync(int id)
+        public async Task<IActionResult> DeleteAsync([FromRoute] int id)
         {
             var successDelete = await _doctorService.RemoveDoctorAsync(id);
             if (successDelete)

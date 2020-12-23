@@ -8,17 +8,17 @@ using VetClinic.DAL.Entities;
 
 namespace VetClinic.API.Controllers
 {
-    [Route("/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class PositionController : ControllerBase
     {
         private readonly IPositionService _positionService;
-        private readonly IMapper _mapper;  
+        private readonly IMapper _mapper;
 
-        public PositionController(IPositionService positionService, IMapper mapper )
+        public PositionController(IPositionService positionService, IMapper mapper)
         {
             _positionService = positionService;
-            _mapper = mapper;          
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -29,7 +29,7 @@ namespace VetClinic.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetAsync(int id)
+        public async Task<IActionResult> GetAsync([FromRoute] int id)
         {
             var position = await _positionService.GetPositionAsync(id);
             var positionDTO = _mapper.Map<PositionDto>(position);
@@ -40,26 +40,26 @@ namespace VetClinic.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostAsync(PositionDto position)
+        public async Task<IActionResult> PostAsync([FromBody] PositionDto position)
         {
-            var createdPosition =await _positionService.AddPositionAsync(_mapper.Map<Position>(position));
+            var createdPosition = await _positionService.AddPositionAsync(_mapper.Map<Position>(position));
             var positionDto = _mapper.Map<PositionDto>(createdPosition);
 
             return Created(nameof(GetAsync), positionDto);
-        }    
+        }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAsync(PositionDto position, int id)
+        public async Task<IActionResult> PutAsync([FromBody] PositionDto position, [FromRoute] int id)
         {
             var successUpdate = await _positionService.UpdatePositionAsync((_mapper.Map<Position>(position)), id);
-            if (successUpdate)            
+            if (successUpdate)
                 return NoContent();
-            
+
             return NotFound();
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAsync(int id)
+        public async Task<IActionResult> DeleteAsync([FromRoute] int id)
         {
             var successDelete = await _positionService.RemovePositionAsync(id);
             if (successDelete)

@@ -13,6 +13,9 @@ namespace VetClinic.API.Mapping
 
             CreateMap<CreateDoctorDto, Doctor>();
             CreateMap<CreateDoctorDto, Doctor>().ReverseMap();
+
+            CreateMap<UpdateDoctorDto, Doctor>();
+            CreateMap<UpdateDoctorDto, Doctor>().ReverseMap();
         }
     }
 }

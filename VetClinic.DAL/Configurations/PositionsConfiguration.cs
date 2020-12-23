@@ -8,6 +8,11 @@ namespace VetClinic.DAL.Configurations
     {
         public void Configure(EntityTypeBuilder<Position> builder)
         {
+            builder.HasMany(c => c.Doctors)
+                .WithOne(c => c.Position)
+                .HasForeignKey(c => c.PositionId)
+                .OnDelete(DeleteBehavior.NoAction);
+
             builder.Property(t => t.PositionName).HasMaxLength(40);
 
             builder.HasData(

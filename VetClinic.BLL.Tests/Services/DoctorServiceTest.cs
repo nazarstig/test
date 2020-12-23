@@ -115,10 +115,10 @@ namespace VetClinic.BLL.Tests.Services
             var _doctorService = new DoctorService(_repositoryMock.Object, _userServiceMock.Object, _roleManagerMock.Object);
 
             // Act    
-            var actual= await _doctorService.AddDoctorAsync(doctor, user);
+            var actual = await _doctorService.AddDoctorAsync(doctor, user);
 
             // Assert            
-            Assert.Equal(doctor, actual); 
+            Assert.Equal(doctor, actual);
         }
 
 
@@ -180,28 +180,28 @@ namespace VetClinic.BLL.Tests.Services
 
         [Theory, AutoMoqData]
         public async Task Update_DoctorUserDoctorId_ReturnFalce(Doctor doctor,
-            User user,            
+            User user,
             [Frozen] Mock<IUserService> _userServiceMock,
             [Frozen] Mock<IRepositoryWrapper> _repositoryMock,
             [Frozen] Mock<RoleManager<IdentityRole>> _roleManagerMock)
         {
             // Arrange
-            int doctorid = doctor.Id;            
+            int doctorid = doctor.Id;
 
             _repositoryMock.Setup(x => x.DoctorRepository
             .GetFirstOrDefaultAsync(
                 p => p.Id == doctorid,
                 It.IsAny<Func<IQueryable<Doctor>, IIncludableQueryable<Doctor, object>>>(),
                 false))
-                .ReturnsAsync(null as Doctor);           
+                .ReturnsAsync(null as Doctor);
 
             var _doctorService = new DoctorService(_repositoryMock.Object, _userServiceMock.Object, _roleManagerMock.Object);
 
             // Act    
-            var actual = await _doctorService.UpdateDoctorAsync(doctor,user,doctorid);
+            var actual = await _doctorService.UpdateDoctorAsync(doctor, user, doctorid);
 
             // Assert            
-            Assert.False(actual); 
+            Assert.False(actual);
         }
 
 
@@ -243,7 +243,7 @@ namespace VetClinic.BLL.Tests.Services
         {
             // Arrange
             int doctorid = doctor.Id;
-            
+
             _repositoryMock.Setup(x => x.DoctorRepository
             .GetFirstOrDefaultAsync(
                 p => p.Id == doctorid,
@@ -262,7 +262,7 @@ namespace VetClinic.BLL.Tests.Services
 
             // Assert            
             Assert.True(actual);
-            _repositoryMock.Verify(c => c.DoctorRepository.Update(doctor),Times.Once);
+            _repositoryMock.Verify(c => c.DoctorRepository.Update(doctor), Times.Once);
             _repositoryMock.Verify(c => c.SaveAsync(), Times.Once);
         }
     }

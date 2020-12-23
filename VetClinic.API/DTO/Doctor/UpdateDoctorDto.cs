@@ -2,7 +2,7 @@
 
 namespace VetClinic.API.DTO.Doctor
 {
-    public class CreateDoctorDto
+    public class UpdateDoctorDto
     {       
         public string Education { get; set; }
         public string Biography { get; set; }
@@ -10,6 +10,6 @@ namespace VetClinic.API.DTO.Doctor
         public string Photo { get; set; }
         public int PositionId { get; set; }
         
-        public CreateUserDto User { get; set; }       
+        public UserDto User { get; set; }       
     }
 }
