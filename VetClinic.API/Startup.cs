@@ -71,6 +71,7 @@ namespace VetClinic.API
             services.AddScoped<IPositionService, PositionService>();
             services.AddScoped<IDoctorService, DoctorService>();
             services.AddScoped<IServiceService, ServiceService>();
+            services.AddScoped<IAnimalService, AnimalService>();
 
 
             services.AddServices();

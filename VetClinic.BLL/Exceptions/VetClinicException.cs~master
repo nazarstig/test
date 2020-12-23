@@ -1,0 +1,23 @@
+﻿using System;
+using System.Net;
+<<<<<<< HEAD:VetClinic.API/Exceptions/VetClinicException.cs
+using VetClinic.BLL.Exceptions;
+
+namespace VetClinic.API.Exceptions
+=======
+
+namespace VetClinic.BLL.Exceptions
+>>>>>>> master:VetClinic.BLL/Exceptions/VetClinicException.cs
+{
+    public class VetClinicException : Exception
+    {
+        public HttpStatusCode Status { get; set; }
+        public FieldErrorModel[] Errors { get; set; }
+
+        public VetClinicException(HttpStatusCode status, string msg, params FieldErrorModel[] fieldErrors) : base(msg)
+        {
+            Status = status;
+            Errors = fieldErrors;
+        }
+    }
+}
