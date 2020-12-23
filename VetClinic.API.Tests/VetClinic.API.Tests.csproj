@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\VetClinic.API\VetClinic.API.csproj" />
+    <ProjectReference Include="..\VetClinic.BLL\VetClinic.BLL.csproj" />
   </ItemGroup>
 
 </Project>
