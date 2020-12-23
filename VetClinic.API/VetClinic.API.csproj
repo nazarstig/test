@@ -34,4 +34,8 @@
     <ProjectReference Include="..\VetClinic.DAL\VetClinic.DAL.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Validators\User\" />
+  </ItemGroup>
+
 </Project>

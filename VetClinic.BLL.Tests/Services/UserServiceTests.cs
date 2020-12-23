@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Moq;
 using System.Threading.Tasks;
+using VetClinic.API.Tests;
 using VetClinic.BLL.Services.Realizations;
 using VetClinic.DAL.Entities;
 using Xunit;
