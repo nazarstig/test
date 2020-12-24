@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using VetClinic.API.DTO.PositionDTO;
+using VetClinic.API.DTO.Position.PositionDTO;
 using VetClinic.BLL.Services.Interfaces;
 using VetClinic.DAL.Entities;
 
