@@ -1,15 +1,15 @@
-﻿using AutoFixture;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using AutoFixture;
 using AutoFixture.Xunit2;
 using Moq;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using VetClinic.API.Tests;
 using VetClinic.BLL.Services.Realizations;
 using VetClinic.DAL.Entities;
 using VetClinic.DAL.Repositories.Interfaces;
-
 using Xunit;
 
-namespace VetClinic.API.Tests.Services
+namespace VetClinic.BLL.Tests.Services
 {
     public class PositionServiceTest
     {

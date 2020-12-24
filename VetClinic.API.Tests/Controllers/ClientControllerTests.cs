@@ -1,19 +1,17 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 using VetClinic.API.Controllers;
+using VetClinic.API.DTO.ClientDto;
 using VetClinic.API.Mapping;
 using VetClinic.BLL.Services.Interfaces;
 using VetClinic.DAL.Entities;
 using VetClinic.DAL.Repositories.Interfaces;
-using VetClinic.API.DTO.ClientDto;
 using Xunit;
 
-namespace VetClinic.API.Tests.ControllerTests
+namespace VetClinic.API.Tests.Controllers
 {
     public class ClientControllerTests
     {     

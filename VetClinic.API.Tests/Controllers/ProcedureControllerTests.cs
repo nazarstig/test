@@ -1,17 +1,17 @@
-﻿using Moq;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using Moq;
 using VetClinic.API.Controllers;
+using VetClinic.API.DTO.ProcedureDTO;
+using VetClinic.API.Mapping;
+using VetClinic.BLL.Services.Interfaces;
 using VetClinic.DAL.Entities;
 using VetClinic.DAL.Repositories.Interfaces;
-using VetClinic.API.Mapping;
 using Xunit;
-using VetClinic.BLL.Services.Interfaces;
-using AutoMapper;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using VetClinic.API.DTO.ProcedureDTO;
 
-namespace VetClinic.API.Tests.ControllerTests
+namespace VetClinic.API.Tests.Controllers
 {
     public class ProcedureControllerTests
     {

@@ -88,7 +88,7 @@ namespace VetClinic.BLL.Tests.Services
 
             // Act & Assert
             var ex = await Assert.ThrowsAsync<VetClinicException>(() => _appointmentService.GetAppointmentByIdAsync(id));
-            Assert.Equal($"Appointment with {id} id doesn't exist", ex.Message);
+            Assert.Equal($"Appointment with id {id} doesn't exist", ex.Message);
         }
 
 
@@ -198,7 +198,7 @@ namespace VetClinic.BLL.Tests.Services
             // Act & Assert
             var ex = await Assert.ThrowsAsync<VetClinicException>(() =>
                 _appointmentService.UpdateAppointmentAsync(id, appointment));
-            Assert.Equal($"Appointment with {id} id doesn't exist", ex.Message);
+            Assert.Equal($"Appointment with id {id} doesn't exist", ex.Message);
         }
 
         [Fact]
@@ -271,7 +271,7 @@ namespace VetClinic.BLL.Tests.Services
             _repositoryWrapper.Verify(rw => rw.AppointmentRepository.Remove(appointment), Times.Never);
             _repositoryWrapper.Verify(rw => rw.SaveAsync(), Times.Never);
             var ex = await Assert.ThrowsAsync<VetClinicException>(() => _appointmentService.DeleteAppointmentAsync(id));
-            Assert.Equal($"Appointment with {id} id doesn't exist", ex.Message);
+            Assert.Equal($"Appointment with id {id} doesn't exist", ex.Message);
         }
     }
 }

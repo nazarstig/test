@@ -1,10 +1,10 @@
-﻿using AutoFixture.Xunit2;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using AutoFixture.Xunit2;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using VetClinic.API.Controllers;
 using VetClinic.API.DTO;
 using VetClinic.API.DTO.Service;
@@ -13,7 +13,7 @@ using VetClinic.BLL.Services.Interfaces;
 using VetClinic.DAL.Entities;
 using Xunit;
 
-namespace VetClinic.API.Tests
+namespace VetClinic.API.Tests.Controllers
 {
     public class ServiceControllerTest
     {

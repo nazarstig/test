@@ -1,20 +1,19 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore.Query;
-using Moq;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using AutoMapper;
+using Microsoft.EntityFrameworkCore.Query;
+using Moq;
 using VetClinic.API.Mapping;
-using VetClinic.BLL.Services.Realizations;
 using VetClinic.BLL.Services.Interfaces;
+using VetClinic.BLL.Services.Realizations;
 using VetClinic.DAL.Entities;
 using VetClinic.DAL.Repositories.Interfaces;
 using Xunit;
 
-namespace VetClinic.BLL.Tests.ServiceTests.ClientServiceTests
+namespace VetClinic.BLL.Tests.Services
 {
     public class ClientServiceTests
     {

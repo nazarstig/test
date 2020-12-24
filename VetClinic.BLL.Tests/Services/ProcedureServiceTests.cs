@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using Xunit;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
+using AutoMapper;
+using Microsoft.EntityFrameworkCore.Query;
 using Moq;
+using VetClinic.API.Mapping;
+using VetClinic.BLL.Services.Interfaces;
 using VetClinic.BLL.Services.Realizations;
 using VetClinic.DAL.Entities;
 using VetClinic.DAL.Repositories.Interfaces;
-using VetClinic.BLL.Services.Interfaces;
-using AutoMapper;
-using VetClinic.API.Mapping;
-using System.Linq.Expressions;
-using System.Linq;
-using Microsoft.EntityFrameworkCore.Query;
-using System.Threading.Tasks;
+using Xunit;
 
-namespace VetClinic.BLL.Tests.ServiceTests.ProcedureServiceTests
+namespace VetClinic.BLL.Tests.Services
 {
     public class ProcedureServiceTests
     {
