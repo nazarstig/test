@@ -69,7 +69,7 @@ namespace VetClinic.API.Tests.Controllers
             //Assert
             _animalService.Verify(x => x.CreateAnimal(It.IsAny<Animal>()));
             Assert.NotNull(actual);
-            Assert.IsType<OkObjectResult>(actual);
+            Assert.IsType<CreatedResult>(actual);
         }
 
         [Theory, AutoMoqData]
