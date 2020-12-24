@@ -35,20 +35,18 @@ namespace VetClinic.BLL.Tests.Services
         {
             // Arrange
             var appointments = _fixture.CreateMany<Appointment>().ToList();
-            _repositoryWrapper.Setup(rw => rw.AppointmentRepository.GetAsync(It.IsAny<Expression<Func<Appointment, bool>>>(),
-                It.IsAny<Func<IQueryable<Appointment>, IIncludableQueryable<Appointment, object>>>(),
-                It.IsAny<Func<IQueryable<Appointment>, IOrderedQueryable<Appointment>>>(),
-                It.IsAny<bool>())).ReturnsAsync(appointments);
+            
+            _repositoryWrapper
+                .Setup(rw => rw.AppointmentRepository.GetAsync(It.IsAny<Expression<Func<Appointment, bool>>>(),
+                    It.IsAny<Func<IQueryable<Appointment>, IIncludableQueryable<Appointment, object>>>(),
+                    It.IsAny<Func<IQueryable<Appointment>, IOrderedQueryable<Appointment>>>(),
+                    It.IsAny<bool>()))
+                .ReturnsAsync(appointments);
 
             // Act 
             var actual = await _appointmentService.GetAllAppointmentsAsync();
 
             // Assert
-            _repositoryWrapper.Verify(rw => rw.AppointmentRepository.GetAsync(It.IsAny<Expression<Func<Appointment, bool>>>(),
-                    It.IsAny<Func<IQueryable<Appointment>, IIncludableQueryable<Appointment, object>>>(),
-                    It.IsAny<Func<IQueryable<Appointment>, IOrderedQueryable<Appointment>>>(),
-                    It.IsAny<bool>()),
-                Times.Once);
             Assert.Equal(appointments, actual);
         }
 
@@ -56,24 +54,21 @@ namespace VetClinic.BLL.Tests.Services
         public async Task GetAppointmentByIdAsync_AppointmentExists_ReturnsAppointment()
         {
             // Arrange
-            Appointment appointment = _fixture.Create<Appointment>();
+            var appointment = _fixture.Create<Appointment>();
             int id = appointment.Id;
 
-            _repositoryWrapper.Setup(rw => rw.AppointmentRepository.GetFirstOrDefaultAsync(
-                a => a.Id == id,
-                It.IsAny<Func<IQueryable<Appointment>, IIncludableQueryable<Appointment, object>>>(),
-                It.IsAny<bool>()
-            )).ReturnsAsync(() => appointment);
+            _repositoryWrapper
+                .Setup(rw => rw.AppointmentRepository.GetFirstOrDefaultAsync(
+                    a => a.Id == id,
+                    It.IsAny<Func<IQueryable<Appointment>, IIncludableQueryable<Appointment, object>>>(),
+                    It.IsAny<bool>()
+                ))
+                .ReturnsAsync(() => appointment);
 
             // Act
             var actual = await _appointmentService.GetAppointmentByIdAsync(id);
 
             // Assert
-            _repositoryWrapper.Verify(rw => rw.AppointmentRepository.GetFirstOrDefaultAsync(
-                    a => a.Id == id,
-                    It.IsAny<Func<IQueryable<Appointment>, IIncludableQueryable<Appointment, object>>>(),
-                    It.IsAny<bool>()),
-                Times.Once);
             Assert.Equal(appointment, actual);
         }
 
@@ -82,15 +77,16 @@ namespace VetClinic.BLL.Tests.Services
         {
             // Arrange
             int id = -1;
-            _repositoryWrapper.Setup(rw => rw.AppointmentRepository.GetFirstOrDefaultAsync(
-                a => a.Id == id,
-                It.IsAny<Func<IQueryable<Appointment>, IIncludableQueryable<Appointment, object>>>(),
-                It.IsAny<bool>()
-            )).ReturnsAsync(() => null);
+            
+            _repositoryWrapper
+                .Setup(rw => rw.AppointmentRepository.GetFirstOrDefaultAsync(
+                    a => a.Id == id,
+                    It.IsAny<Func<IQueryable<Appointment>, IIncludableQueryable<Appointment, object>>>(),
+                    It.IsAny<bool>()
+                ))
+                .ReturnsAsync(() => null);
 
-            // Act
-
-            // Assert
+            // Act & Assert
             var ex = await Assert.ThrowsAsync<VetClinicException>(() => _appointmentService.GetAppointmentByIdAsync(id));
             Assert.Equal($"Appointment with {id} id doesn't exist", ex.Message);
         }
@@ -103,11 +99,14 @@ namespace VetClinic.BLL.Tests.Services
             var appointment = _fixture.Create<Appointment>();
             int id = appointment.Id;
 
-            _repositoryWrapper.Setup(rw => rw.AnimalRepository.IsAnyAsync(a => a.Id == appointment.AnimalId))
+            _repositoryWrapper
+                .Setup(rw => rw.AnimalRepository.IsAnyAsync(a => a.Id == appointment.AnimalId))
                 .ReturnsAsync(true);
-            _repositoryWrapper.Setup(rw => rw.ServiceRepository.IsAnyAsync(s => s.Id == appointment.ServiceId))
+            _repositoryWrapper
+                .Setup(rw => rw.ServiceRepository.IsAnyAsync(s => s.Id == appointment.ServiceId))
                 .ReturnsAsync(true);
-            _repositoryWrapper.Setup(rw => rw.AppointmentRepository.GetFirstOrDefaultAsync(
+            _repositoryWrapper
+                .Setup(rw => rw.AppointmentRepository.GetFirstOrDefaultAsync(
                     a => a.Id == id,
                     It.IsAny<Func<IQueryable<Appointment>, IIncludableQueryable<Appointment, object>>>(),
                     It.IsAny<bool>()))
@@ -130,20 +129,20 @@ namespace VetClinic.BLL.Tests.Services
             var appointment = _fixture.Create<Appointment>();
             int id = appointment.Id;
 
-            _repositoryWrapper.Setup(rw => rw.AnimalRepository.IsAnyAsync(a => a.Id == appointment.AnimalId))
+            _repositoryWrapper
+                .Setup(rw => rw.AnimalRepository.IsAnyAsync(a => a.Id == appointment.AnimalId))
                 .ReturnsAsync(false);
-            _repositoryWrapper.Setup(rw => rw.ServiceRepository.IsAnyAsync(s => s.Id == appointment.ServiceId))
+            _repositoryWrapper
+                .Setup(rw => rw.ServiceRepository.IsAnyAsync(s => s.Id == appointment.ServiceId))
                 .ReturnsAsync(false);
-
-            _repositoryWrapper.Setup(rw => rw.AppointmentRepository.GetFirstOrDefaultAsync(
+            _repositoryWrapper
+                .Setup(rw => rw.AppointmentRepository.GetFirstOrDefaultAsync(
                     a => a.Id == id,
                     It.IsAny<Func<IQueryable<Appointment>, IIncludableQueryable<Appointment, object>>>(),
                     It.IsAny<bool>()))
                 .ReturnsAsync(appointment);
 
-            // Act
-
-            // Assert
+            // Act & Assert
             var ex = await Assert.ThrowsAsync<VetClinicException>(() => _appointmentService.CreateAppointmentAsync(appointment));
             Assert.Equal($"Model is invalid", ex.Message);
         }
@@ -156,30 +155,29 @@ namespace VetClinic.BLL.Tests.Services
             var appointment = _fixture.Create<Appointment>();
             int id = appointment.Id;
 
-            _repositoryWrapper.Setup(rw => rw.AnimalRepository.IsAnyAsync(a => a.Id == appointment.AnimalId))
-                .ReturnsAsync(true);
-            _repositoryWrapper.Setup(rw => rw.ServiceRepository.IsAnyAsync(s => s.Id == appointment.ServiceId))
-                .ReturnsAsync(true);
-            _repositoryWrapper.Setup(rw => rw.StatusRepository.IsAnyAsync(s => s.Id == appointment.StatusId))
-                .ReturnsAsync(true);
-            _repositoryWrapper.Setup(rw => rw.DoctorRepository.IsAnyAsync(d => d.Id == appointment.DoctorId))
-                .ReturnsAsync(true);
-
-            _repositoryWrapper.Setup(rw => rw.AppointmentRepository.GetFirstOrDefaultAsync(
+            _repositoryWrapper
+                .Setup(rw => rw.AppointmentRepository.GetFirstOrDefaultAsync(
                     a => a.Id == id,
                     It.IsAny<Func<IQueryable<Appointment>, IIncludableQueryable<Appointment, object>>>(),
                     It.IsAny<bool>()))
                 .ReturnsAsync(appointment);
-
+            _repositoryWrapper
+                .Setup(rw => rw.AnimalRepository.IsAnyAsync(a => a.Id == appointment.AnimalId))
+                .ReturnsAsync(true);
+            _repositoryWrapper
+                .Setup(rw => rw.ServiceRepository.IsAnyAsync(s => s.Id == appointment.ServiceId))
+                .ReturnsAsync(true);
+            _repositoryWrapper
+                .Setup(rw => rw.StatusRepository.IsAnyAsync(s => s.Id == appointment.StatusId))
+                .ReturnsAsync(true);
+            _repositoryWrapper
+                .Setup(rw => rw.DoctorRepository.IsAnyAsync(d => d.Id == appointment.DoctorId))
+                .ReturnsAsync(true);
+            
             // Act 
             var actual = await _appointmentService.UpdateAppointmentAsync(id, appointment);
 
             // Assert
-            _repositoryWrapper.Verify(rw => rw.AppointmentRepository.GetFirstOrDefaultAsync(
-                    a => a.Id == id,
-                    It.IsAny<Func<IQueryable<Appointment>, IIncludableQueryable<Appointment, object>>>(),
-                    It.IsAny<bool>()),
-                Times.Exactly(2));
             _repositoryWrapper.Verify(rw => rw.AppointmentRepository.Update(appointment), Times.Once);
             _repositoryWrapper.Verify(rw => rw.SaveAsync(), Times.Once);
             Assert.Equal(appointment, actual);
@@ -197,9 +195,7 @@ namespace VetClinic.BLL.Tests.Services
                 It.IsAny<Func<IQueryable<Appointment>, IIncludableQueryable<Appointment, object>>>(),
                 It.IsAny<bool>())).ReturnsAsync(() => null);
 
-            // Act 
-
-            // Assert
+            // Act & Assert
             var ex = await Assert.ThrowsAsync<VetClinicException>(() =>
                 _appointmentService.UpdateAppointmentAsync(id, appointment));
             Assert.Equal($"Appointment with {id} id doesn't exist", ex.Message);
@@ -220,15 +216,13 @@ namespace VetClinic.BLL.Tests.Services
                 .ReturnsAsync(false);
             _repositoryWrapper.Setup(rw => rw.DoctorRepository.IsAnyAsync(d => d.Id == appointment.DoctorId))
                 .ReturnsAsync(false);
-
             _repositoryWrapper.Setup(rw => rw.AppointmentRepository.GetFirstOrDefaultAsync(
                     a => a.Id == id,
                     It.IsAny<Func<IQueryable<Appointment>, IIncludableQueryable<Appointment, object>>>(),
                     It.IsAny<bool>()))
                 .ReturnsAsync(appointment);
-            // Act
 
-            // Assert
+            // Act & Assert
             var ex = await Assert.ThrowsAsync<VetClinicException>(() =>
                 _appointmentService.UpdateAppointmentAsync(id, appointment));
             Assert.Equal($"Model is invalid", ex.Message);
@@ -250,6 +244,7 @@ namespace VetClinic.BLL.Tests.Services
             // Act
             var actual = await _appointmentService.DeleteAppointmentAsync(id);
 
+            // Assert
             _repositoryWrapper.Verify(rw => rw.AppointmentRepository.GetFirstOrDefaultAsync(
                     a => a.Id == id,
                     It.IsAny<Func<IQueryable<Appointment>, IIncludableQueryable<Appointment, object>>>(),
@@ -272,10 +267,7 @@ namespace VetClinic.BLL.Tests.Services
                 It.IsAny<Func<IQueryable<Appointment>, IIncludableQueryable<Appointment, object>>>(),
                 It.IsAny<bool>())).ReturnsAsync(() => null);
 
-            // Act
-
-
-            // Assert
+            // Act & Assert
             _repositoryWrapper.Verify(rw => rw.AppointmentRepository.Remove(appointment), Times.Never);
             _repositoryWrapper.Verify(rw => rw.SaveAsync(), Times.Never);
             var ex = await Assert.ThrowsAsync<VetClinicException>(() => _appointmentService.DeleteAppointmentAsync(id));

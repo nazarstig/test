@@ -33,7 +33,7 @@ namespace VetClinic.BLL.Services.Realizations
         {
             var appointment = await _repositoryWrapper.AppointmentRepository.GetFirstOrDefaultAsync(a => a.Id == id, Include());
             if (appointment == null)
-                throw new VetClinicException(HttpStatusCode.BadRequest, $"Appointment with {id} id doesn't exist");
+                throw new VetClinicException(HttpStatusCode.NotFound, $"Appointment with id {id} doesn't exist");
 
             return appointment;
         }
@@ -81,18 +81,18 @@ namespace VetClinic.BLL.Services.Realizations
             var fieldErrorModels = new List<FieldErrorModel>();
 
             if (!await _repositoryWrapper.AnimalRepository.IsAnyAsync(a => a.Id == appointment.AnimalId))
-                fieldErrorModels.Add(new FieldErrorModel("animalId", $"Animal with {appointment.AnimalId} id doesn't exist"));
+                fieldErrorModels.Add(new FieldErrorModel("animalId", $"Animal with id {appointment.AnimalId} doesn't exist"));
 
             if (!await _repositoryWrapper.ServiceRepository.IsAnyAsync(s => s.Id == appointment.ServiceId))
-                fieldErrorModels.Add(new FieldErrorModel("serviceId", $"Service with {appointment.ServiceId} id doesn't exist"));
+                fieldErrorModels.Add(new FieldErrorModel("serviceId", $"Service with id {appointment.ServiceId} doesn't exist"));
 
             if (isUpdate)
             {
                 if (!await _repositoryWrapper.StatusRepository.IsAnyAsync(s => s.Id == appointment.StatusId))
-                    fieldErrorModels.Add(new FieldErrorModel("statusId", $"Status with {appointment.StatusId} id doesn't exist"));
+                    fieldErrorModels.Add(new FieldErrorModel("statusId", $"Status with id {appointment.StatusId} doesn't exist"));
 
                 if (!await _repositoryWrapper.DoctorRepository.IsAnyAsync(d => d.Id == appointment.DoctorId))
-                    fieldErrorModels.Add(new FieldErrorModel("doctorId", $"Doctor with {appointment.DoctorId} id doesn't exist"));
+                    fieldErrorModels.Add(new FieldErrorModel("doctorId", $"Doctor with id {appointment.DoctorId} doesn't exist"));
 
                 await ValidatePerformedProcedures(appointment, fieldErrorModels);
             }
@@ -109,7 +109,7 @@ namespace VetClinic.BLL.Services.Realizations
             {
                 var procedure = await _repositoryWrapper.ProcedureRepository.GetFirstOrDefaultAsync(p => p.Id == ap.ProcedureId);
                 if (procedure == null)
-                    messages.Add($"Procedure with {ap.ProcedureId} id doesn't exist");
+                    messages.Add($"Procedure with id {ap.ProcedureId} doesn't exist");
             }
 
             if (messages.Count > 0)

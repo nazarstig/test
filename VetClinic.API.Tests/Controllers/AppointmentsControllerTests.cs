@@ -89,9 +89,7 @@ namespace VetClinic.API.Tests.Controllers
                 .Setup(a => a.GetAppointmentByIdAsync(id))
                 .ThrowsAsync(new VetClinicException(HttpStatusCode.BadRequest, $"Appointment with {id} id doesn't exist"));
 
-            // Act
-
-            // Assert
+            // Act & Assert
             var ex = await Assert.ThrowsAsync<VetClinicException>(() => _appointmentsController.GetAsync(id));
             Assert.Equal($"Appointment with {id} id doesn't exist", ex.Message);
         }
@@ -106,12 +104,12 @@ namespace VetClinic.API.Tests.Controllers
             var readAppointmentDto = _fixture.Create<AppointmentDto>();
             var createAppointmentDto = _fixture.Create<CreateAppointmentDto>();
 
-            _appointmentService
-                .Setup(a => a.CreateAppointmentAsync(appointment))
-                .ReturnsAsync(createdAppointment);
             _autoMapper
                 .Setup(m => m.Map<Appointment>(createAppointmentDto))
                 .Returns(appointment);
+            _appointmentService
+                .Setup(a => a.CreateAppointmentAsync(appointment))
+                .ReturnsAsync(createdAppointment);
             _autoMapper
                 .Setup(m => m.Map<AppointmentDto>(createdAppointment))
                 .Returns(readAppointmentDto);
@@ -120,9 +118,9 @@ namespace VetClinic.API.Tests.Controllers
             var actual = await _appointmentsController.PostAsync(createAppointmentDto);
 
             // Assert
-            _appointmentService.Verify(a => a.CreateAppointmentAsync(appointment));
-            _autoMapper.Verify(m => m.Map<Appointment>(createAppointmentDto));
-            _autoMapper.Verify(m => m.Map<AppointmentDto>(createdAppointment));
+            _autoMapper.Verify(m => m.Map<Appointment>(createAppointmentDto), Times.Once);
+            _appointmentService.Verify(a => a.CreateAppointmentAsync(appointment), Times.Once);
+            _autoMapper.Verify(m => m.Map<AppointmentDto>(createdAppointment), Times.Once);
             Assert.IsType<CreatedAtRouteResult>(actual);
         }
 
@@ -139,10 +137,7 @@ namespace VetClinic.API.Tests.Controllers
             _appointmentService.Setup(ap => ap.CreateAppointmentAsync(appointment))
                 .ThrowsAsync(new VetClinicException(HttpStatusCode.BadRequest, "Model is invalid"));
 
-            // Act
-
-            // Assert
-
+            // Act & Assert
             var ex = await Assert.ThrowsAsync<VetClinicException>(() => _appointmentsController.PostAsync(createAppointmentDto));
             Assert.Equal($"Model is invalid", ex.Message);
         }
@@ -156,12 +151,12 @@ namespace VetClinic.API.Tests.Controllers
             var appointment = _fixture.Create<Appointment>();
             int id = 10;
 
-            _appointmentService
-                .Setup(a => a.UpdateAppointmentAsync(id, appointment))
-                .ReturnsAsync(appointment);
             _autoMapper
                 .Setup(m => m.Map<Appointment>(updateAppointmentDto))
                 .Returns(appointment);
+            _appointmentService
+                .Setup(a => a.UpdateAppointmentAsync(id, appointment))
+                .ReturnsAsync(appointment);
 
             // Act
             var actual = await _appointmentsController.PutAsync(id, updateAppointmentDto);
@@ -180,16 +175,14 @@ namespace VetClinic.API.Tests.Controllers
             var appointment = _fixture.Create<Appointment>();
             int id = -1;
 
-            _appointmentService
-                .Setup(a => a.UpdateAppointmentAsync(id, appointment))
-                .ThrowsAsync(new VetClinicException(HttpStatusCode.BadRequest, $"Appointment with {id} id doesn't exist"));
             _autoMapper
                 .Setup(m => m.Map<Appointment>(updateAppointmentDto))
                 .Returns(appointment);
+            _appointmentService
+                .Setup(a => a.UpdateAppointmentAsync(id, appointment))
+                .ThrowsAsync(new VetClinicException(HttpStatusCode.BadRequest, $"Appointment with {id} id doesn't exist"));
 
-            // Act
-
-            // Assert
+            // Act & Assert
             var ex = await Assert.ThrowsAsync<VetClinicException>(
                 () => _appointmentsController.PutAsync(id, updateAppointmentDto));
             Assert.Equal($"Appointment with {id} id doesn't exist", ex.Message);
@@ -199,9 +192,9 @@ namespace VetClinic.API.Tests.Controllers
         public async Task PutAsync_AppointmentModelIsNotValid_ThrowsException()
         {
             // Arrange
-            int id = -1;
             var appointment = _fixture.Create<Appointment>();
             var updateAppointmentDto = _fixture.Create<UpdateAppointmentDto>();
+            int id = 10;
 
             _autoMapper
                 .Setup(m => m.Map<Appointment>(updateAppointmentDto))
@@ -209,9 +202,7 @@ namespace VetClinic.API.Tests.Controllers
             _appointmentService.Setup(ap => ap.UpdateAppointmentAsync(id, appointment))
                 .ThrowsAsync(new VetClinicException(HttpStatusCode.BadRequest, "Model is invalid"));
 
-            // Act
-
-            // Assert
+            // Act & Assert
             var ex = await Assert.ThrowsAsync<VetClinicException>(
                 () => _appointmentsController.PutAsync(id, updateAppointmentDto));
             Assert.Equal($"Model is invalid", ex.Message);
@@ -222,8 +213,8 @@ namespace VetClinic.API.Tests.Controllers
         public async Task DeleteAsync_AppointmentIsDeleted_ReturnsNoContent()
         {
             // Arrange 
-            int id = 10;
             var appointment = _fixture.Create<Appointment>();
+            int id = 10;
 
             _appointmentService
                 .Setup(a => a.DeleteAppointmentAsync(id))
@@ -233,7 +224,7 @@ namespace VetClinic.API.Tests.Controllers
             var actual = await _appointmentsController.DeleteAsync(id);
 
             // Assert
-            _appointmentService.Verify(a => a.DeleteAppointmentAsync(id));
+            _appointmentService.Verify(a => a.DeleteAppointmentAsync(id), Times.Once);
             Assert.IsType<NoContentResult>(actual);
         }
 
@@ -242,14 +233,12 @@ namespace VetClinic.API.Tests.Controllers
         {
             // Arrange
             int id = -1;
-
+            
             _appointmentService
                 .Setup(a => a.DeleteAppointmentAsync(id))
                 .ThrowsAsync(new VetClinicException(HttpStatusCode.BadRequest, $"Appointment with {id} id doesn't exist"));
 
-            // Act
-
-            // Assert
+            // Act & Assert
             var ex = await Assert.ThrowsAsync<VetClinicException>(() => _appointmentsController.DeleteAsync(id));
             Assert.Equal($"Appointment with {id} id doesn't exist", ex.Message);
         }
