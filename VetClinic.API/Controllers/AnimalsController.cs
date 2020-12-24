@@ -8,7 +8,8 @@ using VetClinic.DAL.Entities;
 
 namespace VetClinic.API.Controllers
 {
-    [Route("api/animals")]
+    [Route("api/[controller]")]
+    [ApiController]
     public class AnimalsController : Controller
     {
         private readonly IAnimalService _animalService;
@@ -19,19 +20,19 @@ namespace VetClinic.API.Controllers
             _mapper = mapper;
         }
 
+        [HttpPost]
+        public async Task<IActionResult> PostAsync([FromBody] CreateAnimalDto createAnimalDto)
+        {
+            await _animalService.CreateAnimal(_mapper.Map<Animal>(createAnimalDto));
+            return Created(nameof(GetAsync), createAnimalDto);
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetAsync()
         {
             var animals = await _animalService.GetAllAsync();
             var result = animals.Select(x => _mapper.Map<ReadAnimalDto>(x));
             return Ok(result);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> PostAsync([FromBody]CreateAnimalDto createAnimalDto)
-        {
-            await _animalService.CreateAnimal(_mapper.Map<Animal>(createAnimalDto));
-            return Ok(createAnimalDto);
         }
 
         [HttpGet("{id}")]
