@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using VetClinic.API.DTO.Position.PositionDTO;
 
-namespace VetClinic.API.Validators
+namespace VetClinic.API.Validators.Position
 {
     public class PositionDtoValidator: AbstractValidator<PositionDto>
     {
