@@ -1,4 +1,4 @@
-﻿namespace VetClinic.API.DTO.PositionDTO
+﻿namespace VetClinic.API.DTO.Position.PositionDTO
 {
     public class PositionDto
     {

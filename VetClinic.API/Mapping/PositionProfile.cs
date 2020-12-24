@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using VetClinic.API.DTO.PositionDTO;
+using VetClinic.API.DTO.Position.PositionDTO;
 using VetClinic.DAL.Entities;
 
 namespace VetClinic.API.Mapping
