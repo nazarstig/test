@@ -12,8 +12,6 @@ using VetClinic.API.ExtensionMethods;
 using VetClinic.API.Filters;
 using VetClinic.API.Middlewares;
 using VetClinic.BLL;
-using VetClinic.BLL.Services.Interfaces;
-using VetClinic.BLL.Services.Realizations;
 using VetClinic.DAL;
 using VetClinic.DAL.Entities;
 using VetClinic.DAL.Repositories.Interfaces;
@@ -46,14 +44,7 @@ namespace VetClinic.API
                 options.UseSqlServer(connection, builder =>
                     builder.MigrationsAssembly("VetClinic.DAL")));
 
-
-            IdentityBuilder builder = services.AddIdentityCore<User>();
-            builder = new IdentityBuilder(typeof(User), typeof(IdentityRole), builder.Services);
-            builder.AddEntityFrameworkStores<ApplicationContext>()
-                .AddDefaultTokenProviders();
-
-            services.AddScoped<IRoleValidator<IdentityRole>, RoleValidator<IdentityRole>>();
-            services.AddScoped<RoleManager<IdentityRole>, RoleManager<IdentityRole>>();
+            services.AddIdentity();
 
             services.AddAutoMapper(typeof(Startup));
 
@@ -62,17 +53,11 @@ namespace VetClinic.API
                 .AddNewtonsoftJson();
 
             services.Configure<ApiBehaviorOptions>(options => { options.SuppressModelStateInvalidFilter = true; });
+
             services.AddSwaggerGen();
+
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IProcedureService, ProcedureService>();
-            services.AddScoped<IClientService, ClientService>();
-            services.AddScoped<IPositionService, PositionService>();
-            services.AddScoped<IDoctorService, DoctorService>();
-            services.AddScoped<IServiceService, ServiceService>();
-            services.AddScoped<IAnimalService, AnimalService>();
-
-
+           
             services.AddServices();
 
             services.AddSwaggerConfig();
