@@ -16,10 +16,10 @@ namespace VetClinic.BLL.Services.Realizations
             _repositoryWrapper = repositoryWrapper;
         }
 
-        public void CreateAnimal(Animal animal)
+        public async Task CreateAnimal(Animal animal)
         {
             _repositoryWrapper.AnimalRepository.Add(animal);
-            _repositoryWrapper.SaveAsync();
+            await _repositoryWrapper.SaveAsync();
         }
 
         public async Task<ICollection<Animal>> GetAllAsync()
@@ -32,13 +32,13 @@ namespace VetClinic.BLL.Services.Realizations
             return  (await _repositoryWrapper.AnimalRepository.GetAsync(x => x.Id == id)).FirstOrDefault();
         }
 
-        public async void UpdateAnimal(Animal animal)
+        public async Task UpdateAnimal(Animal animal)
         {
             _repositoryWrapper.AnimalRepository.Update(animal);
             await _repositoryWrapper.SaveAsync();
         }
 
-        public async void RemoveAnimal(Animal animal)
+        public async Task RemoveAnimal(Animal animal)
         {
             _repositoryWrapper.AnimalRepository.Remove(animal);
             await _repositoryWrapper.SaveAsync();

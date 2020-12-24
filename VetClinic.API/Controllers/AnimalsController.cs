@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
-using VetClinic.API.DTO;
+using VetClinic.API.DTO.Animal;
 using VetClinic.BLL.Services.Interfaces;
 using VetClinic.DAL.Entities;
 
@@ -20,7 +20,7 @@ namespace VetClinic.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> GetAsync()
         {
             var animals = await _animalService.GetAllAsync();
             var result = animals.Select(x => _mapper.Map<ReadAnimalDto>(x));
@@ -28,14 +28,14 @@ namespace VetClinic.API.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody]CreateAnimalDto createAnimalDto)
+        public async Task<IActionResult> PostAsync([FromBody]CreateAnimalDto createAnimalDto)
         {
-            _animalService.CreateAnimal(_mapper.Map<Animal>(createAnimalDto));
+            await _animalService.CreateAnimal(_mapper.Map<Animal>(createAnimalDto));
             return Ok(createAnimalDto);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Show(int id)
+        public async Task<IActionResult> GetAsync(int id)
         {
             var animal = await _animalService.GetAsync(id);
 
@@ -50,7 +50,7 @@ namespace VetClinic.API.Controllers
 
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id,[FromBody]UpdateAnimalDto updateAnimalDto)
+        public async Task<IActionResult> PutAsync(int id,[FromBody]UpdateAnimalDto updateAnimalDto)
         {
             var animal = await _animalService.GetAsync(id);
 
@@ -65,14 +65,14 @@ namespace VetClinic.API.Controllers
             animal.Photo = updateAnimalDto.Photo;
             animal.AnimalTypeId = updateAnimalDto.AnimalTypeId;
 
-            _animalService.UpdateAnimal(animal);
+            await _animalService.UpdateAnimal(animal);
 
-            return Ok(animal);
+            return NoContent();
         }
 
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Destroy(int id)
+        public async Task<IActionResult> DeleteAsync(int id)
         {
             var animal = await _animalService.GetAsync(id);
 
@@ -80,8 +80,8 @@ namespace VetClinic.API.Controllers
             {
                 return NotFound();
             }
-            _animalService.RemoveAnimal(animal);
-            return Ok(animal);
+            await _animalService.RemoveAnimal(animal);
+            return NoContent();
         }
     }
 }

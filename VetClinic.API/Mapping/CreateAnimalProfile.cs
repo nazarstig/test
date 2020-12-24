@@ -4,17 +4,17 @@ using VetClinic.DAL.Entities;
 
 namespace VetClinic.API.Mapping
 {
-    public class AnimalProfile : Profile
+    public class CreateAnimalProfile : Profile
     {
-        public AnimalProfile()
+        public CreateAnimalProfile()
         {
             CreateMap<CreateAnimalDto, Animal>()
                 .ForMember(d => d.Name, t => t.MapFrom(o => o.Name))
                 .ForMember(d => d.Age, t => t.MapFrom(o => o.Age))
-                .ForMember(d => d.AnimalTypeId, t => t.MapFrom(o => o.AnimalTypeId))
-                .ForMember(d => d.ClientId, t => t.MapFrom(o => o.ClientId))
                 .ForMember(d => d.Photo, t => t.MapFrom(o => o.Photo))
-                .ForAllOtherMembers(d => d.Ignore());
+                .ForMember(d => d.ClientId, t => t.MapFrom(o => o.ClientId))
+                .ForMember(d => d.AnimalTypeId, t => t.MapFrom(o => o.AnimalTypeId))
+                .ReverseMap();
         }
     }
 }

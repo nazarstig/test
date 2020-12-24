@@ -1,4 +1,4 @@
-﻿namespace VetClinic.API.DTO
+﻿namespace VetClinic.API.DTO.Animal
 {
     public class CreateAnimalDto
     {
