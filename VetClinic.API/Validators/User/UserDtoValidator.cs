@@ -18,12 +18,12 @@ namespace VetClinic.API.Validators.User
                 .MaximumLength(30).WithMessage("Last name cannot be longer than 30 characters");
 
             RuleFor(user => user.Email).NotEmpty().WithMessage("Email cannot be empty")
-                .EmailAddress(EmailValidationMode.AspNetCoreCompatible).WithMessage("Invalid email")
+                //.EmailAddress(EmailValidationMode.AspNetCoreCompatible).WithMessage("Invalid email")
                 .MaximumLength(50).WithMessage("Email cannot be longer than 50 characters");
 
             RuleFor(user => user.PhoneNumber).NotEmpty().WithMessage("Phone number cannot be empty")
-                .MaximumLength(12).WithMessage("Phone number cannot be longer than 12 digits")
-                .Matches("^[0-9]{12}$").WithMessage("Valid phone number contains only digits");
+                .MaximumLength(12).WithMessage("Phone number cannot be longer than 12 digits");
+                //.Matches("^[0-9]{12}$").WithMessage("Valid phone number contains only digits");
         }
     }
 }

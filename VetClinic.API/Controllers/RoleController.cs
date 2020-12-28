@@ -21,7 +21,7 @@ namespace VetClinic.API.Controllers
 
         [Route("")]
         [HttpGet]
-        public async Task<IActionResult> GetAsync()
+        public IActionResult Get()
         {
             var roles = RoleManager.Roles;
             IEnumerable<RoleDto> roleDtos = Mapper.Map<IEnumerable<IdentityRole>, IEnumerable<RoleDto>>(roles);

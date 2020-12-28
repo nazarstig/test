@@ -9,5 +9,6 @@ namespace VetClinic.BLL.Services.Interfaces
         public Task<(bool, string)> CreateUserAsync(User inputUser, params IdentityRole[] inputRoles);
         public Task<bool> UpdateUserAsync(string id, User inputUser, params IdentityRole[] inputRoles);
         public Task<bool> DeleteUserAsync(string id);
+        public Task<bool> UserNameExistsAsync(string userName);
     }
 }
