@@ -94,6 +94,11 @@ namespace VetClinic.BLL.Services.Realizations
             return false;
         }
 
+        public async Task<User> GetUser(string id)
+        {
+            return await UserManager.FindByIdAsync(id);
+        }
+
         public async Task<bool> UserNameExistsAsync(string userName)
         {
             return await UserManager.FindByNameAsync(userName) != null;

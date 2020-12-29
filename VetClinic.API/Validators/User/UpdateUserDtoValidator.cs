@@ -10,12 +10,14 @@ namespace VetClinic.API.Validators.User
         public UpdateUserDtoValidator(IUserService userService)
         {
             RuleFor(user => user.UserName).NotEmpty().WithMessage("Username cannot be empty")
-                    .MaximumLength(50).WithMessage("Username cannot be longer than 50 characters")
-                    .Must(name =>
-                        {
-                            return !userService.UserNameExistsAsync(name).Result;
-                        })
-                    .WithMessage("Username already exists");
+                    .MaximumLength(50).WithMessage("Username cannot be longer than 50 characters");
+
+            RuleFor(user => user).Must(newUser =>
+                {
+                    var oldUser = userService.GetUser(newUser.Id).Result;
+                    return userService.UserNameExistsAsync(newUser.UserName).Result || oldUser.UserName == newUser.UserName;
+                })
+                .WithMessage("Username already exists");
 
             RuleFor(user => user.FirstName).NotEmpty().WithMessage("First name cannot be empty")
                     .MaximumLength(30).WithMessage("First name cannot be longer than 50 characters");
