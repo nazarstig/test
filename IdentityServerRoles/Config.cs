@@ -71,22 +71,24 @@ namespace IdentityServerRoles
                     ClientId = "angular_client",
                     RequirePkce = true,
                     ClientSecrets = {new Secret("angular_secret".ToSha256()) },
-
+                    RequireClientSecret = false,
                     AllowedGrantTypes = GrantTypes.Code,
                     RedirectUris = { "https://oauth.pstmn.io/v1/browser-callback",
-                                       "https://localhost:5001/signin-oidc", },
+                                       "https://localhost:5001/signin-oidc",
+                    "http://localhost:4200"},
 
-                    PostLogoutRedirectUris = { "https://localhost:5001/signout-callback-oidc"},
-
-
+                    PostLogoutRedirectUris = { "https://localhost:5001/signout-callback-oidc",
+                    "http://localhost:4200"},
+                    AllowedCorsOrigins = { "http://localhost:4200" },
                     AllowedScopes = new List<string>
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         "ApiOne",
+                        "offline_access",
                     },
 
-                    RequireConsent = true,
+                    RequireConsent = false,
 
                     AllowOfflineAccess = true,
 
