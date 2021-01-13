@@ -60,6 +60,15 @@ namespace VetClinic.API
            
             services.AddServices();
 
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy( builder => {
+                    builder.AllowAnyOrigin();
+                    builder.AllowAnyMethod();
+                    builder.AllowAnyHeader();
+                });
+            });
+
             services.AddSwaggerConfig();
         }
 
@@ -74,6 +83,8 @@ namespace VetClinic.API
             app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseRouting();
+
+            app.UseCors();
 
             app.UseAuthentication();
 

@@ -23,7 +23,8 @@ namespace VetClinic.BLL.Services.Realizations
         public async Task<ICollection<Doctor>> GetDoctorAsync()
         {
             var doctors = await _repositoryWrapper.DoctorRepository.GetAsync(
-                include: c => c.Include(i => i.User));
+                include: c => c.Include(i => i.User)
+                .Include(d => d.Position));
             return doctors;
         }
 
@@ -31,7 +32,13 @@ namespace VetClinic.BLL.Services.Realizations
         {
             Doctor doctor = await _repositoryWrapper.DoctorRepository.GetFirstOrDefaultAsync(
                 filter: d => d.Id == doctorId,
-                include: d => d.Include(c => c.User));
+                include: d => d.Include(c => c.User)
+                .Include(d => d.Position)
+                .Include(d => d.Appointments).ThenInclude(a => a.AppointmentProcedures).ThenInclude(p => p.Procedure)
+                .Include(d => d.Appointments).ThenInclude(a => a.Animal).ThenInclude(p => p.Client).ThenInclude(p=>p.User)
+                .Include(d => d.Appointments).ThenInclude(a => a.Animal).ThenInclude(p => p.AnimalType)
+                .Include(d => d.Appointments).ThenInclude(a => a.Service)
+                .Include(d => d.Appointments).ThenInclude(a => a.Status));                
 
             if (doctor == null)
                 return null;
@@ -41,13 +48,7 @@ namespace VetClinic.BLL.Services.Realizations
 
         public async Task<Doctor> AddDoctorAsync(Doctor doctor, User user)
         {
-            var role = await _roleManager.FindByNameAsync("doctor");
-            if (role == null)
-            {
-                await _roleManager.CreateAsync(
-                    new IdentityRole() { Name = "doctor" });
-                role = await _roleManager.FindByNameAsync("doctor");
-            }
+            var role = await this.DoctorRoleExistAsync();
 
             var (sucssess, userId) = await _userService.CreateUserAsync(user, role);
             if (sucssess)
@@ -56,7 +57,10 @@ namespace VetClinic.BLL.Services.Realizations
                 await _repositoryWrapper.SaveAsync();
             }
 
-            return doctor;
+            return await _repositoryWrapper.DoctorRepository.GetFirstOrDefaultAsync(
+                filter: d => d.Id == doctor.Id,
+                include: d => d.Include(c => c.User)
+                .Include(d => d.Position));
         }
 
         public async Task<bool> RemoveDoctorAsync(int doctorId)
@@ -77,13 +81,7 @@ namespace VetClinic.BLL.Services.Realizations
 
         public async Task<bool> UpdateDoctorAsync(Doctor inputDoctor, User inputUser, int doctorId)
         {
-            var role = await _roleManager.FindByNameAsync("doctor");
-            if (role == null)
-            {
-                await _roleManager.CreateAsync(
-                    new IdentityRole() { Name = "doctor" });
-                role = await _roleManager.FindByNameAsync("doctor");
-            }
+            var role = await this.DoctorRoleExistAsync();
 
             var doctor = await _repositoryWrapper
                 .DoctorRepository
@@ -117,6 +115,23 @@ namespace VetClinic.BLL.Services.Realizations
                 await _repositoryWrapper.SaveAsync();
                 return true;
             }
+        }
+
+        public Task<bool> IsAnyDoctorAsync(int id)
+        {
+            return _repositoryWrapper.DoctorRepository.IsAnyAsync(d => d.Id == id);
+        }
+
+        private async Task<IdentityRole> DoctorRoleExistAsync()
+        {
+            var role = await _roleManager.FindByNameAsync("doctor");
+            if (role == null)
+            {
+                await _roleManager.CreateAsync(
+                    new IdentityRole() { Name = "doctor" });
+                role = await _roleManager.FindByNameAsync("doctor");
+            }
+            return role;
         }
     }
 }
