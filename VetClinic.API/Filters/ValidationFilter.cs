@@ -13,9 +13,9 @@ namespace VetClinic.API.Filters
         {
             if (context.ModelState.IsValid) return;
 
-            var errorsDictionary =
-                context.ModelState.ToDictionary(kvp => kvp.Key, kvp => kvp.Value.Errors.Select(x => x.ErrorMessage));
-
+            var errorsDictionary = context.ModelState
+                .Where(x => x.Value.Errors.Count > 0)
+                .ToDictionary(kvp => kvp.Key, kvp => kvp.Value.Errors.Select(x => x.ErrorMessage));
 
             var errors = new List<FieldErrorModel>();
             foreach (var (fieldName, errorList) in errorsDictionary)
