@@ -94,6 +94,16 @@ namespace VetClinic.BLL.Services.Realizations
             return false;
         }
 
+        public async Task<User> GetUser(string id)
+        {
+            return await UserManager.FindByIdAsync(id);
+        }
+
+        public async Task<bool> UserNameExistsAsync(string userName)
+        {
+            return await UserManager.FindByNameAsync(userName) != null;
+        }
+
         private bool Equals(IEnumerable<string> arr1, IEnumerable<IdentityRole> arr2)
         {
             IEnumerable<string> roles = arr2.Select(arr2 => arr2.Name);

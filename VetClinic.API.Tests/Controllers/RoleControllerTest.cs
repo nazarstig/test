@@ -15,7 +15,7 @@ namespace VetClinic.API.Tests.Controllers
     public class RoleControllerTest
     {
         [Theory, AutoMoqData]
-        public async Task Index_NoParams_ReturnOk(IQueryable<IdentityRole> roles,
+        public void Index_NoParams_ReturnOk(IQueryable<IdentityRole> roles,
             [Frozen] Mock<RoleManager<IdentityRole>> roleManagerMock,
             [Frozen] Mock<IMapper> mapper)
         {
@@ -25,7 +25,7 @@ namespace VetClinic.API.Tests.Controllers
             var sut = new RoleController(roleManagerMock.Object, mapper.Object);
 
             //Act
-            var result = await sut.GetAsync();
+            var result = sut.Get();
             var contentResult = result as ObjectResult;
 
             //Assert
