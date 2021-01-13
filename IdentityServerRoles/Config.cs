@@ -71,7 +71,7 @@ namespace IdentityServerRoles
                     ClientId = "angular_client",
                     RequirePkce = true,
                     ClientSecrets = {new Secret("angular_secret".ToSha256()) },
-
+                    RequireClientSecret = false,
                     AllowedGrantTypes = GrantTypes.Code,
                     RedirectUris = { "https://oauth.pstmn.io/v1/browser-callback",
                                        "https://localhost:5001/signin-oidc",
@@ -88,7 +88,7 @@ namespace IdentityServerRoles
                         "offline_access",
                     },
 
-                    RequireConsent = true,
+                    RequireConsent = false,
 
                     AllowOfflineAccess = true,
 
