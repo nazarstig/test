@@ -35,7 +35,7 @@ namespace VetClinic.BLL.Services.Realizations
         {
             return await _repositoryWrapper.PositionRepository.GetAsync();
         }
-       
+              
         public async Task<bool> RemovePositionAsync(int id)
         {
             var position = await _repositoryWrapper.PositionRepository.GetFirstOrDefaultAsync(p => p.Id == id);
@@ -54,7 +54,7 @@ namespace VetClinic.BLL.Services.Realizations
             if (position == null)
                 return false;
 
-            if (await _repositoryWrapper.PositionRepository.IsAnyAsync(p => p.Id == id))
+            if (await this.IsAnyPositionAsync(id))
             {
                 position.Id = id;
                 _repositoryWrapper.PositionRepository.Update(position);
@@ -63,6 +63,10 @@ namespace VetClinic.BLL.Services.Realizations
             }
 
             return false;            
+        }
+        public Task<bool> IsAnyPositionAsync(int id)
+        {
+            return _repositoryWrapper.PositionRepository.IsAnyAsync(p=>p.Id==id);
         }
     }
 }

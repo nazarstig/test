@@ -111,6 +111,10 @@ namespace VetClinic.BLL.Tests.Services
                 .Add(doctor));
             _userServiceMock.Setup(x => x.CreateUserAsync(user, role))
                 .ReturnsAsync((true, doctor.UserId));
+            _repositoryMock.Setup(d => d.DoctorRepository.GetFirstOrDefaultAsync(d => d.Id == doctor.Id,
+                It.IsAny<Func<IQueryable<Doctor>, IIncludableQueryable<Doctor,
+                object>>>(), false))
+                .ReturnsAsync(doctor);
 
             var _doctorService = new DoctorService(_repositoryMock.Object, _userServiceMock.Object, _roleManagerMock.Object);
 

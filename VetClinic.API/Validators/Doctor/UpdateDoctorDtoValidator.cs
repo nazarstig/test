@@ -4,13 +4,14 @@ using VetClinic.BLL.Services.Interfaces;
 
 namespace VetClinic.API.Validators.Doctor
 {
-    public class CreateDoctorDtoValidator : AbstractValidator<CreateDoctorDto>
+    public class UpdateDoctorDtoValidator : AbstractValidator<UpdateDoctorDto>
     {
-        public CreateDoctorDtoValidator(IPositionService positionService)
+        public UpdateDoctorDtoValidator(IPositionService positionService)
         {            
             RuleFor(doctor => doctor.Biography).MaximumLength(200).WithMessage("Biography cannot be longer than 200 characters");
             RuleFor(doctor => doctor.Education).MaximumLength(100).WithMessage("Biography cannot be longer than 100 characters");
             RuleFor(doctor => doctor.PositionId).MustAsync((id, exist) => positionService.IsAnyPositionAsync(id)).WithMessage("Position with selected Id does not exist");
+
         }
     }
 }
