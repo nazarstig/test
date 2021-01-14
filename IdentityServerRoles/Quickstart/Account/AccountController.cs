@@ -175,6 +175,9 @@ namespace IdentityServerHost.Quickstart.UI
 
             if (User?.Identity.IsAuthenticated == true)
             {
+                // Revoke all user tokens
+                await _interaction.RevokeTokensForCurrentSessionAsync();
+
                 // delete local authentication cookie
                 await _signInManager.SignOutAsync();
 
