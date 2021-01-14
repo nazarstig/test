@@ -46,6 +46,7 @@ namespace IdentityServerRoles
                 new ApiScope("scope1"),
                 new ApiScope("scope2"),
                 new ApiScope("ApiOne"),
+                new ApiScope("offline_access"),
             };
 
         public static IEnumerable<Client> Clients =>
@@ -75,7 +76,7 @@ namespace IdentityServerRoles
                     AllowedGrantTypes = GrantTypes.Code,
                     RedirectUris = { "https://oauth.pstmn.io/v1/browser-callback",
                                        "https://localhost:5001/signin-oidc",
-                    "http://localhost:4200"},
+                    "http://localhost:4200", "http://localhost:4200/silent-renew.html"},
 
                     PostLogoutRedirectUris = { "https://localhost:5001/signout-callback-oidc",
                     "http://localhost:4200"},
