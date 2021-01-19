@@ -40,6 +40,8 @@ namespace VetClinic.BLL.Tests.Services
                 .Setup(rw => rw.AppointmentRepository.GetAsync(It.IsAny<Expression<Func<Appointment, bool>>>(),
                     It.IsAny<Func<IQueryable<Appointment>, IIncludableQueryable<Appointment, object>>>(),
                     It.IsAny<Func<IQueryable<Appointment>, IOrderedQueryable<Appointment>>>(),
+                    It.IsAny<int?>(),
+                    It.IsAny<int?>(),
                     It.IsAny<bool>()))
                 .ReturnsAsync(appointments);
 

@@ -63,6 +63,8 @@ namespace VetClinic.BLL.Tests.Services
                It.IsAny<Expression<Func<Procedure, bool>>>(),
                It.IsAny<Func<IQueryable<Procedure>, IIncludableQueryable<Procedure, object>>>(),
                It.IsAny<Func<IQueryable<Procedure>, IOrderedQueryable<Procedure>>>(),
+               It.IsAny<int?>(),
+               It.IsAny<int?>(),
                It.IsAny<bool>()
                )).ReturnsAsync(ProceduresList());
 

@@ -25,7 +25,7 @@ namespace VetClinic.BLL.Tests.Services
         {
             // Arrange
             _repositoryMock.Setup(x => x.DoctorRepository
-             .GetAsync(null, It.IsAny<Func<IQueryable<Doctor>, IIncludableQueryable<Doctor, object>>>(), null, false))
+             .GetAsync(null, It.IsAny<Func<IQueryable<Doctor>, IIncludableQueryable<Doctor, object>>>(), null, null,null, false))
                .ReturnsAsync(doctors);
             var _doctorService = new DoctorService(_repositoryMock.Object, _userServiceMock.Object, _roleManagerMock.Object);
 
@@ -37,7 +37,7 @@ namespace VetClinic.BLL.Tests.Services
             _repositoryMock.Verify(m => m.DoctorRepository
                 .GetAsync(null,
                 It.IsAny<Func<IQueryable<Doctor>, IIncludableQueryable<Doctor, object>>>(),
-                null, false),
+                null, null, null, false),
                 Times.Once);
         }
 
