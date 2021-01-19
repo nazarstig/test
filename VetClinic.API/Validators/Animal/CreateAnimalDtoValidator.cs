@@ -28,8 +28,6 @@ namespace VetClinic.API.Validators.Animal
             RuleFor(x => x.AnimalTypeId)
                 .NotEmpty()
                 .WithMessage("Should not be empty");
-
-
         }
     }
 }
