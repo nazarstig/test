@@ -80,11 +80,11 @@ namespace VetClinic.API
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCors();
+
             app.UseMiddleware<ExceptionMiddleware>();
 
-            app.UseRouting();
-
-            app.UseCors();
+            app.UseRouting();          
 
             app.UseAuthentication();
 
