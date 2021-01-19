@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
 using VetClinic.API.DTO.Animal;
+using VetClinic.API.DTO.Queries;
+using VetClinic.API.DTO.Responses;
+using VetClinic.BLL.Domain;
 using VetClinic.BLL.Services.Interfaces;
 using VetClinic.DAL.Entities;
 
@@ -24,15 +27,22 @@ namespace VetClinic.API.Controllers
         public async Task<IActionResult> PostAsync([FromBody] CreateAnimalDto createAnimalDto)
         {
             await _animalService.CreateAnimal(_mapper.Map<Animal>(createAnimalDto));
-            return Created(nameof(GetAsync), createAnimalDto);
+            return Created(nameof(GetAsync),new Response<CreateAnimalDto>(createAnimalDto));
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAsync()
+        public async Task<IActionResult> GetAsync(
+            [FromQuery] AnimalsFiltrationQuery query,
+            [FromQuery] PaginationQuery paginationQuery)
         {
-            var animals = await _animalService.GetAllAsync();
+            var pagination = _mapper.Map<PaginationFilter>(paginationQuery);
+            var filter = _mapper.Map<AnimalsFilter>(query);
+
+            var animals = await _animalService.GetAllAsync(filter, pagination);
+
             var result = animals.Select(x => _mapper.Map<ReadAnimalDto>(x));
-            return Ok(result);
+            var pagedResponse = new PagedResponse<ReadAnimalDto>(result, paginationQuery);
+            return Ok(pagedResponse);
         }
 
         [HttpGet("{id}")]
@@ -46,7 +56,7 @@ namespace VetClinic.API.Controllers
             }
 
             var animalDto = _mapper.Map<ReadAnimalDto>(animal);
-            return Ok(animalDto);
+            return Ok(new Response<ReadAnimalDto>(animalDto));
         }
 
 
