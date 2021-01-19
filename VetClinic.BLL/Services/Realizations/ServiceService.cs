@@ -44,6 +44,7 @@ namespace VetClinic.BLL.Services.Realizations
             }
 
             serviceUpdated.ServiceName = service.ServiceName;
+            serviceUpdated.Description = service.Description;
             serviceUpdated.Appointments = service.Appointments;
 
             _repositoryWrapper.ServiceRepository.Update(serviceUpdated);

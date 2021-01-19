@@ -3,5 +3,6 @@
     public class ServiceUpdateDto
     {
         public string ServiceName { get; set; }
+        public string Description { get; set; }
     }
 }
