@@ -12,11 +12,15 @@ jobs:
     steps:
       - uses: actions/setup-java@v1
         with:
-          java-version: '11' # The JDK version to make available on the path.
+          java-version: "11" # The JDK version to make available on the path.
           architecture: x64 # (x64 or x86) - defaults to x64
       - uses: actions/checkout@v2
         with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+          fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: "3.1.404"
       - name: Cache SonarCloud packages
         uses: actions/cache@v1
         with:
@@ -38,7 +42,7 @@ jobs:
           dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
       - name: Build and analyze
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: powershell
         run: |
