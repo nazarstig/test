@@ -22,12 +22,16 @@ namespace VetClinic.DAL.Repositories.Realizations
             Expression<Func<TEntity, bool>> filter = null,
             Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+            int? pageNumber = null, int? pageSize = null,
             bool asNoTracking = false)
         {
             IQueryable<TEntity> query = GetQuery(filter, include, asNoTracking);
 
             if (orderBy != null)
                 return await orderBy(query).ToListAsync();
+
+            if (pageNumber != null && pageSize != null)
+                query = query.Skip((pageNumber.Value - 1) * pageSize.Value).Take(pageSize.Value);
 
             return await query.ToListAsync();
         }

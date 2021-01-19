@@ -4,9 +4,12 @@ using Microsoft.EntityFrameworkCore.Query;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net;
 using System.Threading.Tasks;
+using VetClinic.BLL.Domain;
 using VetClinic.BLL.Exceptions;
+using VetClinic.BLL.Helpers;
 using VetClinic.BLL.Services.Interfaces;
 using VetClinic.DAL.Entities;
 using VetClinic.DAL.Repositories.Interfaces;
@@ -24,8 +27,27 @@ namespace VetClinic.BLL.Services.Realizations
             _repositoryWrapper = repositoryWrapper;
         }
 
-        public async Task<ICollection<Appointment>> GetAllAppointmentsAsync()
+        public async Task<ICollection<Appointment>> GetAllAppointmentsAsync(
+            AppointmentsFilter filter = null,
+            PaginationFilter pagination = null)
         {
+            if (pagination != null && filter != null)
+            {
+                return await _repositoryWrapper.AppointmentRepository.GetAsync(filter: Filter(filter), include: Include(),
+                    pageNumber: pagination.PageNumber, pageSize: pagination.PageSize);
+            }
+
+            if (filter != null)
+            {
+                return await _repositoryWrapper.AppointmentRepository.GetAsync(filter: Filter(filter), include: Include());
+            }
+
+            if (pagination != null)
+            {
+                return await _repositoryWrapper.AppointmentRepository.GetAsync(include: Include(),
+                    pageNumber: pagination.PageNumber, pageSize: pagination.PageSize);
+            }
+
             return await _repositoryWrapper.AppointmentRepository.GetAsync(include: Include());
         }
 
@@ -72,7 +94,7 @@ namespace VetClinic.BLL.Services.Realizations
 
             return appointment;
         }
-        
+
         private void UpdatePerformedProcedures(Appointment source, Appointment destination)
         {
             foreach (var ap in destination.AppointmentProcedures)
@@ -96,6 +118,44 @@ namespace VetClinic.BLL.Services.Realizations
                 .Include(a => a.Status)
                 .Include(a => a.Doctor).ThenInclude(d => d.User)
                 .Include(a => a.AppointmentProcedures).ThenInclude(a => a.Procedure);
+        }
+
+        private static Expression<Func<Appointment, bool>> Filter(AppointmentsFilter filter)
+        {
+            var expressionsList = new List<Expression<Func<Appointment, bool>>>();
+
+            if (filter.StatusId != null)
+            {
+                Expression<Func<Appointment, bool>> statusFilter = a => a.StatusId == filter.StatusId;
+                expressionsList.Add(statusFilter);
+            }
+
+            if (filter.ServiceId != null)
+            {
+                Expression<Func<Appointment, bool>> serviceFilter = a => a.ServiceId == filter.ServiceId;
+                expressionsList.Add(serviceFilter);
+            }
+
+            if (filter.DoctorId != null)
+            {
+                Expression<Func<Appointment, bool>> doctorFilter = a => a.DoctorId == filter.DoctorId;
+                expressionsList.Add(doctorFilter);
+            }
+
+            if (filter.AnimalId != null)
+            {
+                Expression<Func<Appointment, bool>> animalFilter = a => a.AnimalId == filter.AnimalId;
+                expressionsList.Add(animalFilter);
+            }
+
+            Expression<Func<Appointment, bool>> expression = appointment => true;
+
+            foreach (var exp in expressionsList)
+            {
+                expression = expression.AndAlso(exp);
+            }
+
+            return expression;
         }
     }
 }

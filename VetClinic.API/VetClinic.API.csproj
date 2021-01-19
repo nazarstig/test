@@ -5,10 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="DTO\Appointments\NewFolder\**" />
-    <Content Remove="DTO\Appointments\NewFolder\**" />
-    <EmbeddedResource Remove="DTO\Appointments\NewFolder\**" />
-    <None Remove="DTO\Appointments\NewFolder\**" />
   </ItemGroup>
 
   <ItemGroup>

@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using VetClinic.API.DTO.Appointments;
+using VetClinic.API.DTO.Queries;
+using VetClinic.API.DTO.Responses;
+using VetClinic.BLL.Domain;
 using VetClinic.BLL.Services.Interfaces;
 using VetClinic.DAL.Entities;
 
@@ -22,13 +25,20 @@ namespace VetClinic.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAsync()
+        public async Task<IActionResult> GetAsync(
+            [FromQuery] AppointmentsFiltrationQuery query,
+            [FromQuery] PaginationQuery paginationQuery)
         {
-            var appointments = await _appointmentService.GetAllAppointmentsAsync();
+            var pagination = _mapper.Map<PaginationFilter>(paginationQuery);
+            var filter = _mapper.Map<AppointmentsFilter>(query);
+
+            var appointments = await _appointmentService.GetAllAppointmentsAsync(filter, pagination);
 
             var appointmentsDto = _mapper.Map<IEnumerable<AppointmentDto>>(appointments);
 
-            return Ok(appointmentsDto);
+            var pagedResponse = new PagedResponse<AppointmentDto>(appointmentsDto, paginationQuery);
+
+            return Ok(pagedResponse);
         }
 
         [HttpGet("{id}", Name = "GetAsync")]
@@ -38,7 +48,7 @@ namespace VetClinic.API.Controllers
 
             var appointmentDto = _mapper.Map<AppointmentDto>(appointment);
 
-            return Ok(appointmentDto);
+            return Ok(new Response<AppointmentDto>(appointmentDto));
         }
 
         [HttpPost]
@@ -48,9 +58,9 @@ namespace VetClinic.API.Controllers
 
             var createdAppointment = await _appointmentService.CreateAppointmentAsync(appointment);
 
-            var readAppointmentDto = _mapper.Map<AppointmentDto>(createdAppointment);
+            var appointmentDto = _mapper.Map<AppointmentDto>(createdAppointment);
 
-            return CreatedAtRoute(nameof(GetAsync), new { readAppointmentDto.Id }, readAppointmentDto);
+            return CreatedAtRoute(nameof(GetAsync), new { appointmentDto.Id }, new Response<AppointmentDto>(appointmentDto));
         }
 
         [HttpPut("{id}")]
