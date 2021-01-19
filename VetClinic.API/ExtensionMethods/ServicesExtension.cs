@@ -19,6 +19,7 @@ namespace VetClinic.API.ExtensionMethods
             services.AddScoped<IDoctorService, DoctorService>();
             services.AddScoped<IServiceService, ServiceService>();
             services.AddScoped<IAnimalService, AnimalService>();
+            services.AddScoped<IAnimalTypeService, AnimalTypeService>();
         }
 
         public static void AddIdentity(this IServiceCollection services)
