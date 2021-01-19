@@ -13,6 +13,7 @@ namespace VetClinic.DAL.Repositories.Interfaces
             Expression<Func<TEntity, bool>> filter = null,
             Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+            int? pageNumber = null, int? pageSize = null,
             bool asNoTracking = false);
 
         Task<TEntity> GetFirstOrDefaultAsync(
