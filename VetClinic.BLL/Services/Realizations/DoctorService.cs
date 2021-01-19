@@ -1,7 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
+using VetClinic.BLL.Domain;
+using VetClinic.BLL.Helpers;
 using VetClinic.BLL.Services.Interfaces;
 using VetClinic.DAL.Entities;
 using VetClinic.DAL.Repositories.Interfaces;
@@ -20,8 +24,34 @@ namespace VetClinic.BLL.Services.Realizations
             _userService = userService;
         }
 
-        public async Task<ICollection<Doctor>> GetDoctorAsync()
+        public async Task<ICollection<Doctor>> GetDoctorAsync(
+            DoctorsFilter filter = null,
+            PaginationFilter pagination = null)
         {
+
+            if (pagination != null && filter != null)
+            {
+                return await _repositoryWrapper.DoctorRepository.GetAsync(filter: Filter(filter),
+                    include: c => c.Include(i => i.User)
+                    .Include(d => d.Position),
+                    pageNumber: pagination.PageNumber, pageSize: pagination.PageSize);
+            }
+
+            if (filter != null)
+            {
+                return await _repositoryWrapper.DoctorRepository.GetAsync(filter: Filter(filter),
+                    include: c => c.Include(i => i.User)
+                    .Include(d => d.Position));
+            }
+
+            if (pagination != null)
+            {
+                return await _repositoryWrapper.DoctorRepository.GetAsync(
+                    include: c => c.Include(i => i.User)
+                    .Include(d => d.Position),
+                    pageNumber: pagination.PageNumber, pageSize: pagination.PageSize);
+            }
+
             var doctors = await _repositoryWrapper.DoctorRepository.GetAsync(
                 include: c => c.Include(i => i.User)
                 .Include(d => d.Position));
@@ -35,10 +65,10 @@ namespace VetClinic.BLL.Services.Realizations
                 include: d => d.Include(c => c.User)
                 .Include(d => d.Position)
                 .Include(d => d.Appointments).ThenInclude(a => a.AppointmentProcedures).ThenInclude(p => p.Procedure)
-                .Include(d => d.Appointments).ThenInclude(a => a.Animal).ThenInclude(p => p.Client).ThenInclude(p=>p.User)
+                .Include(d => d.Appointments).ThenInclude(a => a.Animal).ThenInclude(p => p.Client).ThenInclude(p => p.User)
                 .Include(d => d.Appointments).ThenInclude(a => a.Animal).ThenInclude(p => p.AnimalType)
                 .Include(d => d.Appointments).ThenInclude(a => a.Service)
-                .Include(d => d.Appointments).ThenInclude(a => a.Status));                
+                .Include(d => d.Appointments).ThenInclude(a => a.Status));
 
             if (doctor == null)
                 return null;
@@ -132,6 +162,32 @@ namespace VetClinic.BLL.Services.Realizations
                 role = await _roleManager.FindByNameAsync("doctor");
             }
             return role;
+        }
+
+        private static Expression<Func<Doctor, bool>> Filter(DoctorsFilter filter)
+        {
+            var expressionsList = new List<Expression<Func<Doctor, bool>>>();
+
+            if (filter.PositionId != null)
+            {
+                Expression<Func<Doctor, bool>> positionFilter = a => a.PositionId == filter.PositionId;
+                expressionsList.Add(positionFilter);
+            }
+
+            if (filter.UserId != null)
+            {
+                Expression<Func<Doctor, bool>> userFilter = a => a.UserId == filter.UserId;
+                expressionsList.Add(userFilter);
+            }
+
+            Expression<Func<Doctor, bool>> expression = doctor => true;
+
+            foreach (var exp in expressionsList)
+            {
+                expression = expression.AndAlso(exp);
+            }
+
+            return expression;
         }
     }
 }

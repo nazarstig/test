@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using VetClinic.API.DTO.Doctor;
+using VetClinic.API.DTO.Queries;
+using VetClinic.API.DTO.Responses;
+using VetClinic.BLL.Domain;
 using VetClinic.BLL.Services.Interfaces;
 using VetClinic.DAL.Entities;
 
@@ -22,11 +25,16 @@ namespace VetClinic.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAsync()
+        public async Task<IActionResult> GetAsync(
+            [FromQuery] DoctorsFiltrationQuery query,
+            [FromQuery] PaginationQuery paginationQuery)
         {
-            var doctors = await _doctorService.GetDoctorAsync();
+            var pagination = _mapper.Map<PaginationFilter>(paginationQuery);
+            var filter = _mapper.Map<DoctorsFilter>(query);
+            var doctors = await _doctorService.GetDoctorAsync(filter, pagination);
             var doctorsDto = _mapper.Map<ICollection<ReadDoctorDto>>(doctors);
-            return Ok(doctorsDto);
+            var pagedResponse = new PagedResponse<ReadDoctorDto>(doctorsDto, paginationQuery);
+            return Ok(pagedResponse);
         }
 
         [HttpGet("{id}")]
