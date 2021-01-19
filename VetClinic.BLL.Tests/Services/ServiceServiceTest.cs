@@ -27,7 +27,7 @@ namespace VetClinic.BLL.Tests.Services
             [Frozen] List<Service> services)
         {
             // Arrange
-            _wrapper.Setup(s => s.ServiceRepository.GetAsync(null,null,null,false)).ReturnsAsync(services);
+            _wrapper.Setup(s => s.ServiceRepository.GetAsync(null,null,null,null,null,false)).ReturnsAsync(services);
 
             // Act 
             var result = await _serviceService.GetAllServicesAsync();

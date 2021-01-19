@@ -28,7 +28,7 @@ namespace VetClinic.BLL.Tests.Services
         {
             // Arrange
             repositoryMock.Setup(x => x.PositionRepository
-            .GetAsync(null, null, null, false))
+            .GetAsync(null, null, null, null, null, false))
                 .ReturnsAsync(positions);
 
             // Act
@@ -36,7 +36,7 @@ namespace VetClinic.BLL.Tests.Services
 
             // Assert
             Assert.Equal(positions.Count, actual.Count);
-            repositoryMock.Verify(m => m.PositionRepository.GetAsync(null, null, null, false), Times.Once);
+            repositoryMock.Verify(m => m.PositionRepository.GetAsync(null, null, null, null, null, false), Times.Once);
         }
 
 

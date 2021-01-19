@@ -41,14 +41,14 @@ namespace VetClinic.API.Tests.Controllers
             var appointmentsDto = _fixture.CreateMany<AppointmentDto>(5).ToList();
 
             _appointmentService
-                .Setup(a => a.GetAllAppointmentsAsync())
+                .Setup(a => a.GetAllAppointmentsAsync(null, null))
                 .ReturnsAsync(appointments);
             _autoMapper
                 .Setup(m => m.Map<IEnumerable<AppointmentDto>>(appointments))
                 .Returns(appointmentsDto);
 
             // Act
-            var actual = await _appointmentsController.GetAsync();
+            var actual = await _appointmentsController.GetAsync(null, null);
 
             // Assert
             var okObjectResult = Assert.IsType<OkObjectResult>(actual);
@@ -233,7 +233,7 @@ namespace VetClinic.API.Tests.Controllers
         {
             // Arrange
             int id = -1;
-            
+
             _appointmentService
                 .Setup(a => a.DeleteAppointmentAsync(id))
                 .ThrowsAsync(new VetClinicException(HttpStatusCode.BadRequest, $"Appointment with {id} id doesn't exist"));
