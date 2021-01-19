@@ -9,10 +9,16 @@ namespace VetClinic.API.Mapping
         public AnimalTypeProfile()
         {
             CreateMap<AnimalTypeDto, AnimalType>()
-                .ReverseMap()
                 .ForMember(d => d.AnimalTypeName, t => t.MapFrom(o => o.AnimalTypeName))
                 .ReverseMap()
                 .ForAllOtherMembers(d => d.Ignore());
+
+            CreateMap<ReadAnimalTypeDto,AnimalType>()
+                .ForMember(d => d.Id, t => t.MapFrom(o => o.Id))
+                .ForMember(d => d.AnimalTypeName, t => t.MapFrom(o => o.AnimalTypeName))
+                .ReverseMap()
+                .ForAllOtherMembers(d => d.Ignore());
+
         }
     }
 }
