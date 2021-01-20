@@ -175,6 +175,15 @@ namespace VetClinic.BLL.Services.Realizations
                 expressionsList.Add(userFilter);
             }
 
+            if (filter.Name != null)
+            {
+                Expression<Func<Doctor, bool>> nameFilter = a => a.User.FirstName.ToUpper().StartsWith(filter.Name.ToUpper())
+                || a.User.LastName.ToUpper().StartsWith(filter.Name.ToUpper())
+                || (a.User.FirstName.ToUpper() + " " + a.User.LastName.ToUpper()).StartsWith(filter.Name.ToUpper())
+                || (a.User.LastName.ToUpper() + " " + a.User.FirstName.ToUpper()).StartsWith(filter.Name.ToUpper());
+                expressionsList.Add(nameFilter);
+            }
+
             Expression<Func<Doctor, bool>> expression = doctor => true;
 
             foreach (var exp in expressionsList)
