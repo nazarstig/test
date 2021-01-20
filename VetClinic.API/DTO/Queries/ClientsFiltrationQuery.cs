@@ -7,6 +7,6 @@ namespace VetClinic.API.DTO.Queries
 {
     public class ClientsFiltrationQuery
     {
-        public string ClientId { get; set; }
+        public string UserId { get; set; }
     }
 }
