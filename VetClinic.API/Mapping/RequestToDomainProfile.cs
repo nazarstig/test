@@ -12,6 +12,7 @@ namespace VetClinic.API.Mapping
             CreateMap<AppointmentsFiltrationQuery, AppointmentsFilter>();
             CreateMap<DoctorsFiltrationQuery, DoctorsFilter>();
             CreateMap<AnimalsFiltrationQuery, AnimalsFilter>();
+            CreateMap<ClientsFiltrationQuery, ClientsFilter>();
         }
     }
 }
