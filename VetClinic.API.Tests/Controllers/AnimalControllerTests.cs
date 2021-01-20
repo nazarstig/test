@@ -30,7 +30,7 @@ namespace VetClinic.API.Tests.Controllers
             var Sut = new AnimalsController(_animalService.Object, _mapper.Object);
 
             //Act
-            var actual = await Sut.GetAsync();
+            var actual = await Sut.GetAsync(null,null);
 
             //Assert
             Assert.NotNull(actual);

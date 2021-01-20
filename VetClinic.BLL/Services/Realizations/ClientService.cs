@@ -27,7 +27,7 @@ namespace VetClinic.BLL.Services.Realizations
 
         public async Task<Client> AddClient(User user, Client client)
         {
-            IdentityRole role = new IdentityRole { Name = "member" };
+            IdentityRole role = new IdentityRole { Name = "client" };
             var (res, id) = await _userService.CreateUserAsync(user, role);
             string userId;
             if (res)

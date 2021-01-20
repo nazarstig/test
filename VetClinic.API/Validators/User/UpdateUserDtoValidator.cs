@@ -14,8 +14,12 @@ namespace VetClinic.API.Validators.User
 
             RuleFor(user => user).Must(newUser =>
                 {
-                    var oldUser = userService.GetUser(newUser.Id).Result;
-                    return userService.UserNameExistsAsync(newUser.UserName).Result || oldUser.UserName == newUser.UserName;
+                    var oldUser = userService.GetUser(newUser.UserName).Result;
+                    if (oldUser == null)
+                    {
+                        return false;
+                    }
+                    return !userService.UserNameExistsAsync(newUser.UserName).Result || oldUser.UserName == newUser.UserName;
                 })
                 .WithMessage("Username already exists");
 
