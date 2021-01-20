@@ -107,9 +107,9 @@ namespace VetClinic.BLL.Services.Realizations
         {
             var expressionsList = new List<Expression<Func<Client, bool>>>();
 
-            if (filter.ClientId != null)
+            if (filter.UserId != null)
             {
-                Expression<Func<Client, bool>> statusFilter = a => a.UserId == filter.ClientId;
+                Expression<Func<Client, bool>> statusFilter = a => a.UserId == filter.UserId;
                 expressionsList.Add(statusFilter);
             }
             Expression<Func<Client, bool>> expression = animal => true;

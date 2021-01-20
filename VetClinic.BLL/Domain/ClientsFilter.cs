@@ -6,6 +6,6 @@ namespace VetClinic.BLL.Domain
 {
     public class ClientsFilter
     {
-        public string ClientId { get; set; }
+        public string UserId { get; set; }
     }
 }
