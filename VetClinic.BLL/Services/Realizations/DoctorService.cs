@@ -63,12 +63,7 @@ namespace VetClinic.BLL.Services.Realizations
             Doctor doctor = await _repositoryWrapper.DoctorRepository.GetFirstOrDefaultAsync(
                 filter: d => d.Id == doctorId,
                 include: d => d.Include(c => c.User)
-                .Include(d => d.Position)
-                .Include(d => d.Appointments).ThenInclude(a => a.AppointmentProcedures).ThenInclude(p => p.Procedure)
-                .Include(d => d.Appointments).ThenInclude(a => a.Animal).ThenInclude(p => p.Client).ThenInclude(p => p.User)
-                .Include(d => d.Appointments).ThenInclude(a => a.Animal).ThenInclude(p => p.AnimalType)
-                .Include(d => d.Appointments).ThenInclude(a => a.Service)
-                .Include(d => d.Appointments).ThenInclude(a => a.Status));
+                .Include(d => d.Position));
 
             if (doctor == null)
                 return null;
