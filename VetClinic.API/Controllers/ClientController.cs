@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using VetClinic.DAL.Entities;
 using VetClinic.API.DTO.ClientDto;
 using VetClinic.BLL.Services.Interfaces;
+using VetClinic.API.DTO.Queries;
+using VetClinic.BLL.Domain;
 
 namespace VetClinic.API.Controllers
 {
@@ -50,9 +52,16 @@ namespace VetClinic.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<ICollection<Client>>> GetAsync()
+        public async Task<ActionResult<ICollection<Client>>> GetAsync(
+            [FromQuery] ClientsFiltrationQuery query,
+            [FromQuery] PaginationQuery paginationQuery
+            )
         {
-            var result = await _clientService.GetAllClients();
+            var pagination = _mapper.Map<PaginationFilter>(paginationQuery);
+            var filter = _mapper.Map<ClientsFilter>(query);
+
+            var result = await _clientService.GetAllClients(filter, pagination);
+            
             ICollection<ReadClientDto> readClients = new List<ReadClientDto>();
             ReadClientDto dto;
             foreach(Client client in result)

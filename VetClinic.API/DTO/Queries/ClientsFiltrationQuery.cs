@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace VetClinic.API.DTO.Queries
 {
-    public class ClientFiltrationQuery
+    public class ClientsFiltrationQuery
     {
-        public int? ClientId { get; set; }
+        public string ClientId { get; set; }
     }
 }
