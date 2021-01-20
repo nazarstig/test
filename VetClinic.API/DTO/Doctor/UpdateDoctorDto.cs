@@ -10,6 +10,6 @@ namespace VetClinic.API.DTO.Doctor
         public string Photo { get; set; }
         public int PositionId { get; set; }
         
-        public UserDto User { get; set; }       
+        public UpdateUserDto User { get; set; }       
     }
 }
