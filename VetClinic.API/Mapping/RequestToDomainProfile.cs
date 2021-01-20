@@ -11,6 +11,7 @@ namespace VetClinic.API.Mapping
             CreateMap<PaginationQuery, PaginationFilter>();
             CreateMap<AppointmentsFiltrationQuery, AppointmentsFilter>();
             CreateMap<AnimalsFiltrationQuery, AnimalsFilter>();
+            CreateMap<ClientsFiltrationQuery, ClientsFilter>();
         }
     }
 }
