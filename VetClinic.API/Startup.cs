@@ -2,7 +2,6 @@
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -13,7 +12,6 @@ using VetClinic.API.Filters;
 using VetClinic.API.Middlewares;
 using VetClinic.BLL;
 using VetClinic.DAL;
-using VetClinic.DAL.Entities;
 using VetClinic.DAL.Repositories.Interfaces;
 using VetClinic.DAL.Repositories.Realizations;
 
@@ -73,7 +71,7 @@ namespace VetClinic.API
         }
 
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, UserManager<User> userManager)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -94,7 +92,7 @@ namespace VetClinic.API
 
             app.UseCustomSwaggerConfig();
 
-            ApplicationUserSeeder.SeedUsers(userManager);
+            ApplicationUserSeeder.SeedUsers(app);
         }
     }
 }

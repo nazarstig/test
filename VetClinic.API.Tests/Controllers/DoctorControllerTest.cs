@@ -33,20 +33,20 @@ namespace VetClinic.API.Tests.Controllers
             [Frozen] List<ReadDoctorDto> doctorDto)
         {
             // Arrange
-            doctorServiceMock.Setup(m => m.GetDoctorAsync())
+            doctorServiceMock.Setup(m => m.GetDoctorAsync(null,null))
                 .ReturnsAsync(doctor);
             mapper.Setup(m => m.Map<ICollection<ReadDoctorDto>>(doctor))
                 .Returns(doctorDto);
 
             // Act
-            var actualResult = await doctorController.GetAsync();
+            var actualResult = await doctorController.GetAsync(null,null);
 
             // Assert      
             var result = actualResult as OkObjectResult;
 
             Assert.Equal(doctorDto, result.Value);
             Assert.True(actualResult is OkObjectResult);
-            doctorServiceMock.Verify(m => m.GetDoctorAsync(), Times.Once);
+            doctorServiceMock.Verify(m => m.GetDoctorAsync(null,null), Times.Once);
         }
 
 
