@@ -78,7 +78,7 @@ namespace VetClinic.BLL.Services.Realizations
 
         public async Task<bool> PutClient(User user, Client client)
         {
-            IdentityRole role = new IdentityRole { Name = "member" };
+            IdentityRole role = new IdentityRole { Name = "client" };
             var res = await _userService.UpdateUserAsync(client.UserId, user, role);
             await _repositoryWrapper.SaveAsync();
             return res;

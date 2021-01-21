@@ -13,7 +13,12 @@ namespace VetClinic.API.Validators.User
                 .MaximumLength(50).WithMessage("Username cannot be longer than 50 characters")
                 .Must(name =>
                 {
-                    return !userService.UserNameExistsAsync(name).Result;
+                    if(name != null)
+                    {
+
+                        return !userService.UserNameExistsAsync(name).Result;
+                    }
+                    return false;
                 })
                 .WithMessage("Username already exists");
 
