@@ -1,19 +1,18 @@
-﻿using IdentityModel;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Serilog.Events;
-using System.Linq;
-using System.Net;
-using System.Security.Claims;
-using VetClinic.BLL.Exceptions;
+using System.Threading.Tasks;
+using VetClinic.BLL.Services.Interfaces;
 using VetClinic.DAL.Entities;
+using VetClinic.DAL.Repositories.Interfaces;
 
 namespace VetClinic.BLL
 {
     public static class ApplicationUserSeeder
     {
-        public static void SeedUsers(UserManager<User> userManager)
+        public static async void SeedUsers(IApplicationBuilder builder)
         {
             var services = new ServiceCollection();
             services.AddLogging();
@@ -21,88 +20,112 @@ namespace VetClinic.BLL
                 .MinimumLevel.Debug()
                 .WriteTo.Console(restrictedToMinimumLevel: LogEventLevel.Debug)
                 .CreateLogger();
+            var provider = builder.ApplicationServices;
+            var scopeFactory = provider.GetRequiredService<IServiceScopeFactory>();
 
-            var alice = userManager.FindByNameAsync("alice").Result;
-            if (alice == null)
+            using (var scope = scopeFactory.CreateScope()) {
+                var userManager = scope.ServiceProvider.GetService<UserManager<User>>();
+                var repositoryWrapper = scope.ServiceProvider.GetService<IRepositoryWrapper>();
+
+                //admins
+                var data = new User{ UserName = "alice", FirstName = "Alice", LastName = "Smith", Email = "AliceSmith@email.com", PhoneNumber = "123456789123"};
+
+                await MakeAdmin(data, userManager);
+
+                //clients
+                data = new User { Id = "111", FirstName = "Bob", LastName = "Smith", UserName = "bob", Email = "bob@gmail.com", PhoneNumber = "0481417644", PasswordHash = "Pass123$" };
+
+                await MakeClient(data, new Client() { Id = 1 }, userManager, repositoryWrapper);
+
+                data = new User { Id = "112", FirstName = "Andriy", LastName = "Vozniy", UserName = "VoAndr", Email = "VAndr@gmail.com", PhoneNumber = "0931412644", PasswordHash= "Pass123$" };
+
+                await MakeClient(data, new Client() { Id = 2 }, userManager, repositoryWrapper);
+
+                data = new User { Id = "113", FirstName = "Maruna", LastName = "Kosovich", UserName = "kosmar", Email = "KosovichMaruna@gmail.com", PhoneNumber = "0681236324", PasswordHash = "Pass123$" };
+                    
+                await MakeClient(data, new Client() { Id = 3 }, userManager, repositoryWrapper);
+
+                data = new User { Id = "114", FirstName = "Nadiya", LastName = "Mukolenko", UserName = "MukoNa", Email = "MukoNa@gmail.com", PhoneNumber = "0982931254", PasswordHash = "Pass123$" };
+                    
+                await MakeClient(data, new Client() { Id = 4 }, userManager, repositoryWrapper);
+
+                //doctors
+                data = new User { Id = "72", FirstName = "Ma", LastName = "Guma", UserName = "magma", Email = "ma@gmail.com", PhoneNumber = "0939412644", PasswordHash = "Pass123$" };
+                var doctorData = new Doctor {Id = 1, Education = "Gas and Oil", Experience = "2", PositionId = 1 };
+                await MakeDoctor(data, doctorData, userManager, repositoryWrapper);
+
+                data = new User { Id = "98", FirstName = "Gregory", LastName = "House", UserName = "house", Email = "house@gmail.com", PhoneNumber = "0939417534", PasswordHash = "Pass123$" };
+                doctorData = new Doctor { Id = 2, Education = "America", Experience = "3", PositionId = 3 };
+                await MakeDoctor(data, doctorData, userManager, repositoryWrapper);
+
+                data = new User { Id = "64", FirstName = "Gomer", LastName = "Sipmson", UserName = "donut", Email = "donut@gmail.com", PhoneNumber = "0456412644", PasswordHash = "Pass123$" };
+                doctorData = new Doctor { Id = 3, Education = "Nuke", Experience = "7", PositionId = 4 };
+                await MakeDoctor(data, doctorData, userManager, repositoryWrapper);
+            }
+        }
+
+        private static async Task MakeClient(User userData, Client clientData, UserManager<User> userManager, IRepositoryWrapper repositoryWrapper)
+        {
+            var user = userManager.FindByNameAsync(userData.UserName).Result;
+            if (user == null)
             {
-                alice = new User
-                {
-                    UserName = "alice",
-                    FirstName = "Alice",
-                    LastName = "Smith",
-                    Email = "AliceSmith@email.com",
-                    EmailConfirmed = true,
-                    PhoneNumber = "123456789123",
-                };
-                var result = userManager.CreateAsync(alice, "Pass123$").Result;
-                if (!result.Succeeded)
-                {
-                    throw new VetClinicException(HttpStatusCode.InternalServerError, result.Errors.First().Description);
-                }
+                user = userData;
 
-                result = userManager.AddClaimsAsync(alice, new Claim[]{
-                        new Claim(JwtClaimTypes.Name, "Alice Smith"),
-                        new Claim(JwtClaimTypes.GivenName, "Alice"),
-                        new Claim(JwtClaimTypes.FamilyName, "Smith"),
-                        new Claim(JwtClaimTypes.WebSite, "http://alice.com"),
-                    }).Result;
-                if (!result.Succeeded)
-                {
-                    throw new VetClinicException(HttpStatusCode.InternalServerError, result.Errors.First().Description);
-                }
+                _ = await userManager.CreateAsync(user, "Pass123$");
+                var client = await repositoryWrapper.ClientRepository.GetFirstOrDefaultAsync(filter: c => c.Id == clientData.Id);
+                client.UserId = userData.Id;
+                repositoryWrapper.ClientRepository.Update(client);
+                await repositoryWrapper.SaveAsync();
+                
 
-                if (!userManager.IsInRoleAsync(alice, "admin").Result)
-                {
-                    _ = userManager.AddToRoleAsync(alice, "admin").Result;
-                }
-
-                Log.Debug("alice created");
+                Log.Debug($@"{userData.UserName} created");
             }
             else
             {
-                Log.Debug("alice already exists");
+                Log.Debug($@"{userData.UserName} already exists");
             }
+        }
 
-            var bob = userManager.FindByNameAsync("bob").Result;
-            if (bob == null)
+        private static async Task MakeDoctor(User userData, Doctor doctorData, UserManager<User> userManager, IRepositoryWrapper repositoryWrapper)
+        {
+            var user = userManager.FindByNameAsync(userData.UserName).Result;
+            if (user == null)
             {
-                bob = new User
-                {
-                    UserName = "bob",
-                    FirstName = "Alice",
-                    LastName = "Smith",
-                    Email = "BobSmith@email.com",
-                    EmailConfirmed = true,
-                    PhoneNumber = "123456789321",
-                };
-                var result = userManager.CreateAsync(bob, "Pass123$").Result;
-                if (!result.Succeeded)
-                {
-                    throw new VetClinicException(HttpStatusCode.InternalServerError, result.Errors.First().Description);
-                }
+                user = userData;
 
-                result = userManager.AddClaimsAsync(bob, new Claim[]{
-                        new Claim(JwtClaimTypes.Name, "Bob Smith"),
-                        new Claim(JwtClaimTypes.GivenName, "Bob"),
-                        new Claim(JwtClaimTypes.FamilyName, "Smith"),
-                        new Claim(JwtClaimTypes.WebSite, "http://bob.com"),
-                        new Claim("location", "somewhere")
-                    }).Result;
-                if (!result.Succeeded)
-                {
-                    throw new VetClinicException(HttpStatusCode.InternalServerError, result.Errors.First().Description);
-                }
+                _ = await userManager.CreateAsync(user, "Pass123$");
+                var doctor = await repositoryWrapper.DoctorRepository.GetFirstOrDefaultAsync(filter: d => d.Id == doctorData.Id);
+                doctor.UserId = userData.Id;
+                repositoryWrapper.DoctorRepository.Update(doctor);
+                await repositoryWrapper.SaveAsync();
 
-                if (!userManager.IsInRoleAsync(bob, "client").Result)
-                {
-                    _ = userManager.AddToRoleAsync(bob, "client").Result;
-                }
-
-                Log.Debug("bob created");
+                Log.Debug($@"{userData.UserName} created");
             }
             else
             {
-                Log.Debug("bob already exists");
+                Log.Debug($@"{userData.UserName} already exists");
+            }
+        }
+
+        private static async Task MakeAdmin(User userData, UserManager<User> userManager)
+        {
+            var user = userManager.FindByNameAsync(userData.UserName).Result;
+            if (user == null)
+            {
+                user = userData;
+
+                _ = await userManager.CreateAsync(user, "Pass123$");
+
+                if (!userManager.IsInRoleAsync(user, "admin").Result)
+                {
+                    _ = userManager.AddToRoleAsync(user, "admin").Result;
+                }
+
+                Log.Debug($@"{userData.UserName} created");
+            }
+            else
+            {
+                Log.Debug($@"{userData.UserName} already exists");
             }
         }
     }

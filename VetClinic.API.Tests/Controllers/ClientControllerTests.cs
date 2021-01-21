@@ -53,7 +53,7 @@ namespace VetClinic.API.Tests.Controllers
                 _clientService.Setup(p => p.GetAllClients()).ReturnsAsync(collection);
 
                 //Action
-                var result = await _clientController.GetAsync();
+                var result = await _clientController.GetAsync(null,null);
 
                 //Assert
                 Assert.True(result.Result is OkObjectResult);
