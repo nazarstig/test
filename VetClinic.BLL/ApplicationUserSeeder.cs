@@ -72,6 +72,10 @@ namespace VetClinic.BLL
                 user = userData;
 
                 _ = await userManager.CreateAsync(user, "Pass123$");
+                if (!userManager.IsInRoleAsync(user, "client").Result)
+                {
+                    _ = userManager.AddToRoleAsync(user, "client").Result;
+                }
                 var client = await repositoryWrapper.ClientRepository.GetFirstOrDefaultAsync(filter: c => c.Id == clientData.Id);
                 client.UserId = userData.Id;
                 repositoryWrapper.ClientRepository.Update(client);
@@ -94,6 +98,10 @@ namespace VetClinic.BLL
                 user = userData;
 
                 _ = await userManager.CreateAsync(user, "Pass123$");
+                if (!userManager.IsInRoleAsync(user, "doctor").Result)
+                {
+                    _ = userManager.AddToRoleAsync(user, "doctor").Result;
+                }
                 var doctor = await repositoryWrapper.DoctorRepository.GetFirstOrDefaultAsync(filter: d => d.Id == doctorData.Id);
                 doctor.UserId = userData.Id;
                 repositoryWrapper.DoctorRepository.Update(doctor);
