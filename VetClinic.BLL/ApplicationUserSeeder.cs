@@ -12,7 +12,7 @@ namespace VetClinic.BLL
 {
     public static class ApplicationUserSeeder
     {
-        public static async void SeedUsers(IApplicationBuilder builder)
+        public static async Task SeedUsers(IApplicationBuilder builder)
         {
             var services = new ServiceCollection();
             services.AddLogging();
