@@ -8,5 +8,6 @@ namespace VetClinic.API.DTO.Queries
         public int? ServiceId { get; set; }
         public int? DoctorId { get; set; }
         public int? AnimalId { get; set; }
+        public int? ClientId { get; set; }
     }
 }
