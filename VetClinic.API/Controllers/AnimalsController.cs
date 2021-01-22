@@ -17,6 +17,7 @@ namespace VetClinic.API.Controllers
     {
         private readonly IAnimalService _animalService;
         private readonly IMapper _mapper;
+
         public AnimalsController(IAnimalService animalService, IMapper mapper)
         {
             _animalService = animalService;
@@ -26,8 +27,11 @@ namespace VetClinic.API.Controllers
         [HttpPost]
         public async Task<IActionResult> PostAsync([FromBody] CreateAnimalDto createAnimalDto)
         {
-            await _animalService.CreateAnimal(_mapper.Map<Animal>(createAnimalDto));
-            return Created(nameof(GetAsync),new Response<CreateAnimalDto>(createAnimalDto));
+            var animal = await _animalService.CreateAnimal(_mapper.Map<Animal>(createAnimalDto));
+            
+            var readAnimalDto = _mapper.Map<ReadAnimalDto>(animal);
+
+            return Created(nameof(GetAsync), new Response<ReadAnimalDto>(readAnimalDto));
         }
 
         [HttpGet]
@@ -50,7 +54,7 @@ namespace VetClinic.API.Controllers
         {
             var animal = await _animalService.GetAsync(id);
 
-            if(animal == null)
+            if (animal == null)
             {
                 return NotFound();
             }
@@ -61,7 +65,7 @@ namespace VetClinic.API.Controllers
 
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAsync(int id,[FromBody]UpdateAnimalDto updateAnimalDto)
+        public async Task<IActionResult> PutAsync(int id, [FromBody] UpdateAnimalDto updateAnimalDto)
         {
             var animal = await _animalService.GetAsync(id);
 
@@ -91,6 +95,7 @@ namespace VetClinic.API.Controllers
             {
                 return NotFound();
             }
+
             await _animalService.RemoveAnimal(animal);
             return NoContent();
         }

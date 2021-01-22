@@ -22,10 +22,15 @@ namespace VetClinic.BLL.Services.Realizations
             _repositoryWrapper = repositoryWrapper;
         }
 
-        public async Task CreateAnimal(Animal animal)
+        public async Task<Animal> CreateAnimal(Animal animal)
         {
             _repositoryWrapper.AnimalRepository.Add(animal);
             await _repositoryWrapper.SaveAsync();
+            
+            var createdAnimal = await GetAsync(animal.Id);
+
+
+            return createdAnimal;
         }
 
         public async Task<ICollection<Animal>> GetAllAsync(

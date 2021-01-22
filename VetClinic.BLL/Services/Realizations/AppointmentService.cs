@@ -148,6 +148,12 @@ namespace VetClinic.BLL.Services.Realizations
                 expressionsList.Add(animalFilter);
             }
 
+            if (filter.ClientId != null)
+            {
+                Expression<Func<Appointment, bool>> clientFilter = a => a.Animal.ClientId == filter.ClientId;
+                expressionsList.Add(clientFilter);
+            }
+
             Expression<Func<Appointment, bool>> expression = appointment => true;
 
             foreach (var exp in expressionsList)

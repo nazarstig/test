@@ -7,7 +7,7 @@ namespace VetClinic.BLL.Services.Interfaces
 {
     public interface IAnimalService
     {
-        Task CreateAnimal(Animal animal);
+        Task<Animal> CreateAnimal(Animal animal);
         Task<ICollection<Animal>> GetAllAsync(
             AnimalsFilter filter = null,
             PaginationFilter pagination = null);
