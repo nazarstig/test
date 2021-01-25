@@ -104,6 +104,27 @@ namespace VetClinic.BLL.Services.Realizations
             return await UserManager.FindByNameAsync(userName) != null;
         }
 
+        public async Task<bool> ChangePassword(string id, string oldPassword, string newPassword)
+        {
+            User user = await this.GetUser(id);
+            var result = await UserManager.ChangePasswordAsync(user, oldPassword, newPassword);
+            if (result.Succeeded)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public async Task<bool> OldPasswordExists(string id, string passwordToCheck)
+        {
+            var user = await GetUser(id);
+
+            PasswordVerificationResult passwordMatch = UserManager.PasswordHasher.VerifyHashedPassword(user, user.PasswordHash, passwordToCheck);
+
+            return passwordMatch == PasswordVerificationResult.Success;
+        }
+
         private bool Equals(IEnumerable<string> arr1, IEnumerable<IdentityRole> arr2)
         {
             IEnumerable<string> roles = arr2.Select(arr2 => arr2.Name);
