@@ -106,8 +106,9 @@ namespace VetClinic.BLL.Services.Realizations
 
         public async Task<bool> ChangePassword(string id, string oldPassword, string newPassword)
         {
-            User user = await this.GetUser(id);
+            User user = await GetUser(id);
             var result = await UserManager.ChangePasswordAsync(user, oldPassword, newPassword);
+
             if (result.Succeeded)
             {
                 return true;
@@ -119,6 +120,11 @@ namespace VetClinic.BLL.Services.Realizations
         public async Task<bool> OldPasswordExists(string id, string passwordToCheck)
         {
             var user = await GetUser(id);
+
+            if(user == null)
+            {
+                return false;
+            }
 
             PasswordVerificationResult passwordMatch = UserManager.PasswordHasher.VerifyHashedPassword(user, user.PasswordHash, passwordToCheck);
 

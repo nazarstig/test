@@ -3,10 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using VetClinic.API.DTO.User;
+using VetClinic.API.DTO.Account;
 using VetClinic.BLL.Services.Interfaces;
 
-namespace VetClinic.API.Validators.User
+namespace VetClinic.API.Validators.Account
 {
     public class ChangePasswordDtoValidator : AbstractValidator<ChangePasswordDto>
     {

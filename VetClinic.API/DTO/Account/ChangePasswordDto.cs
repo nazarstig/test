@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace VetClinic.API.DTO.User
+namespace VetClinic.API.DTO.Account
 {
     public class ChangePasswordDto
     {
