@@ -21,6 +21,10 @@ namespace VetClinic.API.Controllers
         [HttpGet("{userName}")]
         public async Task<bool> UserNameExists(string userName)
         {
+            if (userName == null)
+            {
+                return false;
+            }
             return await UserService.UserNameExistsAsync(userName);
         }
     }
