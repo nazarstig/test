@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using VetClinic.API.DTO.Responses;
 using VetClinic.API.DTO.Role;
 
 namespace VetClinic.API.Controllers
@@ -26,7 +27,7 @@ namespace VetClinic.API.Controllers
             var roles = RoleManager.Roles;
             IEnumerable<RoleDto> roleDtos = Mapper.Map<IEnumerable<IdentityRole>, IEnumerable<RoleDto>>(roles);
 
-            return Ok(roleDtos);
+            return Ok(new Response<IEnumerable<RoleDto>>(roleDtos));
         }
 
         [Route("{id}")]
@@ -40,7 +41,7 @@ namespace VetClinic.API.Controllers
             }
             RoleDto roleDto = Mapper.Map<IdentityRole, RoleDto>(role);
 
-            return Ok(roleDto);
+            return Ok(new Response<RoleDto>(roleDto));
         }
 
         [Route("")]
@@ -51,7 +52,7 @@ namespace VetClinic.API.Controllers
 
             _ = await RoleManager.CreateAsync(role);
 
-            return Created("/roles/", dto);
+            return Created("api/role", new Response<CreateRoleDto>(dto));
         }
 
         [Route("{id}")]
