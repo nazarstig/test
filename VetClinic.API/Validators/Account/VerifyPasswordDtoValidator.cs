@@ -12,14 +12,14 @@ namespace VetClinic.API.Validators.Account
         public VerifyPasswordDtoValidator()
         {
             RuleFor(form => form.OldPassword).NotEmpty().WithMessage("Password cannot be empty")
-               //.MinimumLength(8).WithMessage("Password must be longer than 8 characters")
-               //.Matches(@"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$")
-               //.WithMessage("Valid password must have only upper and lower case latin characters and digits and special characters")
+               .MinimumLength(8).WithMessage("Password must be longer than 8 characters")
+               .Matches(@"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$")
+               .WithMessage("Valid password must have only upper and lower case latin characters and digits and special characters")
                .MaximumLength(128).WithMessage("Password is too long");
 
           
             RuleFor(form => form.Id).NotEmpty().WithMessage("Id cannot be empty")
-                .MaximumLength(256).WithMessage("Id is too long");
+                .MaximumLength(100).WithMessage("Id is too long");
         }
     }
 }

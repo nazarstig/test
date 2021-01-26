@@ -14,10 +14,10 @@ namespace VetClinic.API.Validators.Account
         {
 
             RuleFor(form => form.OldPassword).NotEmpty().WithMessage("Password cannot be empty")
-                //.MinimumLength(8).WithMessage("Password must be longer than 8 characters")
-                //.Matches(@"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$")
-                //.WithMessage("Valid password must have only upper and lower case latin characters and digits and special characters")
-                .MaximumLength(300).WithMessage("Password is too long");
+                .MinimumLength(8).WithMessage("Password must be longer than 8 characters")
+                .Matches(@"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$")
+                .WithMessage("Valid password must have only upper and lower case latin characters and digits and special characters")
+                .MaximumLength(128).WithMessage("Password is too long");
 
             RuleFor(form => form).Must(form => 
             {
@@ -26,10 +26,10 @@ namespace VetClinic.API.Validators.Account
             }).WithMessage("Old password is incorrect");
 
             RuleFor(form => form.NewPassword).NotEmpty().WithMessage("Password cannot be empty")
-                //.MinimumLength(8).WithMessage("Password must be longer than 8 characters")
-                //.Matches(@"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$")
-                //.WithMessage("Valid password must have only upper and lower case latin characters and digits and special characters")
-                .MaximumLength(300).WithMessage("Password is too long");
+                .MinimumLength(8).WithMessage("Password must be longer than 8 characters")
+                .Matches(@"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$")
+                .WithMessage("Valid password must have only upper and lower case latin characters and digits and special characters")
+                .MaximumLength(128).WithMessage("Password is too long");
         }
     }
 }

@@ -40,7 +40,7 @@ namespace VetClinic.API.Validators.User
                 //.MinimumLength(8).WithMessage("Password must be longer than 8 characters")
                 //.Matches(@"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$")
                 //.WithMessage("Valid password must have only upper and lower case latin characters and digits and special characters")
-                .MaximumLength(300).WithMessage("Password is too long");
+                .MaximumLength(128).WithMessage("Password is too long");
         }
     }
 }
