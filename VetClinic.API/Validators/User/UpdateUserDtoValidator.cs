@@ -14,7 +14,7 @@ namespace VetClinic.API.Validators.User
 
             RuleFor(user => user).Must(newUser =>
                 {
-                    var oldUser = userService.GetUser(newUser.UserName).Result;
+                    var oldUser = userService.GetUser(newUser.UserId).Result;
                     if (oldUser == null)
                     {
                         return false;
