@@ -78,6 +78,7 @@ namespace VetClinic.BLL.Services.Realizations
             var (sucssess, userId) = await _userService.CreateUserAsync(user, role);
             if (sucssess)
             {
+                doctor.User = await _userService.GetUser(userId);
                 _repositoryWrapper.DoctorRepository.Add(doctor);
                 await _repositoryWrapper.SaveAsync();
             }
