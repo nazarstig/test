@@ -1,11 +1,11 @@
-﻿using FluentValidation;
+using FluentValidation;
 using FluentValidation.Validators;
 using VetClinic.API.DTO.User;
 using VetClinic.BLL.Services.Interfaces;
 
 namespace VetClinic.API.Validators.User
 {
-    public class CreateUserDtoValidator : AbstractValidator<CreateUserDto>
+    public class CreateUserDtoValidator<T> : AbstractValidator<T> where T: CreateUserDto
     {
         public CreateUserDtoValidator(IUserService userService)
         {

@@ -42,7 +42,6 @@ namespace VetClinic.API.Tests.Controllers
                 ProcedureName = "nail cutting",
                 Description = "for cats only",
                 Price = 100M,
-                IsSelectable = false
             };            
         }
 
@@ -170,9 +169,9 @@ namespace VetClinic.API.Tests.Controllers
         {
             return new List<Procedure>
             {
-                    new Procedure{Id=1, IsSelectable=true, ProcedureName="SPA procedures", Description="Best for your pet", Price=1000},
-                    new Procedure{Id=2, IsSelectable=false, ProcedureName="Operation", Description="Paw fracture", Price=2000},
-                    new Procedure{Id=3, IsSelectable=true, ProcedureName="Examination of animal", Description="Pet inspection", Price=50}
+                    new Procedure{Id=1,  ProcedureName="SPA procedures", Description="Best for your pet", Price=1000},
+                    new Procedure{Id=2,  ProcedureName="Operation", Description="Paw fracture", Price=2000},
+                    new Procedure{Id=3,  ProcedureName="Examination of animal", Description="Pet inspection", Price=50}
             };
         }
 

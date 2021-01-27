@@ -13,7 +13,7 @@ namespace VetClinic.API.Validators.Doctor
             RuleFor(doctor => doctor.Education).MaximumLength(100).WithMessage("Biography cannot be longer than 100 characters");
             RuleFor(doctor => doctor.PositionId).MustAsync((id, exist) => positionService.IsAnyPositionAsync(id)).WithMessage("Position with selected Id does not exist");
 
-            RuleFor(doctor => doctor.User).SetValidator(new CreateUserDtoValidator(userService));
+            //RuleFor(doctor => doctor.User).SetValidator(new CreateUserDtoValidator(userService));
         }
     }
 }
