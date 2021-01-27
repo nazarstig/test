@@ -40,7 +40,7 @@ namespace VetClinic.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAsync([FromRoute] int id)
         {
-            Doctor doctor = await _doctorService.GetDoctorAsync(id);
+            Doctor doctor = await _doctorService.GetDoctorByIdAsync(id);
             ReadDoctorDto doctorDto = _mapper.Map<ReadDoctorDto>(doctor);
             if (doctorDto == null)
                 return NotFound();
@@ -56,7 +56,7 @@ namespace VetClinic.API.Controllers
             var createdDoctor = await _doctorService.AddDoctorAsync(doctor, user);
             var readDoctorDto = _mapper.Map<ReadDoctorDto>(createdDoctor);
 
-            return Created(nameof(GetAsync), readDoctorDto);
+            return Created(nameof(GetAsync), new Response<ReadDoctorDto>(readDoctorDto));
         }
 
         [HttpPut("{id}")]

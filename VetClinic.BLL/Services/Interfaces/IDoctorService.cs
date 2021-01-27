@@ -7,7 +7,7 @@ namespace VetClinic.BLL.Services.Interfaces
 {
     public interface IDoctorService
     {
-        public Task<Doctor> GetDoctorAsync(int doctorId);
+        public Task<Doctor> GetDoctorByIdAsync(int doctorId);
         public Task<ICollection<Doctor>> GetDoctorAsync(
             DoctorsFilter filter = null,
             PaginationFilter pagination = null);

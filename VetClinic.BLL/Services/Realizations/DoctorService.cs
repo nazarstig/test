@@ -58,7 +58,7 @@ namespace VetClinic.BLL.Services.Realizations
             return doctors;
         }
 
-        public async Task<Doctor> GetDoctorAsync(int doctorId)
+        public async Task<Doctor> GetDoctorByIdAsync(int doctorId)
         {
             Doctor doctor = await _repositoryWrapper.DoctorRepository.GetFirstOrDefaultAsync(
                 filter: d => d.Id == doctorId,

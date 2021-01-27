@@ -7,7 +7,8 @@ namespace VetClinic.API.Validators.Doctor
 {
     public class UpdateDoctorDtoValidator : UpdateUserDtoValidator<UpdateDoctorDto>
     {
-        public UpdateDoctorDtoValidator(IUserService userService, IPositionService positionService): base(userService)        {
+        public UpdateDoctorDtoValidator(IUserService userService, IPositionService positionService) : base(userService)
+        {
             RuleFor(doctor => doctor.Biography)
                 .MaximumLength(200)
                 .WithMessage("Biography cannot be longer than 200 characters");
@@ -16,7 +17,7 @@ namespace VetClinic.API.Validators.Doctor
                 .WithMessage("Biography cannot be longer than 100 characters");
             RuleFor(doctor => doctor.PositionId)
                 .MustAsync((id, exist) => positionService.IsAnyPositionAsync(id))
-                .WithMessage("Position with selected Id does not exist");            
+                .WithMessage("Position with selected Id does not exist");
         }
     }
 }

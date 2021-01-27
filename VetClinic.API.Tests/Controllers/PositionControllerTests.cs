@@ -7,6 +7,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using VetClinic.API.Controllers;
 using VetClinic.API.DTO.Position.PositionDTO;
+using VetClinic.API.DTO.Queries;
+using VetClinic.API.DTO.Responses;
+using VetClinic.BLL.Domain;
 using VetClinic.BLL.Services.Interfaces;
 using VetClinic.DAL.Entities;
 using Xunit;
@@ -31,23 +34,28 @@ namespace VetClinic.API.Tests.Controllers
         [Theory, AutoMoqData]
         public async Task GetAll_Positions_ReturnsTrue(
             [Frozen] List<Position> positions,
-            [Frozen] List<PositionDto> positionsDTO)
+            [Frozen] List<PositionDto> positionsDTO,
+            [Frozen] PaginationQuery paginationQuery,
+            [Frozen] PaginationFilter paginationFilter)
         {
             // Arrange
-            positionServiceMock.Setup(m => m.GetPositionAsync())
+            positionServiceMock.Setup(m => m.GetPositionAsync(paginationFilter))
                 .ReturnsAsync(positions);
             mapper.Setup(m => m.Map<ICollection<PositionDto>>(positions))
                 .Returns(positionsDTO);
+            mapper.Setup(m => m.Map<PaginationFilter>(paginationQuery))
+                .Returns(paginationFilter);            
 
             // Act
-            var actualResult = await positionController.GetAsync();
+            var actualResult = await positionController.GetAsync(paginationQuery);
 
             // Assert      
             var result = actualResult as OkObjectResult;
+            var resultData = result.Value as PagedResponse<PositionDto>;
 
-            Assert.Equal(positionsDTO, result.Value);
+            Assert.Equal(positionsDTO, resultData.Data);
             Assert.True(actualResult is OkObjectResult);
-            positionServiceMock.Verify(m => m.GetPositionAsync(), Times.Once);
+            positionServiceMock.Verify(m => m.GetPositionAsync(paginationFilter), Times.Once);
         }
 
 
@@ -57,7 +65,7 @@ namespace VetClinic.API.Tests.Controllers
            [Frozen] PositionDto positionDTO)
         {
             // Arrange           
-            positionServiceMock.Setup(p => p.GetPositionAsync(position.Id))
+            positionServiceMock.Setup(p => p.GetPositionByIdAsync(position.Id))
                 .ReturnsAsync(position);
             mapper.Setup(m => m.Map<PositionDto>(position))
                 .Returns(positionDTO);
@@ -67,9 +75,11 @@ namespace VetClinic.API.Tests.Controllers
 
             // Assert    
             var result = actualResult as OkObjectResult;
-            Assert.Equal(positionDTO, result.Value);
+            var resultData = result.Value as Response<PositionDto>;
+
+            Assert.Equal(positionDTO, resultData.Data);
             Assert.True(actualResult is OkObjectResult);
-            positionServiceMock.Verify(m => m.GetPositionAsync(position.Id), Times.Once);
+            positionServiceMock.Verify(m => m.GetPositionByIdAsync(position.Id), Times.Once);
         }
 
 
@@ -82,7 +92,7 @@ namespace VetClinic.API.Tests.Controllers
             Position position = new Position { Id = 1 };
             PositionDto positionDTO = new PositionDto { Id = 1 };
 
-            positionServiceMock1.Setup(p => p.GetPositionAsync(position.Id))
+            positionServiceMock1.Setup(p => p.GetPositionByIdAsync(position.Id))
                 .ReturnsAsync(null as Position);
             mapper1.Setup(m => m.Map<PositionDto>(position))
                 .Returns(positionDTO);
@@ -94,7 +104,7 @@ namespace VetClinic.API.Tests.Controllers
 
             // Assert                          
             Assert.True(actualResult is NotFoundResult);
-            positionServiceMock1.Verify(m => m.GetPositionAsync(position.Id), Times.Once);
+            positionServiceMock1.Verify(m => m.GetPositionByIdAsync(position.Id), Times.Once);
         }
 
 

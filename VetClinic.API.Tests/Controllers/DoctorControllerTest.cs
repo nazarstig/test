@@ -7,6 +7,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using VetClinic.API.Controllers;
 using VetClinic.API.DTO.Doctor;
+using VetClinic.API.DTO.Queries;
+using VetClinic.API.DTO.Responses;
+using VetClinic.BLL.Domain;
 using VetClinic.BLL.Services.Interfaces;
 using VetClinic.DAL.Entities;
 using Xunit;
@@ -30,23 +33,31 @@ namespace VetClinic.API.Tests.Controllers
         [Theory, AutoMoqData]
         public async Task GetAll_Doctors_ReturnsTrue(
             [Frozen] List<Doctor> doctor,
-            [Frozen] List<ReadDoctorDto> doctorDto)
+            [Frozen] List<ReadDoctorDto> doctorDto,
+            [Frozen] PaginationQuery paginationQuery,
+            [Frozen] PaginationFilter paginationFilter,
+            [Frozen] DoctorsFiltrationQuery query,
+            [Frozen] DoctorsFilter filter
+            )
         {
             // Arrange
-            doctorServiceMock.Setup(m => m.GetDoctorAsync(null,null))
+            doctorServiceMock.Setup(m => m.GetDoctorAsync(filter, paginationFilter))
                 .ReturnsAsync(doctor);
             mapper.Setup(m => m.Map<ICollection<ReadDoctorDto>>(doctor))
                 .Returns(doctorDto);
+            mapper.Setup(m => m.Map<PaginationFilter>(paginationQuery))
+                .Returns(paginationFilter);
+            mapper.Setup(m => m.Map<DoctorsFilter>(query))
+               .Returns(filter);
 
             // Act
-            var actualResult = await doctorController.GetAsync(null,null);
+            var actualResult = await doctorController.GetAsync(query, paginationQuery);
 
             // Assert      
-            var result = actualResult as OkObjectResult;
-
-            Assert.Equal(doctorDto, result.Value);
+            var result = actualResult as OkObjectResult;            
+            
             Assert.True(actualResult is OkObjectResult);
-            doctorServiceMock.Verify(m => m.GetDoctorAsync(null,null), Times.Once);
+            doctorServiceMock.Verify(m => m.GetDoctorAsync(filter, paginationFilter), Times.Once);
         }
 
 
@@ -56,7 +67,7 @@ namespace VetClinic.API.Tests.Controllers
            [Frozen] ReadDoctorDto doctorDto)
         {
             // Arrange           
-            doctorServiceMock.Setup(p => p.GetDoctorAsync(doctor.Id))
+            doctorServiceMock.Setup(p => p.GetDoctorByIdAsync(doctor.Id))
                 .ReturnsAsync(doctor);
             mapper.Setup(m => m.Map<ReadDoctorDto>(doctor))
                 .Returns(doctorDto);
@@ -66,9 +77,11 @@ namespace VetClinic.API.Tests.Controllers
 
             // Assert    
             var result = actualResult as OkObjectResult;
-            Assert.Equal(doctorDto, result.Value);
+            var resultData = result.Value as Response<ReadDoctorDto>;
+
+            Assert.Equal(doctorDto, resultData.Data);
             Assert.True(actualResult is OkObjectResult);
-            doctorServiceMock.Verify(m => m.GetDoctorAsync(doctor.Id), Times.Once);
+            doctorServiceMock.Verify(m => m.GetDoctorByIdAsync(doctor.Id), Times.Once);
         }
 
 
@@ -82,7 +95,7 @@ namespace VetClinic.API.Tests.Controllers
 
             mapper1.Setup(m => m.Map<ReadDoctorDto>(docotr))
                 .Returns(null as ReadDoctorDto);
-            doctorServiceMock1.Setup(p => p.GetDoctorAsync(docotr.Id))
+            doctorServiceMock1.Setup(p => p.GetDoctorByIdAsync(docotr.Id))
                 .ReturnsAsync(null as Doctor);
 
             var doctorController1 = new DoctorController(doctorServiceMock1.Object, mapper1.Object);
@@ -92,21 +105,24 @@ namespace VetClinic.API.Tests.Controllers
 
             // Assert                          
             Assert.True(actualResult is NotFoundResult);
-            doctorServiceMock1.Verify(m => m.GetDoctorAsync(docotr.Id), Times.Once);
+            doctorServiceMock1.Verify(m => m.GetDoctorByIdAsync(docotr.Id), Times.Once);
         }
 
 
         [Theory, AutoMoqData]
         public async Task Post_DocotrDTO_ReturnsDocotorDTO(
            [Frozen] Doctor doctor,
+           [Frozen] User user,
            [Frozen] ReadDoctorDto readDoctorDto,
            [Frozen] CreateDoctorDto createDoctorDto)
         {
             // Arrange            
-            doctorServiceMock.Setup(m => m.AddDoctorAsync(doctor, doctor.User))
+            doctorServiceMock.Setup(m => m.AddDoctorAsync(doctor, user))
                 .ReturnsAsync(doctor);
             mapper.Setup(m => m.Map<Doctor>(createDoctorDto))
                 .Returns(doctor);
+            mapper.Setup(m => m.Map<User>(createDoctorDto))
+                .Returns(user);
             mapper.Setup(m => m.Map<ReadDoctorDto>(doctor))
                .Returns(readDoctorDto);
 
@@ -114,27 +130,30 @@ namespace VetClinic.API.Tests.Controllers
             await doctorController.PostAsync(createDoctorDto);
 
             // Assert                       
-            doctorServiceMock.Verify(m => m.AddDoctorAsync(doctor, doctor.User), Times.Once);
+            doctorServiceMock.Verify(m => m.AddDoctorAsync(doctor, user), Times.Once);
         }
 
 
         [Theory, AutoMoqData]
         public async Task Put_DoctorDTO_ReturnsNoContent(
            [Frozen] Doctor doctor,
+           [Frozen] User user,
            [Frozen] UpdateDoctorDto doctorDto)
         {
             // Arrange            
-            doctorServiceMock.Setup(m => m.UpdateDoctorAsync(doctor, doctor.User, doctor.Id))
+            doctorServiceMock.Setup(m => m.UpdateDoctorAsync(doctor, user, doctor.Id))
                 .ReturnsAsync(true);
             mapper.Setup(m => m.Map<Doctor>(doctorDto))
                 .Returns(doctor);
+            mapper.Setup(m => m.Map<User>(doctorDto))
+                .Returns(user);
 
             // Act
             var actualResult = await doctorController.PutAsync(doctorDto, doctor.Id);
 
             // Assert             
             Assert.True(actualResult is NoContentResult);
-            doctorServiceMock.Verify(m => m.UpdateDoctorAsync(doctor, doctor.User, doctor.Id), Times.Once);
+            doctorServiceMock.Verify(m => m.UpdateDoctorAsync(doctor, user, doctor.Id), Times.Once);
         }
 
 
