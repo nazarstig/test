@@ -1,6 +1,6 @@
 ﻿namespace VetClinic.API.DTO.Animal
 {
-    public class ClientDto
+    public class AnimalClientDto
     {
         public int Id { get; set; }
         public string FirstName { get; set; }

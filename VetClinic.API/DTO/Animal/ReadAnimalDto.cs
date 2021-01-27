@@ -6,7 +6,7 @@
         public string Name { get; set; }
         public int Age { get; set; }
         public string Photo { get; set; }
-        public ClientDto Client { get; set; }
+        public AnimalClientDto Client { get; set; }
         public string AnimalTypeName { get; set; }
     }
 }
