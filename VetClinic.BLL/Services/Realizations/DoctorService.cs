@@ -58,7 +58,7 @@ namespace VetClinic.BLL.Services.Realizations
             return doctors;
         }
 
-        public async Task<Doctor> GetDoctorAsync(int doctorId)
+        public async Task<Doctor> GetDoctorByIdAsync(int doctorId)
         {
             Doctor doctor = await _repositoryWrapper.DoctorRepository.GetFirstOrDefaultAsync(
                 filter: d => d.Id == doctorId,
@@ -78,6 +78,7 @@ namespace VetClinic.BLL.Services.Realizations
             var (sucssess, userId) = await _userService.CreateUserAsync(user, role);
             if (sucssess)
             {
+                doctor.User = await _userService.GetUser(userId);
                 _repositoryWrapper.DoctorRepository.Add(doctor);
                 await _repositoryWrapper.SaveAsync();
             }

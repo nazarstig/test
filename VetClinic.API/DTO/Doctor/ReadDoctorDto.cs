@@ -2,11 +2,10 @@
 
 namespace VetClinic.API.DTO.Doctor
 {
-    public class ReadDoctorDto
+    public class ReadDoctorDto : UserDto
     {
         public int Id { get; set; }
         public string UserId { get; set; }
-        public UserDto User { get; set; }
         public string Education { get; set; }
         public string Biography { get; set; }
         public string Experience { get; set; }
