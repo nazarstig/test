@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+using FluentValidation;
 using FluentValidation.Validators;
 using VetClinic.API.DTO.User;
 using VetClinic.BLL.Services.Interfaces;
