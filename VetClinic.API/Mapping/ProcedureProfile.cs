@@ -15,8 +15,7 @@ namespace VetClinic.API.Mapping
                  opt => opt.MapFrom(src => src.Description)).
                  ForMember(d => d.Price,
                  opt => opt.MapFrom(src => src.Price));
-            // ForMember(d => d.IsSelectable,
-            //opt => opt.MapFrom(src => src.IsSelectable));
+          
 
             CreateMap<Procedure, ReadProcedureDto>().
                   ForMember(d => d.Id,
@@ -27,8 +26,7 @@ namespace VetClinic.API.Mapping
                  opt => opt.MapFrom(src => src.Description)).
                  ForMember(d => d.Price,
                  opt => opt.MapFrom(src => src.Price));
-            // ForMember(d => d.IsSelectable,
-            //opt => opt.MapFrom(src => src.IsSelectable));
+            
 
             CreateMap<UpdateProcedureDto, Procedure>().
                  ForMember(d => d.ProcedureName,
@@ -37,8 +35,7 @@ namespace VetClinic.API.Mapping
                  opt => opt.MapFrom(src => src.Description)).
                  ForMember(d => d.Price,
                  opt => opt.MapFrom(src => src.Price));
-                 // ForMember(d => d.IsSelectable,
-                 //opt => opt.MapFrom(src => src.IsSelectable));
+                 
         }
     }
 }
