@@ -38,7 +38,6 @@ namespace VetClinic.BLL.Services.Realizations
             var foundProcedure = await _repositoryWrapper.ProcedureRepository.GetFirstOrDefaultAsync(filter: p => p.Id == id);
             if (foundProcedure == null) return false;
             foundProcedure.Description = procedure.Description;
-            foundProcedure.IsSelectable = procedure.IsSelectable;
             foundProcedure.Price = procedure.Price;
             foundProcedure.ProcedureName = procedure.ProcedureName;
             _repositoryWrapper.ProcedureRepository.Update(foundProcedure);

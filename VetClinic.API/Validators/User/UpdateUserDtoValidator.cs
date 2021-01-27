@@ -1,11 +1,11 @@
-﻿using FluentValidation;
+using FluentValidation;
 using FluentValidation.Validators;
 using VetClinic.API.DTO.User;
 using VetClinic.BLL.Services.Interfaces;
 
 namespace VetClinic.API.Validators.User
 {
-    public class UpdateUserDtoValidator : AbstractValidator<UpdateUserDto>
+    public class UpdateUserDtoValidator<T> : AbstractValidator<T> where T: UpdateUserDto
     {
         public UpdateUserDtoValidator(IUserService userService)
         {
@@ -14,7 +14,7 @@ namespace VetClinic.API.Validators.User
 
             RuleFor(user => user).Must(newUser =>
                 {
-                    var oldUser = userService.GetUser(newUser.UserName).Result;
+                    var oldUser = userService.GetUser(newUser.UserId).Result;
                     if (oldUser == null)
                     {
                         return false;

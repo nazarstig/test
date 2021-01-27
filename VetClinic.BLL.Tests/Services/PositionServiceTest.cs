@@ -50,7 +50,7 @@ namespace VetClinic.BLL.Tests.Services
                 .ReturnsAsync(position);
 
             // Act
-            var actual = await positionService.GetPositionAsync(id);
+            var actual = await positionService.GetPositionByIdAsync(id);
 
             // Assert
             Assert.Equal(position.Id, actual.Id);

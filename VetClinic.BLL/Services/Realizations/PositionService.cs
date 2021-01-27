@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using VetClinic.BLL.Domain;
 using VetClinic.BLL.Services.Interfaces;
 using VetClinic.DAL.Entities;
 using VetClinic.DAL.Repositories.Interfaces;
@@ -26,13 +27,20 @@ namespace VetClinic.BLL.Services.Realizations
             return createdPosition;
         }
 
-        public async Task<Position> GetPositionAsync(int positionId)
+        public async Task<Position> GetPositionByIdAsync(int positionId)
         {            
            return await _repositoryWrapper.PositionRepository.GetFirstOrDefaultAsync(p => p.Id == positionId);                      
         }
 
-        public async Task<ICollection<Position>> GetPositionAsync()
+        public async Task<ICollection<Position>> GetPositionAsync(
+            PaginationFilter pagination = null)
         {
+            if (pagination != null)
+            {
+                return await _repositoryWrapper.PositionRepository.GetAsync(                    
+                    pageNumber: pagination.PageNumber, pageSize: pagination.PageSize);
+            }
+
             return await _repositoryWrapper.PositionRepository.GetAsync();
         }
               

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using VetClinic.API.Controllers;
+using VetClinic.API.DTO.Responses;
 using VetClinic.API.DTO.Role;
 using Xunit;
 
@@ -31,8 +32,7 @@ namespace VetClinic.API.Tests.Controllers
             //Assert
             Assert.NotNull(result);
             Assert.IsType<OkObjectResult>(result);
-            Assert.IsAssignableFrom<IEnumerable<RoleDto>>(contentResult.Value);
-            Assert.Equal(roles, contentResult.Value);
+            Assert.IsAssignableFrom<Response<IEnumerable<RoleDto>>>(contentResult.Value);
         }
 
         [Theory, AutoMoqData]
@@ -56,8 +56,8 @@ namespace VetClinic.API.Tests.Controllers
             //Assert
             Assert.NotNull(result);
             Assert.IsType<OkObjectResult>(result);
-            Assert.IsAssignableFrom<RoleDto>(contentResult.Value);
-            Assert.Equal(dto, contentResult.Value);
+            Assert.IsAssignableFrom<Response<RoleDto>>(contentResult.Value);
+            Assert.Equal(dto, ((Response<RoleDto>)contentResult.Value).Data);
         }
 
         [Theory, AutoMoqData]
@@ -98,8 +98,8 @@ namespace VetClinic.API.Tests.Controllers
             //Assert
             Assert.NotNull(result);
             Assert.IsType<CreatedResult>(result);
-            Assert.IsAssignableFrom<CreateRoleDto>(contentResult.Value);
-            Assert.Equal(dto.Name, ((CreateRoleDto)contentResult.Value).Name);
+            Assert.IsAssignableFrom<Response<CreateRoleDto>>(contentResult.Value);
+            Assert.Equal(dto.Name, ((Response<CreateRoleDto>)contentResult.Value).Data.Name);
         }
 
         [Theory, AutoMoqData]

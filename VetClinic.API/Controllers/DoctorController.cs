@@ -40,29 +40,31 @@ namespace VetClinic.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAsync([FromRoute] int id)
         {
-            Doctor doctor = await _doctorService.GetDoctorAsync(id);
+            Doctor doctor = await _doctorService.GetDoctorByIdAsync(id);
             ReadDoctorDto doctorDto = _mapper.Map<ReadDoctorDto>(doctor);
             if (doctorDto == null)
                 return NotFound();
 
-            return Ok(doctorDto);
+            return Ok(new Response<ReadDoctorDto>(doctorDto));
         }
 
         [HttpPost]
         public async Task<IActionResult> PostAsync([FromBody] CreateDoctorDto doctorDto)
         {
             var doctor = _mapper.Map<Doctor>(doctorDto);
-            var createdDoctor = await _doctorService.AddDoctorAsync(doctor, doctor.User);
+            var user = _mapper.Map<User>(doctorDto);
+            var createdDoctor = await _doctorService.AddDoctorAsync(doctor, user);
             var readDoctorDto = _mapper.Map<ReadDoctorDto>(createdDoctor);
 
-            return Created(nameof(GetAsync), readDoctorDto);
+            return Created(nameof(GetAsync), new Response<ReadDoctorDto>(readDoctorDto));
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> PutAsync([FromBody] UpdateDoctorDto doctorDto, [FromRoute] int id)
         {
             var doctor = _mapper.Map<Doctor>(doctorDto);
-            var successUpdate = await _doctorService.UpdateDoctorAsync(doctor, doctor.User, id);
+            var user = _mapper.Map<User>(doctorDto);
+            var successUpdate = await _doctorService.UpdateDoctorAsync(doctor, user, id);
             if (successUpdate)
                 return NoContent();
 

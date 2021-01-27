@@ -35,7 +35,7 @@ namespace VetClinic.BLL.Tests.Services
             );
             _mapper = mapperConfig.CreateMapper();
             _procedureService = new ProcedureService(_repositoryWrapper.Object);
-            _procedure = new Procedure { Id = 9, ProcedureName = "nail cutting", Description = "for cats only", Price = 100M, IsSelectable = false };
+            _procedure = new Procedure { Id = 9, ProcedureName = "nail cutting", Description = "for cats only", Price = 100M};
         }
 
         [Fact]
@@ -109,7 +109,7 @@ namespace VetClinic.BLL.Tests.Services
         public async Task PutProcedure_UpdatesObject()
         {
             //arrange
-            Procedure procedureUpdated = new Procedure { ProcedureName = "nail cleaning", Description = "for cats only", Price = 50M, IsSelectable = false };
+            Procedure procedureUpdated = new Procedure { ProcedureName = "nail cleaning", Description = "for cats only", Price = 50M};
             _procedureRepository.Setup(repo => repo.Update(_procedure));
             _repositoryWrapper.Setup(r => r.ProcedureRepository.GetFirstOrDefaultAsync(It.IsAny<Expression<Func<Procedure, bool>>>(),
              It.IsAny<Func<IQueryable<Procedure>, IIncludableQueryable<Procedure, object>>>(),
@@ -158,9 +158,9 @@ namespace VetClinic.BLL.Tests.Services
         {
             return new List<Procedure>
             {
-                new Procedure{Id=1, IsSelectable=true, ProcedureName="SPA procedures", Description="Best for your pet", Price=1000},
-                new Procedure{Id=2, IsSelectable=false, ProcedureName="Operation", Description="Paw fracture", Price=2000},
-                new Procedure{Id=3, IsSelectable=true, ProcedureName="Examination of animal", Description="Pet inspection", Price=50}
+                new Procedure{Id=1, ProcedureName="SPA procedures", Description="Best for your pet", Price=1000},
+                new Procedure{Id=2, ProcedureName="Operation", Description="Paw fracture", Price=2000},
+                new Procedure{Id=3, ProcedureName="Examination of animal", Description="Pet inspection", Price=50}
             };
         }
     }

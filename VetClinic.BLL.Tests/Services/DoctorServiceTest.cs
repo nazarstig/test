@@ -58,7 +58,7 @@ namespace VetClinic.BLL.Tests.Services
             var _doctorService = new DoctorService(_repositoryMock.Object, _userServiceMock.Object, _roleManagerMock.Object);
 
             // Act
-            var actual = await _doctorService.GetDoctorAsync(id);
+            var actual = await _doctorService.GetDoctorByIdAsync(id);
 
             // Assert
             Assert.Equal(doctor.Id, actual.Id);
@@ -86,7 +86,7 @@ namespace VetClinic.BLL.Tests.Services
             var _doctorService = new DoctorService(_repositoryMock.Object, _userServiceMock.Object, _roleManagerMock.Object);
 
             // Act
-            var actual = await _doctorService.GetDoctorAsync(id);
+            var actual = await _doctorService.GetDoctorByIdAsync(id);
 
             // Assert
             Assert.Null(actual);
