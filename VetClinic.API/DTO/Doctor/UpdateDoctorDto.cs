@@ -2,15 +2,12 @@
 
 namespace VetClinic.API.DTO.Doctor
 {
-    public class UpdateDoctorDto
-    {       
+    public class UpdateDoctorDto : UpdateUserDto
+    {
         public string Education { get; set; }
         public string Biography { get; set; }
         public string Experience { get; set; }
         public string Photo { get; set; }
-        public int PositionId { get; set; }
-        public string UserId { get; set; }
-
-        public UserDto User { get; set; }
+        public int PositionId { get; set; }        
     }
 }

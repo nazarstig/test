@@ -11,5 +11,7 @@ namespace VetClinic.BLL.Services.Interfaces
         public Task<bool> DeleteUserAsync(string id);
         public Task<bool> UserNameExistsAsync(string userName);
         public Task<User> GetUser(string id);
+        public Task<bool> ChangePassword(string id, string oldPassword, string newPassword);
+        public Task<bool> OldPasswordExists(string id, string passwordToCheck);
     }
 }
