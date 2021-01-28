@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using VetClinic.API.DTO.AnimalType;
+using VetClinic.API.DTO.Responses;
 using VetClinic.BLL.Services.Interfaces;
 using VetClinic.DAL.Entities;
 
@@ -24,7 +26,7 @@ namespace VetClinic.API.Controllers
         public async Task<IActionResult> PostAsync([FromBody] AnimalTypeDto createAnimalTypeDto)
         {
             await _animalTypeService.CreateAnimalType(_mapper.Map<AnimalType>(createAnimalTypeDto));
-            return Created(nameof(GetAsync), createAnimalTypeDto);
+            return Created(nameof(GetAsync), new Response<AnimalTypeDto>(createAnimalTypeDto));
         }
 
         [HttpGet]
@@ -32,7 +34,7 @@ namespace VetClinic.API.Controllers
         {
             var animals = await _animalTypeService.GetAllAsync();
             var result = animals.Select(x => _mapper.Map<ReadAnimalTypeDto>(x));
-            return Ok(result);
+            return Ok(new Response<IEnumerable<ReadAnimalTypeDto>>(result));
         }
 
         [HttpGet("{id}")]
@@ -46,7 +48,7 @@ namespace VetClinic.API.Controllers
             }
 
             var animalTypeDto = _mapper.Map<ReadAnimalTypeDto>(animal);
-            return Ok(animalTypeDto);
+            return Ok(new Response<ReadAnimalTypeDto>(animalTypeDto));
         }
 
 
