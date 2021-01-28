@@ -8,9 +8,15 @@ namespace VetClinic.DAL.Configurations
     {
         public void Configure(EntityTypeBuilder<Service> builder)
         {
-            builder.Property(t => t.ServiceName).HasMaxLength(100);
-            builder.Property(t => t.Description).HasMaxLength(2000);
+            builder.HasKey(t => t.Id);
+            builder.Property(t => t.ServiceName).HasMaxLength(50).IsRequired();
+            builder.Property(t => t.Description).HasMaxLength(2000).IsRequired();
 
+            builder
+                .HasMany(t => t.Appointments)
+                .WithOne(t => t.Service)
+                .HasForeignKey(t => t.ServiceId);
+               
             builder.HasData(
                 new Service[]
                 {
