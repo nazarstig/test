@@ -8,6 +8,7 @@ namespace VetClinic.DAL.Configurations
     {
         public void Configure(EntityTypeBuilder<IdentityRole> builder)
         {
+            builder.HasKey(t => t.Id);
             builder.Property(t => t.Name).HasMaxLength(32);
             builder.Property(t => t.NormalizedName).HasMaxLength(32);
 
