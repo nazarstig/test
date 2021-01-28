@@ -111,64 +111,65 @@ namespace VetClinic.API.Tests.Controllers
         [Theory, AutoMoqData]
         public async Task Post_PositionDTO_ReturnsPositionDTO(
            [Frozen] Position position,
+           [Frozen] CreateUpdatePositionDto createUpdatePositionDto,
            [Frozen] PositionDto positionDTO)
         {
             // Arrange            
             positionServiceMock.Setup(m => m.AddPositionAsync(position))
                 .ReturnsAsync(position);
-            mapper.Setup(m => m.Map<Position>(positionDTO))
+            mapper.Setup(m => m.Map<Position>(createUpdatePositionDto))
                 .Returns(position);
             mapper.Setup(m => m.Map<PositionDto>(position))
                .Returns(positionDTO);
-            /*
+            
             // Act
-            await positionController.PostAsync(positionDTO);
+            await positionController.PostAsync(createUpdatePositionDto);
 
             // Assert                        
             positionServiceMock.Verify(m => m.AddPositionAsync(position), Times.Once);
-            */
+            
         }
 
 
         [Theory, AutoMoqData]
         public async Task Put_PositionDTO_ReturnsNoContent(
            [Frozen] Position position,
-           [Frozen] PositionDto positionDTO)
+           [Frozen] CreateUpdatePositionDto positionDTO)
         {
             // Arrange            
             positionServiceMock.Setup(m => m.UpdatePositionAsync(position, position.Id))
                 .ReturnsAsync(true);
             mapper.Setup(m => m.Map<Position>(positionDTO))
                 .Returns(position);
-            /*
+            
             // Act
             var actualResult = await positionController.PutAsync(positionDTO, position.Id);
 
             // Assert             
             Assert.True(actualResult is NoContentResult);
             positionServiceMock.Verify(m => m.UpdatePositionAsync(position, position.Id), Times.Once);
-            */
+            
         }
 
 
         [Theory, AutoMoqData]
         public async Task Put_PositionDTO_ReturnsNotFound(
            [Frozen] Position position,
-           [Frozen] PositionDto positionDTO)
+           [Frozen] CreateUpdatePositionDto positionDTO)
         {
             // Arrange            
             positionServiceMock.Setup(m => m.UpdatePositionAsync(position, position.Id))
                 .ReturnsAsync(false);
             mapper.Setup(m => m.Map<Position>(positionDTO))
                 .Returns(position);
-            /*
+            
             // Act
             var actualResult = await positionController.PutAsync(positionDTO, position.Id);
 
             // Assert             
             Assert.True(actualResult is NotFoundResult);
             Assert.NotNull(actualResult);
-            */
+            
         }
 
 
