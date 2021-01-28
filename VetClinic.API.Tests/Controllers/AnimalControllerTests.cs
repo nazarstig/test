@@ -5,6 +5,7 @@ using Moq;
 using System.Threading.Tasks;
 using VetClinic.API.Controllers;
 using VetClinic.API.DTO.Animal;
+using VetClinic.API.DTO.Queries;
 using VetClinic.BLL.Services.Interfaces;
 using VetClinic.DAL.Entities;
 using Xunit;
@@ -23,14 +24,15 @@ namespace VetClinic.API.Tests.Controllers
 
         [Theory,AutoMoqData]
         public async Task GetAsync_WhenCalled_ReturnsOkObjectResult(
-            [Frozen] Mock<IAnimalService> _animalService)
+            [Frozen] Mock<IAnimalService> _animalService,
+            [Frozen] Mock<PaginationQuery> paginationQuery)
         {
             //Arrange
             _mapper.Setup(x => x.Map<ReadAnimalDto>(It.IsAny<Animal>()));
             var Sut = new AnimalsController(_animalService.Object, _mapper.Object);
 
             //Act
-            var actual = await Sut.GetAsync(null,null);
+            var actual = await Sut.GetAsync(null, paginationQuery.Object);
 
             //Assert
             Assert.NotNull(actual);
