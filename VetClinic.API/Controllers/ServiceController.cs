@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using VetClinic.API.DTO;
+using VetClinic.API.DTO.Responses;
 using VetClinic.API.DTO.Service;
 using VetClinic.BLL.Services.Interfaces;
 using VetClinic.DAL.Entities;
@@ -28,7 +29,8 @@ namespace VetClinic.API.Controllers
         {
             var services = await _serviceService.GetAllServicesAsync();
             var servicesDTO = _mapper.Map<ICollection<ServiceDto>>(services);
-            return Ok(servicesDTO);
+            var response = new Response<IEnumerable<ServiceDto>>(servicesDTO);
+            return Ok(response);
         }
 
         // GET api/service/3
@@ -43,7 +45,7 @@ namespace VetClinic.API.Controllers
             }
 
             var serviceDTO = _mapper.Map<ServiceDto>(service);
-            return Ok(serviceDTO);
+            return Ok(new Response<ServiceDto>(serviceDTO));
         }
 
         // POST api/service
@@ -53,7 +55,7 @@ namespace VetClinic.API.Controllers
             var service = _mapper.Map<Service>(serviceCreateDTO);
             var insertedService  =  await _serviceService.AddAsync(service);
             var insertedServiceDTO = _mapper.Map<ServiceDto>(insertedService);
-            return CreatedAtAction("Get", new { id = insertedServiceDTO.Id }, insertedServiceDTO);
+            return Created(nameof(GetAsync), new Response<ServiceDto>(insertedServiceDTO));
         }
 
         // PUT api/service/id
