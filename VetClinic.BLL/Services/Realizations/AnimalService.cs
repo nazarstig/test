@@ -59,7 +59,7 @@ namespace VetClinic.BLL.Services.Realizations
 
         public async Task<Animal> GetAsync(int id)
         {
-            return  (await _repositoryWrapper.AnimalRepository.GetAsync(x => x.Id == id)).FirstOrDefault();
+            return  (await _repositoryWrapper.AnimalRepository.GetAsync(x => x.Id == id,include:Include())).FirstOrDefault();
         }
 
         public async Task UpdateAnimal(Animal animal)
