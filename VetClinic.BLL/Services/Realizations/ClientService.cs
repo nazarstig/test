@@ -18,11 +18,13 @@ namespace VetClinic.BLL.Services.Realizations
     {
         private readonly IRepositoryWrapper _repositoryWrapper;
         private readonly IUserService _userService;
-
-        public ClientService(IRepositoryWrapper repositoryWrapper, IUserService userService)
+        private readonly IEmailNotificationService _emailNotificationService;
+        public ClientService(IRepositoryWrapper repositoryWrapper, IUserService userService,
+            IEmailNotificationService emailNotificationService)
         {
             _repositoryWrapper = repositoryWrapper;
             _userService = userService;
+            _emailNotificationService = emailNotificationService;
         }
 
         public async Task<Client> AddClient(User user, Client client)
@@ -36,6 +38,8 @@ namespace VetClinic.BLL.Services.Realizations
                 client = new Client { UserId = userId };
                 _repositoryWrapper.ClientRepository.Add(client);
                 await _repositoryWrapper.SaveAsync();
+                await _emailNotificationService.CreateAndSendEmailAsync(user.Email, EmailHelper.RegistrationSubject,
+                    EmailHelper.RegistrationMessage(user.FirstName));
             }
             return client;
         }

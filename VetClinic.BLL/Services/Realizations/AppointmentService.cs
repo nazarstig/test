@@ -20,11 +20,14 @@ namespace VetClinic.BLL.Services.Realizations
     {
         private readonly IMapper _mapper;
         private readonly IRepositoryWrapper _repositoryWrapper;
+        private readonly IEmailNotificationService _emailNotificationService;
 
-        public AppointmentService(IMapper mapper, IRepositoryWrapper repositoryWrapper)
+        public AppointmentService(IMapper mapper, IRepositoryWrapper repositoryWrapper,
+            IEmailNotificationService emailNotificationService)
         {
             _mapper = mapper;
             _repositoryWrapper = repositoryWrapper;
+            _emailNotificationService = emailNotificationService;
         }
 
         public async Task<ICollection<Appointment>> GetAllAppointmentsAsync(
@@ -63,6 +66,7 @@ namespace VetClinic.BLL.Services.Realizations
         public async Task<Appointment> CreateAppointmentAsync(Appointment appointment)
         {
             _repositoryWrapper.AppointmentRepository.Add(appointment);
+           
             await _repositoryWrapper.SaveAsync();
 
             var createdAppointment = await GetAppointmentByIdAsync(appointment.Id);
@@ -78,6 +82,18 @@ namespace VetClinic.BLL.Services.Realizations
             _mapper.Map(appointment, appointmentToUpdate);
 
             _repositoryWrapper.AppointmentRepository.Update(appointmentToUpdate);
+
+            if (appointmentToUpdate.Status.Id == 3)
+            {
+                var doctorEmail = appointment.Doctor.User.Email;
+                var doctorName = appointment.Doctor.User.FirstName;
+                var patientName = appointment.Animal.Client.User.LastName;
+                var animalName = appointment.Animal.Name;
+                var date = appointment.AppointmentDate.ToString();
+                _emailNotificationService.SendEmailAsync(doctorEmail, EmailHelper.AppointmentDoctorSubject,
+                EmailHelper.AppointmentDoctorMessage(doctorName, patientName, animalName, date));
+            }
+
             await _repositoryWrapper.SaveAsync();
 
             appointmentToUpdate = await GetAppointmentByIdAsync(id);

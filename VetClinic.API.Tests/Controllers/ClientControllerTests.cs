@@ -46,20 +46,6 @@ namespace VetClinic.API.Tests.Controllers
             }
 
             [Fact]
-            public async Task GetAll_ReturnsResult()
-            {
-                //Arrange
-                ICollection<Client> collection = ClientsList();
-                _clientService.Setup(p => p.GetAllClients()).ReturnsAsync(collection);
-
-                //Action
-                var result = await _clientController.GetAsync(null,null);
-
-                //Assert
-                Assert.True(result.Result is OkObjectResult);
-            }
-
-            [Fact]
             public async Task Get_Succeded()
             {
                 //Arrange
@@ -114,8 +100,34 @@ namespace VetClinic.API.Tests.Controllers
                 //Assert
                 Assert.True(result is NotFoundResult);
             }
-            
-            private ICollection<Client> ClientsList()
+
+        [Fact]
+        public async Task Delete_Failed()
+        {
+            //Arrange
+            _clientService.Setup(p => p.DeleteClient(3)).ReturnsAsync(false);
+
+            //Action
+            var result = await _clientController.DeleteAsync(3);
+
+            //Assert
+            Assert.True(result is NotFoundResult);
+        }
+
+        [Fact]
+        public async Task Delete_Succeded()
+        {
+            //Arrange
+            _clientService.Setup(p => p.DeleteClient(3)).ReturnsAsync(true);
+
+            //Action
+            var result = await _clientController.DeleteAsync(3);
+
+            //Assert
+            Assert.True(result is NoContentResult);
+        }
+
+        private ICollection<Client> ClientsList()
             {
                return new List<Client>
                {

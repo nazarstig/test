@@ -20,6 +20,7 @@ namespace VetClinic.API.ExtensionMethods
             services.AddScoped<IServiceService, ServiceService>();
             services.AddScoped<IAnimalService, AnimalService>();
             services.AddScoped<IAnimalTypeService, AnimalTypeService>();
+            services.AddScoped<IEmailNotificationService, EmailNotificationService>();
         }
 
         public static void AddIdentity(this IServiceCollection services)
