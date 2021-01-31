@@ -38,8 +38,7 @@ namespace VetClinic.BLL.Services.Realizations
                 client = new Client { UserId = userId };
                 _repositoryWrapper.ClientRepository.Add(client);
                 await _repositoryWrapper.SaveAsync();
-                await _emailNotificationService.CreateAndSendEmailAsync(user.Email, EmailHelper.RegistrationSubject,
-                    EmailHelper.RegistrationMessage(user.FirstName));
+                await _emailNotificationService.SendClientRegistrationNotification(user);
             }
             return client;
         }
@@ -125,6 +124,8 @@ namespace VetClinic.BLL.Services.Realizations
 
             return expression;
         }
+
+       
 
     }
 }

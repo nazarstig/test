@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using System;
@@ -83,18 +83,10 @@ namespace VetClinic.BLL.Services.Realizations
 
             _repositoryWrapper.AppointmentRepository.Update(appointmentToUpdate);
 
-            if (appointmentToUpdate.Status.Id == 3)
-            {
-                var doctorEmail = appointment.Doctor.User.Email;
-                var doctorName = appointment.Doctor.User.FirstName;
-                var patientName = appointment.Animal.Client.User.LastName;
-                var animalName = appointment.Animal.Name;
-                var date = appointment.AppointmentDate.ToString();
-                _emailNotificationService.SendEmailAsync(doctorEmail, EmailHelper.AppointmentDoctorSubject,
-                EmailHelper.AppointmentDoctorMessage(doctorName, patientName, animalName, date));
-            }
 
             await _repositoryWrapper.SaveAsync();
+
+            await _emailNotificationService.SendAppointmentNotifications(appointmentToUpdate);
 
             appointmentToUpdate = await GetAppointmentByIdAsync(id);
 

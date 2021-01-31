@@ -6,57 +6,106 @@ using System.Text;
 using System.Threading.Tasks;
 using VetClinic.BLL.Helpers;
 using VetClinic.BLL.Services.Interfaces;
+using VetClinic.DAL.Entities;
 
 namespace VetClinic.BLL.Services.Realizations
 {
     public class EmailNotificationService : IEmailNotificationService
     {
-
-        public async Task<bool> CreateAndSendEmailAsync(string toEmail, string subject, string message)
-        {
-            bool result = false;
- //           string emailMsg = EmailHelper.RegistrationMessage(toEmail);//"Dear " + toEmail + ", <br /><br />Welcome in VetClinic! </b> <br /><br /> Thanks & Regards, <br />Secretar Petrovych";
- //          string emailSubject = EmailHelper.RegistrationSubject;  //EmailInfo.EMAIL_SUBJECT_DEFAULT
-            result = await this.SendEmailAsync(toEmail, subject, message);
-            return result;
-        }
-
-        public async Task<bool> SendEmailAsync(string email, string subject,  string msg )
+        public async Task<bool> SendEmailAsync(string emailTo, string subject, string message)
         {
             bool isSend = false;
+            MailMessage mailMessage = CreateMailMessageObject(emailTo, subject, message);
             try
             {
-                var body = msg;
-                var message = new MailMessage();
-                message.To.Add(new MailAddress(email));
-                message.From = new MailAddress("vetclinicif114notification@gmail.com");
-                message.Subject = subject;
-                message.Body = body;
-                message.IsBodyHtml = true;
-
-                using (var smtp = new SmtpClient())
-                {
-
-                    var credential = new NetworkCredential
-                    {
-                        UserName = "vetclinicif114notification@gmail.com",
-                        Password = "Roberto!1243$"
-                    };
-                    smtp.Credentials = credential;
-                    smtp.Host = "smtp.gmail.com";
-                    smtp.Port = Convert.ToInt32(587);
-                    smtp.EnableSsl = true;
-
-                    await smtp.SendMailAsync(message);
-                    isSend = true;
-                }
+                await EmailHelper.smtp.SendMailAsync(mailMessage);
+                isSend = true;
             }
-            catch (Exception ex)
+
+            catch(Exception ex)
             {
-                throw ex;
-            }  
+                Console.WriteLine(ex.Message);
+            }
             return isSend;
         }
+
+        public MailMessage CreateMailMessageObject(string emailTo, string subject, string message)
+        {
+            var body = message;
+            var mailMessage = new MailMessage();
+            mailMessage.To.Add(new MailAddress(emailTo));
+            mailMessage.From = new MailAddress(EmailHelper.EmailInfo.EmailSender);
+            mailMessage.Subject = subject;
+            mailMessage.Body = body;
+            mailMessage.IsBodyHtml = true;
+            return mailMessage;
+        }
+
+        public async Task SendAppointmentNotifications(Appointment appointment)
+        {
+            AppointmentEmailNotificationDto dto = new AppointmentEmailNotificationDto
+            {
+                DoctorEmail = appointment?.Doctor?.User?.Email,
+                DoctorFirstName = appointment?.Doctor?.User?.FirstName,
+                DoctorLastName = appointment?.Doctor?.User?.LastName,
+                ClientEmail = appointment?.Animal?.Client?.User?.Email,
+                ClientFirstName = appointment?.Animal?.Client?.User?.FirstName,
+                ClientLastName = appointment?.Animal?.Client?.User?.LastName,
+                AnimalName = appointment?.Animal?.Name,
+                AnimalType = appointment?.Animal?.AnimalType?.AnimalTypeName,
+                Date = appointment?.AppointmentDate.ToString(),
+                ServiceName = appointment?.Service?.ServiceName,
+                StatusId = appointment?.StatusId
+            };
+
+            switch (dto.StatusId) {
+                case 1:
+                    {
+                        await SendAppointmentNotificationDoctor(dto);
+                        await SendAppointmentNotificationClient(dto);
+                        break;
+                    }
+
+           }
+        }
+        
+
+        public async Task SendAppointmentNotificationDoctor(AppointmentEmailNotificationDto dto)
+        {
+            string emailTo = dto.DoctorEmail;
+            if (emailTo != null)
+            {
+                string subject = EmailHelper.AppointmentDoctorSubject;
+                string message = EmailHelper.AppointmentDoctorMessage(dto);
+                await SendEmailAsync(dto.DoctorEmail,
+                          subject, message);
+            }
+        }
+
+        public async Task SendAppointmentNotificationClient(AppointmentEmailNotificationDto dto)
+        {
+            string emailTo = dto.ClientEmail;
+            if (emailTo != null)
+            {
+                string subject = EmailHelper.AppointmentClientSubject;
+                string message = EmailHelper.AppointmentClientMessage(dto);
+                await SendEmailAsync(emailTo,
+                    subject, message);
+            }
+        }
+
+        public async Task SendClientRegistrationNotification(User user)
+        {
+            string emailTo = user.Email;
+            if (emailTo != null)
+            {
+                string subject = EmailHelper.RegistrationSubject;
+                string message = EmailHelper.RegistrationMessage(user.FirstName, user.LastName);
+                await SendEmailAsync(emailTo, subject,
+                message);
+            }
+        }
+
     }
 }
 
