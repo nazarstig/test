@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using VetClinic.BLL.Domain;
 using VetClinic.BLL.Services.Interfaces;
 using VetClinic.DAL.Entities;
 using VetClinic.DAL.Repositories.Interfaces;
@@ -22,8 +23,14 @@ namespace VetClinic.BLL.Services.Realizations
             await _repositoryWrapper.SaveAsync();
         }
 
-        public async Task<ICollection<AnimalType>> GetAllAsync()
+        public async Task<ICollection<AnimalType>> GetAllAsync(
+            PaginationFilter pagination = null)
         {
+            if (pagination != null)
+            {
+                return await _repositoryWrapper.AnimalTypeRepository.GetAsync(
+                    pageNumber: pagination.PageNumber, pageSize: pagination.PageSize);
+            }
             return await _repositoryWrapper.AnimalTypeRepository.GetAsync();
         }
 
