@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VetClinic.DAL;
 
 namespace VetClinic.DAL.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20210128121931_Fix_fluentAPI_for_Services")]
+    partial class Fix_fluentAPI_for_Services
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -98,6 +100,79 @@ namespace VetClinic.DAL.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetRoleClaims");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(300)")
+                        .HasMaxLength(300);
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(12)")
+                        .HasMaxLength(12);
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.ToTable("AspNetUsers");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -892,22 +967,7 @@ namespace VetClinic.DAL.Migrations
 
             modelBuilder.Entity("VetClinic.DAL.Entities.User", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(30)")
@@ -917,52 +977,7 @@ namespace VetClinic.DAL.Migrations
                         .HasColumnType("nvarchar(30)")
                         .HasMaxLength(30);
 
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(300)")
-                        .HasMaxLength(300);
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(12)")
-                        .HasMaxLength(12);
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedEmail")
-                        .HasName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.ToTable("AspNetUsers");
+                    b.HasDiscriminator().HasValue("User");
 
                     b.HasData(
                         new
@@ -972,14 +987,14 @@ namespace VetClinic.DAL.Migrations
                             ConcurrencyStamp = "413ca0a0-b960-4e2b-a719-cce4b68d1ead",
                             Email = "KolesoAnastasiya@gmail.com",
                             EmailConfirmed = false,
-                            FirstName = "Anastasiya",
-                            LastName = "Koleso",
                             LockoutEnabled = false,
                             PhoneNumber = "0984112333",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "c3cc1978-c181-44cb-946d-7ca1dace3ae0",
                             TwoFactorEnabled = false,
-                            UserName = "Koleso Anastasiya"
+                            UserName = "Koleso Anastasiya",
+                            FirstName = "Anastasiya",
+                            LastName = "Koleso"
                         },
                         new
                         {
@@ -988,14 +1003,14 @@ namespace VetClinic.DAL.Migrations
                             ConcurrencyStamp = "0fa64668-d1db-431c-a6a2-13ce8fbb6a22",
                             Email = "NazarenkoOleh@gmail.com",
                             EmailConfirmed = false,
-                            FirstName = "Oleh",
-                            LastName = "Nazarenko",
                             LockoutEnabled = false,
                             PhoneNumber = "0954453374",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "f5f784bf-9b40-46d2-9c3a-905171150ca7",
                             TwoFactorEnabled = false,
-                            UserName = "Nazarenko Oleh"
+                            UserName = "Nazarenko Oleh",
+                            FirstName = "Oleh",
+                            LastName = "Nazarenko"
                         },
                         new
                         {
@@ -1004,14 +1019,14 @@ namespace VetClinic.DAL.Migrations
                             ConcurrencyStamp = "4f4cef11-e6e3-4065-8adf-9f68da20d90f",
                             Email = "NoorkovaShuba@gmail.com",
                             EmailConfirmed = false,
-                            FirstName = "Shuba",
-                            LastName = "Noorkova",
                             LockoutEnabled = false,
                             PhoneNumber = "0934453214",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "f75eff4e-63f7-4df7-90eb-758e2f85e189",
                             TwoFactorEnabled = false,
-                            UserName = "Noorkova Shuba"
+                            UserName = "Noorkova Shuba",
+                            FirstName = "Shuba",
+                            LastName = "Noorkova"
                         },
                         new
                         {
@@ -1020,14 +1035,14 @@ namespace VetClinic.DAL.Migrations
                             ConcurrencyStamp = "48327729-c171-4a8b-89b0-5fe0ad9114f5",
                             Email = "VozniyAndriy@gmail.com",
                             EmailConfirmed = false,
-                            FirstName = "Andriy",
-                            LastName = "Vozniy",
                             LockoutEnabled = false,
                             PhoneNumber = "0931412622",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "0a782e75-d812-48fe-a1d7-6224edbe01e7",
                             TwoFactorEnabled = false,
-                            UserName = "Vozniy Andriy"
+                            UserName = "Vozniy Andriy",
+                            FirstName = "Andriy",
+                            LastName = "Vozniy"
                         },
                         new
                         {
@@ -1036,14 +1051,14 @@ namespace VetClinic.DAL.Migrations
                             ConcurrencyStamp = "07b04ba6-566f-49b9-97c0-92ad28997987",
                             Email = "KosovichMaruna@gmail.com",
                             EmailConfirmed = false,
-                            FirstName = "Maruna",
-                            LastName = "Kosovich",
                             LockoutEnabled = false,
                             PhoneNumber = "0681236324",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "007433ed-9903-4b34-9573-51e00a866d62",
                             TwoFactorEnabled = false,
-                            UserName = "Kosovich Maruna"
+                            UserName = "Kosovich Maruna",
+                            FirstName = "Maruna",
+                            LastName = "Kosovich"
                         },
                         new
                         {
@@ -1052,14 +1067,14 @@ namespace VetClinic.DAL.Migrations
                             ConcurrencyStamp = "f8e14719-9c64-442a-9ed9-dc7163712cbc",
                             Email = "WernudubIvan@gmail.com",
                             EmailConfirmed = false,
-                            FirstName = "Ivan",
-                            LastName = "Wernudub",
                             LockoutEnabled = false,
                             PhoneNumber = "0982123654",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "e27a6a96-6199-4938-b66e-211bc2e3aa10",
                             TwoFactorEnabled = false,
-                            UserName = "Wernudub Ivan"
+                            UserName = "Wernudub Ivan",
+                            FirstName = "Ivan",
+                            LastName = "Wernudub"
                         },
                         new
                         {
@@ -1068,14 +1083,14 @@ namespace VetClinic.DAL.Migrations
                             ConcurrencyStamp = "72cc948d-9e95-49e8-b63d-38f0062e391d",
                             Email = "MukolenkoNadiya@gmail.com",
                             EmailConfirmed = false,
-                            FirstName = "Nadiya",
-                            LastName = "Mukolenko",
                             LockoutEnabled = false,
                             PhoneNumber = "0982131254",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "a183a647-2492-4a90-8add-9bdb29c48a20",
                             TwoFactorEnabled = false,
-                            UserName = "Mukolenko Nadiya"
+                            UserName = "Mukolenko Nadiya",
+                            FirstName = "Nadiya",
+                            LastName = "Mukolenko"
                         });
                 });
 
@@ -1090,7 +1105,7 @@ namespace VetClinic.DAL.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("VetClinic.DAL.Entities.User", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1099,7 +1114,7 @@ namespace VetClinic.DAL.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("VetClinic.DAL.Entities.User", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1114,7 +1129,7 @@ namespace VetClinic.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("VetClinic.DAL.Entities.User", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1123,7 +1138,7 @@ namespace VetClinic.DAL.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("VetClinic.DAL.Entities.User", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

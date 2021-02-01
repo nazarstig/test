@@ -20,13 +20,13 @@ namespace VetClinic.API.Tests.Controllers
     {
         private readonly Mock<IDoctorService> doctorServiceMock;
         private readonly Mock<IMapper> mapper;
-        private readonly DoctorController doctorController;
+        private readonly DoctorsController doctorController;
         public DoctorControllerTest()
         {
             var fixture = new Fixture();
             doctorServiceMock = fixture.Freeze<Mock<IDoctorService>>();
             mapper = fixture.Freeze<Mock<IMapper>>();
-            doctorController = new DoctorController(doctorServiceMock.Object, mapper.Object);
+            doctorController = new DoctorsController(doctorServiceMock.Object, mapper.Object);
         }
 
 
@@ -98,7 +98,7 @@ namespace VetClinic.API.Tests.Controllers
             doctorServiceMock1.Setup(p => p.GetDoctorByIdAsync(docotr.Id))
                 .ReturnsAsync(null as Doctor);
 
-            var doctorController1 = new DoctorController(doctorServiceMock1.Object, mapper1.Object);
+            var doctorController1 = new DoctorsController(doctorServiceMock1.Object, mapper1.Object);
 
             // Act
             var actualResult = await doctorController1.GetAsync(docotr.Id);
