@@ -15,7 +15,7 @@ namespace VetClinic.API.Tests.Controllers
 {
     public class ProcedureControllerTests
     {
-        ProcedureController _procedureController;
+        ProceduresController _procedureController;
         Mock<IProcedureService> _procedureService;
         Mock<IRepositoryWrapper> _repositoryWrapper;
         Mock<IProcedureRepository> _procedureRepository;
@@ -34,7 +34,7 @@ namespace VetClinic.API.Tests.Controllers
             );
             _mapper = mapperConfig.CreateMapper();
             _procedureService = new Mock<IProcedureService>();
-            _procedureController = new ProcedureController(_procedureService.Object, _mapper);
+            _procedureController = new ProceduresController(_procedureService.Object, _mapper);
 
             _procedure = new Procedure
             {
