@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using VetClinic.API.DTO.AnimalType;
+using VetClinic.API.DTO.Queries;
 using VetClinic.API.DTO.Responses;
+using VetClinic.BLL.Domain;
 using VetClinic.BLL.Services.Interfaces;
 using VetClinic.DAL.Entities;
 
@@ -30,11 +32,14 @@ namespace VetClinic.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAsync()
+        public async Task<IActionResult> GetAsync(
+            [FromQuery] PaginationQuery paginationQuery)
         {
-            var animals = await _animalTypeService.GetAllAsync();
+            var pagination = _mapper.Map<PaginationFilter>(paginationQuery);
+
+            var animals = await _animalTypeService.GetAllAsync(pagination);
             var result = animals.Select(x => _mapper.Map<ReadAnimalTypeDto>(x));
-            return Ok(new Response<IEnumerable<ReadAnimalTypeDto>>(result));
+            return Ok(new PagedResponse<ReadAnimalTypeDto>(result, paginationQuery));
         }
 
         [HttpGet("{id}")]
