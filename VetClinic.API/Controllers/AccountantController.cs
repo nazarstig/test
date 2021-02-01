@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using VetClinic.BLL.Services.Interfaces;
 using VetClinic.BLL.Services.Realizations;
 using System.Web;
+using VetClinic.API.DTO.Accountant;
+using System.Globalization;
 
 namespace VetClinic.API.Controllers
 {
@@ -21,18 +23,21 @@ namespace VetClinic.API.Controllers
             _reportService = reportService;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetReport()
+        [HttpPost]
+        public async Task<IActionResult> PostReport([FromBody] CreateReportDto createReportDto)
         {
-            //var procedures = new List<PerformedProceduresReportModel> {
-            //    new PerformedProceduresReportModel{ ProcedureName="Operation", Price = 2000, Count = 2},
-            //    new PerformedProceduresReportModel{ ProcedureName="Examination of animal", Price = 50, Count = 3},
-            //    new PerformedProceduresReportModel{ ProcedureName="Consultation", Price = 100, Count = 5},
-            //};
+            var procedures = _reportService.GetPerformedProcedures(createReportDto.DateReport);  //new DateTime(2020, 1, 20)
 
-            var procedures = _reportService.GetPerformedProcedures(new DateTime(2020, 1, 20));
-
-            MonthReportModel model = new MonthReportModel { Month = "January", Year = "2020", Procedures = await procedures, Doctors = await _reportService.GetDoctors(), RentExpense = 900, AdvertisingExpense = 300, UtilitiesExpense = 200 };
+            MonthReportModel model = new MonthReportModel 
+            {
+                Month = createReportDto.DateReport.ToString("MMMM", CultureInfo.CreateSpecificCulture("en-US")),
+                Year = createReportDto.DateReport.Year.ToString(), 
+                Procedures = await procedures, 
+                Doctors = await _reportService.GetDoctors(), 
+                RentExpense = createReportDto.RentExpense,
+                AdvertisingExpense = createReportDto.AdvertisingExpense,
+                UtilitiesExpense = createReportDto.UtilitiesExpense 
+            };
 
             byte[] bin = await _reportService.SaveExcelReportFile(model);
 
