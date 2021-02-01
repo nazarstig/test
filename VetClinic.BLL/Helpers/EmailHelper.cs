@@ -11,10 +11,10 @@ namespace VetClinic.BLL.Helpers
     {
         public static class EmailInfo
         {
-            public static string Host = "smtp.gmail.com";
-            public static int Port = 587;
-            public static string EmailSender = "vetclinicif114notification@gmail.com";
-            public static string Password = "Roberto!1243$";
+            public readonly static string Host = "smtp.gmail.com";
+            public readonly static int Port = 587;
+            public readonly static string EmailSender = "vetclinicif114notification@gmail.com";
+            public readonly static string Password = "Roberto!1243$";
         }
 
         public static readonly SmtpClient smtp =
@@ -43,7 +43,7 @@ namespace VetClinic.BLL.Helpers
             return message;
         }
 
-        public static string AppointmentDoctorSubject = "You have new appointment";
+        public static readonly string AppointmentDoctorSubject = "You have new appointment";
 
         public static string AppointmentDoctorMessage(AppointmentEmailNotificationDto dto)
         {
@@ -60,7 +60,7 @@ namespace VetClinic.BLL.Helpers
             return message;
         }
 
-        public static string AppointmentClientSubject = "You have new appointment";
+        public static readonly string AppointmentClientSubject = "You have new appointment";
 
         public static string AppointmentClientMessage(AppointmentEmailNotificationDto dto)
         {
