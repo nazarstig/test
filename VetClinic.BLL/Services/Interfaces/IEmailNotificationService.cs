@@ -8,7 +8,7 @@ namespace VetClinic.BLL.Services.Interfaces
 {
     public interface IEmailNotificationService
     {       
-        public Task<bool> SendEmailAsync(string email, string subject, string msg );
+        public Task<bool> SendEmailAsync(string emailTo, string subject, string message );
         public Task SendAppointmentNotifications(Appointment appointment);
 
         public Task SendClientRegistrationNotification(User user);

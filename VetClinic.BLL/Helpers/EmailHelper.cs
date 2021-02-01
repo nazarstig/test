@@ -31,7 +31,7 @@ namespace VetClinic.BLL.Helpers
             };
 
 
-        public static string RegistrationSubject = "Registration";
+        public static readonly string RegistrationSubject = "Registration";
         public static string RegistrationMessage(string firstName, string lastName)
         {
             string message;
