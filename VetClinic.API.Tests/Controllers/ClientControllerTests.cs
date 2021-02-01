@@ -15,7 +15,7 @@ namespace VetClinic.API.Tests.Controllers
 {
     public class ClientControllerTests
     {     
-            ClientController _clientController;
+            ClientsController _clientController;
             Mock<IRepositoryWrapper> _repositoryWrapper;
             Mock<IClientRepository> _clientRepository;
             Mock<IClientService> _clientService;
@@ -37,7 +37,7 @@ namespace VetClinic.API.Tests.Controllers
                 _mapper = mapperConfig.CreateMapper();
                 _clientService = new Mock<IClientService>();
                 _userService = new Mock<IUserService>();
-                _clientController = new ClientController(_clientService.Object, _mapper);
+                _clientController = new ClientsController(_clientService.Object, _mapper);
                 _client = new Client
                 {
                     Id = 9,
