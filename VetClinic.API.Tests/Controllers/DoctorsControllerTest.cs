@@ -16,12 +16,12 @@ using Xunit;
 
 namespace VetClinic.API.Tests.Controllers
 {
-    public class DoctorControllerTest
+    public class DoctorsControllerTest
     {
         private readonly Mock<IDoctorService> doctorServiceMock;
         private readonly Mock<IMapper> mapper;
         private readonly DoctorsController doctorController;
-        public DoctorControllerTest()
+        public DoctorsControllerTest()
         {
             var fixture = new Fixture();
             doctorServiceMock = fixture.Freeze<Mock<IDoctorService>>();
