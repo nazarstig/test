@@ -16,12 +16,12 @@ using Xunit;
 
 namespace VetClinic.API.Tests.Controllers
 {
-    public class PositionControllerTests
+    public class PositionsControllerTests
     {
         private readonly Mock<IPositionService> positionServiceMock;
         private readonly Mock<IMapper> mapper;
         private readonly PositionsController positionController;
-        public PositionControllerTests()
+        public PositionsControllerTests()
         {
             var fixture = new Fixture();
             positionServiceMock = fixture.Freeze<Mock<IPositionService>>();

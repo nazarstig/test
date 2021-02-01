@@ -13,16 +13,16 @@ using Xunit;
 
 namespace VetClinic.API.Tests.Controllers
 {
-    public class ProcedureControllerTests
+    public class ProceduresControllerTests
     {
-        ProcedureController _procedureController;
+        ProceduresController _proceduresController;
         Mock<IProcedureService> _procedureService;
         Mock<IRepositoryWrapper> _repositoryWrapper;
         Mock<IProcedureRepository> _procedureRepository;
         IMapper _mapper;
         Procedure _procedure;
 
-        public ProcedureControllerTests()
+        public ProceduresControllerTests()
         {
             _repositoryWrapper = new Mock<IRepositoryWrapper>();
             _procedureRepository = new Mock<IProcedureRepository>();
@@ -34,7 +34,7 @@ namespace VetClinic.API.Tests.Controllers
             );
             _mapper = mapperConfig.CreateMapper();
             _procedureService = new Mock<IProcedureService>();
-            _procedureController = new ProcedureController(_procedureService.Object, _mapper);
+            _proceduresController = new ProceduresController(_procedureService.Object, _mapper);
 
             _procedure = new Procedure
             {
@@ -66,7 +66,7 @@ namespace VetClinic.API.Tests.Controllers
             _procedureService.Setup(p => p.GetAllProcedures()).ReturnsAsync(collection);
 
             //Action
-            var result = await _procedureController.GetAsync(); 
+            var result = await _proceduresController.GetAsync(); 
             
             //Assert
             Assert.True(result.Result is OkObjectResult);
@@ -79,7 +79,7 @@ namespace VetClinic.API.Tests.Controllers
             _procedureService.Setup(p => p.GetProcedure(9)).ReturnsAsync(_procedure);
 
             //Action
-            var result = await _procedureController.GetAsync(9);
+            var result = await _proceduresController.GetAsync(9);
 
             //Assert
             Assert.True(result.Result is OkObjectResult);
@@ -91,7 +91,7 @@ namespace VetClinic.API.Tests.Controllers
             _procedureService.Setup(p => p.GetProcedure(9)).ReturnsAsync(_procedure);
 
             //Action
-            var result = await _procedureController.GetAsync(6);
+            var result = await _proceduresController.GetAsync(6);
 
             //Assert
             Assert.True(result.Result is NotFoundResult);
@@ -104,7 +104,7 @@ namespace VetClinic.API.Tests.Controllers
             _procedureService.Setup(p => p.DeleteProcedure(3)).ReturnsAsync(false);
 
             //Action
-            var result = await _procedureController.DeleteAsync(3);
+            var result = await _proceduresController.DeleteAsync(3);
 
             //Assert
             Assert.True(result is NotFoundResult);
@@ -117,7 +117,7 @@ namespace VetClinic.API.Tests.Controllers
             _procedureService.Setup(p => p.DeleteProcedure(3)).ReturnsAsync(true);
 
             //Action
-            var result = await _procedureController.DeleteAsync(3);
+            var result = await _proceduresController.DeleteAsync(3);
 
             //Assert
             Assert.True(result is NoContentResult);
@@ -131,7 +131,7 @@ namespace VetClinic.API.Tests.Controllers
             _procedureService.Setup(p => p.PutProcedure(3, _procedure)).ReturnsAsync(false);
 
             //Action
-            var result = await _procedureController.PutAsync(3, dto);
+            var result = await _proceduresController.PutAsync(3, dto);
 
             //Action
             Assert.True(result is NotFoundResult);
@@ -145,7 +145,7 @@ namespace VetClinic.API.Tests.Controllers
             _procedureService.Setup(p => p.DeleteProcedure(3)).ReturnsAsync(true);
 
             //Action
-            var result = await _procedureController.DeleteAsync(3);
+            var result = await _proceduresController.DeleteAsync(3);
 
             //Assert
             Assert.True(result is NoContentResult);

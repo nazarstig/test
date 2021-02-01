@@ -13,7 +13,7 @@ using Xunit;
 
 namespace VetClinic.API.Tests.Controllers
 {
-    public class RoleControllerTest
+    public class RolesControllerTest
     {
         [Theory, AutoMoqData]
         public void Index_NoParams_ReturnOk(IQueryable<IdentityRole> roles,
