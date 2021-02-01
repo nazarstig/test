@@ -12,12 +12,12 @@ namespace VetClinic.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ServiceController : ControllerBase
+    public class ServicesController : ControllerBase
     {
         private readonly IMapper _mapper;
         private readonly IServiceService _serviceService;
 
-        public ServiceController(IMapper mapper, IServiceService serviceService)
+        public ServicesController(IMapper mapper, IServiceService serviceService)
         {
             _mapper = mapper;
             _serviceService = serviceService;
