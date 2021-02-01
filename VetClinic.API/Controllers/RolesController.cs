@@ -9,9 +9,9 @@ using VetClinic.API.DTO.Role;
 namespace VetClinic.API.Controllers
 {
     [Route("api/[controller]")]
-    public class RoleController : Controller
+    public class RolesController : Controller
     {
-        public RoleController(RoleManager<IdentityRole> roleManager, IMapper mapper)
+        public RolesController(RoleManager<IdentityRole> roleManager, IMapper mapper)
         {
             RoleManager = roleManager;
             Mapper = mapper;
