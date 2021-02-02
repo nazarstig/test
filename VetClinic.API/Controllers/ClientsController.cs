@@ -8,6 +8,7 @@ using VetClinic.API.DTO.ClientDto;
 using VetClinic.BLL.Services.Interfaces;
 using VetClinic.API.DTO.Queries;
 using VetClinic.BLL.Domain;
+using VetClinic.API.DTO.Responses;
 
 namespace VetClinic.API.Controllers
 {
@@ -31,7 +32,7 @@ namespace VetClinic.API.Controllers
             Client client = new Client();
             client = await _clientService.AddClient(user, client);
             ReadClientDto readDto = _mapper.Map<ReadClientDto>(client);
-            return Created("/client/post", readDto);
+            return Created("/client/post", new Response<ReadClientDto>(readDto));
         }
 
         [HttpPut("{id}")]
@@ -69,7 +70,7 @@ namespace VetClinic.API.Controllers
                 dto = _mapper.Map<ReadClientDto>(client);
                 readClients.Add(dto);
             }
-            return Ok(readClients);
+            return Ok(new PagedResponse<ReadClientDto>(readClients, paginationQuery));
         }
 
         [HttpGet("{id}")]
@@ -81,7 +82,7 @@ namespace VetClinic.API.Controllers
             else
             {
                 ReadClientDto readClient = _mapper.Map<ReadClientDto>(res);
-                return Ok(readClient);
+                return Ok(new Response<ReadClientDto>(readClient));
             }               
         }
 
