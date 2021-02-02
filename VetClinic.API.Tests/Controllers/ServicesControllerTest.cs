@@ -15,17 +15,17 @@ using Xunit;
 
 namespace VetClinic.API.Tests.Controllers
 {
-    public class ServiceControllerTest
+    public class ServicesControllerTest
     {
-        readonly ServiceController _controller;
+        readonly ServicesController _controller;
         readonly Mock<IServiceService> _service;
         IMapper _mapper;       
        
-        public ServiceControllerTest()
+        public ServicesControllerTest()
         {
             _service = new Mock<IServiceService>();
             InitializeMapper();
-            _controller = new ServiceController(_mapper, _service.Object);
+            _controller = new ServicesController(_mapper, _service.Object);
         }
 
         private void InitializeMapper()
