@@ -32,7 +32,7 @@ namespace VetClinic.API.Controllers
             Client client = new Client();
             client = await _clientService.AddClient(user, client);
             ReadClientDto readDto = _mapper.Map<ReadClientDto>(client);
-            return Created("/client/post", new Response<ReadClientDto>(readDto));
+            return Created(nameof(GetAsync), new Response<ReadClientDto>(readDto));
         }
 
         [HttpPut("{id}")]

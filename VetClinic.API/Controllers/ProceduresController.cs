@@ -27,7 +27,7 @@ namespace VetClinic.API.Controllers
         {
             Procedure procedure = _mapper.Map<CreateProcedureDto, Procedure>(procedureDTO);
             await _procedureService.AddProcedure(procedure);
-            return Created("/client/post", new Response<CreateProcedureDto>(procedureDTO));
+            return Created(nameof(GetAsync), new Response<CreateProcedureDto>(procedureDTO));
         }
 
         [HttpPut("{id}")]
