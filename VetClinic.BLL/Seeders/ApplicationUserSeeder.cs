@@ -4,7 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Serilog.Events;
 using System.Threading.Tasks;
-using VetClinic.BLL.Services.Interfaces;
 using VetClinic.DAL.Entities;
 using VetClinic.DAL.Repositories.Interfaces;
 
@@ -23,12 +22,13 @@ namespace VetClinic.BLL.Seeders
             var provider = builder.ApplicationServices;
             var scopeFactory = provider.GetRequiredService<IServiceScopeFactory>();
 
-            using (var scope = scopeFactory.CreateScope()) {
+            using (var scope = scopeFactory.CreateScope())
+            {
                 var userManager = scope.ServiceProvider.GetService<UserManager<User>>();
                 var repositoryWrapper = scope.ServiceProvider.GetService<IRepositoryWrapper>();
 
                 //admins
-                var data = new User{ UserName = "alice", FirstName = "Alice", LastName = "Smith", Email = "AliceSmith@email.com", PhoneNumber = "123456789123"};
+                var data = new User { UserName = "alice", FirstName = "Alice", LastName = "Smith", Email = "AliceSmith@email.com", PhoneNumber = "123456789123" };
 
                 await MakeAdmin(data, userManager);
 
@@ -37,21 +37,21 @@ namespace VetClinic.BLL.Seeders
 
                 await MakeClient(data, new Client() { Id = 1 }, userManager, repositoryWrapper);
 
-                data = new User { Id = "112", FirstName = "Andriy", LastName = "Vozniy", UserName = "VoAndr", Email = "VAndr@gmail.com", PhoneNumber = "0931412644", PasswordHash= "Pass123$" };
+                data = new User { Id = "112", FirstName = "Andriy", LastName = "Vozniy", UserName = "VoAndr", Email = "VAndr@gmail.com", PhoneNumber = "0931412644", PasswordHash = "Pass123$" };
 
                 await MakeClient(data, new Client() { Id = 2 }, userManager, repositoryWrapper);
 
                 data = new User { Id = "113", FirstName = "Maruna", LastName = "Kosovich", UserName = "kosmar", Email = "KosovichMaruna@gmail.com", PhoneNumber = "0681236324", PasswordHash = "Pass123$" };
-                    
+
                 await MakeClient(data, new Client() { Id = 3 }, userManager, repositoryWrapper);
 
                 data = new User { Id = "114", FirstName = "Nadiya", LastName = "Mukolenko", UserName = "MukoNa", Email = "MukoNa@gmail.com", PhoneNumber = "0982931254", PasswordHash = "Pass123$" };
-                    
+
                 await MakeClient(data, new Client() { Id = 4 }, userManager, repositoryWrapper);
 
                 //doctors
                 data = new User { Id = "72", FirstName = "Ma", LastName = "Guma", UserName = "magma", Email = "ma@gmail.com", PhoneNumber = "0939412644", PasswordHash = "Pass123$" };
-                var doctorData = new Doctor {Id = 1, Education = "Gas and Oil", Experience = "2", PositionId = 1 };
+                var doctorData = new Doctor { Id = 1, Education = "Gas and Oil", Experience = "2", PositionId = 1 };
                 await MakeDoctor(data, doctorData, userManager, repositoryWrapper);
 
                 data = new User { Id = "98", FirstName = "Gregory", LastName = "House", UserName = "house", Email = "house@gmail.com", PhoneNumber = "0939417534", PasswordHash = "Pass123$" };
@@ -72,17 +72,24 @@ namespace VetClinic.BLL.Seeders
                 user = userData;
 
                 _ = await userManager.CreateAsync(user, "Pass123$");
-                if (!userManager.IsInRoleAsync(user, "client").Result)
+                if (!await userManager.IsInRoleAsync(user, "client"))
                 {
-                    _ = userManager.AddToRoleAsync(user, "client").Result;
+                    _ = await userManager.AddToRoleAsync(user, "client");
                 }
                 var client = await repositoryWrapper.ClientRepository.GetFirstOrDefaultAsync(filter: c => c.Id == clientData.Id);
-                client.UserId = userData.Id;
-                repositoryWrapper.ClientRepository.Update(client);
+                if (client != null)
+                {
+                    client.UserId = userData.Id;
+                    repositoryWrapper.ClientRepository.Update(client);
+                    Log.Debug($@"{userData.UserName} created");
+                }
+                else
+                {
+                    var newUser = await userManager.FindByNameAsync(userData.UserName);
+                    Client newClient = new Client() { UserId = newUser.Id };
+                    repositoryWrapper.ClientRepository.Add(newClient);
+                }
                 await repositoryWrapper.SaveAsync();
-                
-
-                Log.Debug($@"{userData.UserName} created");
             }
             else
             {
@@ -92,22 +99,38 @@ namespace VetClinic.BLL.Seeders
 
         private static async Task MakeDoctor(User userData, Doctor doctorData, UserManager<User> userManager, IRepositoryWrapper repositoryWrapper)
         {
-            var user = userManager.FindByNameAsync(userData.UserName).Result;
+            var user = await userManager.FindByNameAsync(userData.UserName);
             if (user == null)
             {
                 user = userData;
 
                 _ = await userManager.CreateAsync(user, "Pass123$");
-                if (!userManager.IsInRoleAsync(user, "doctor").Result)
+                if (!await userManager.IsInRoleAsync(user, "doctor"))
                 {
-                    _ = userManager.AddToRoleAsync(user, "doctor").Result;
+                    _ = await userManager.AddToRoleAsync(user, "doctor");
                 }
                 var doctor = await repositoryWrapper.DoctorRepository.GetFirstOrDefaultAsync(filter: d => d.Id == doctorData.Id);
-                doctor.UserId = userData.Id;
-                repositoryWrapper.DoctorRepository.Update(doctor);
+                if (doctor != null)
+                {
+                    doctor.UserId = userData.Id;
+                    repositoryWrapper.DoctorRepository.Update(doctor);
+                    Log.Debug($@"{userData.UserName} created");
+                }
+                else
+                {
+                    var newUser = await userManager.FindByNameAsync(userData.UserName);
+                    Doctor newDoctor = new Doctor()
+                    {
+                        UserId = newUser.Id,
+                        Biography = doctorData.Biography,
+                        Education = doctorData.Education,
+                        Experience = doctorData.Experience,
+                        PositionId = doctorData.PositionId,
+                        Photo = doctorData.Photo
+                    };
+                    repositoryWrapper.DoctorRepository.Add(newDoctor);
+                }
                 await repositoryWrapper.SaveAsync();
-
-                Log.Debug($@"{userData.UserName} created");
             }
             else
             {
