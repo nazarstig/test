@@ -12,6 +12,16 @@ namespace VetClinic.BLL.Services.Realizations
 {
     public class EmailNotificationService : IEmailNotificationService
     {
+        private readonly AppointmentService _appointmentService;
+        private readonly ClientService _clientService;
+
+        public EmailNotificationService(AppointmentService appointmentService,
+            ClientService clientService)
+        {
+            _appointmentService = appointmentService;
+            _clientService = clientService;
+        }
+
         public async Task<bool> SendEmailAsync(string emailTo, string subject, string message)
         {
             bool isSend = false;
@@ -22,7 +32,7 @@ namespace VetClinic.BLL.Services.Realizations
                 isSend = true;
             }
 
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
@@ -41,34 +51,39 @@ namespace VetClinic.BLL.Services.Realizations
             return mailMessage;
         }
 
-        public async Task SendAppointmentNotifications(Appointment appointment)
+        public async Task SendAppointmentNotifications(int appointmentId)
         {
-            AppointmentEmailNotificationDto dto = new AppointmentEmailNotificationDto
+            Appointment appointment = await _appointmentService.GetAppointmentByIdAsync(appointmentId);
+            if (appointment != null)
             {
-                DoctorEmail = appointment?.Doctor?.User?.Email,
-                DoctorFirstName = appointment?.Doctor?.User?.FirstName,
-                DoctorLastName = appointment?.Doctor?.User?.LastName,
-                ClientEmail = appointment?.Animal?.Client?.User?.Email,
-                ClientFirstName = appointment?.Animal?.Client?.User?.FirstName,
-                ClientLastName = appointment?.Animal?.Client?.User?.LastName,
-                AnimalName = appointment?.Animal?.Name,
-                AnimalType = appointment?.Animal?.AnimalType?.AnimalTypeName,
-                Date = appointment?.AppointmentDate.ToString(),
-                ServiceName = appointment?.Service?.ServiceName,
-                StatusId = appointment?.StatusId
-            };
+                AppointmentEmailNotificationDto dto = new AppointmentEmailNotificationDto
+                {
+                    DoctorEmail = appointment?.Doctor?.User?.Email,
+                    DoctorFirstName = appointment?.Doctor?.User?.FirstName,
+                    DoctorLastName = appointment?.Doctor?.User?.LastName,
+                    ClientEmail = appointment?.Animal?.Client?.User?.Email,
+                    ClientFirstName = appointment?.Animal?.Client?.User?.FirstName,
+                    ClientLastName = appointment?.Animal?.Client?.User?.LastName,
+                    AnimalName = appointment?.Animal?.Name,
+                    AnimalType = appointment?.Animal?.AnimalType?.AnimalTypeName,
+                    Date = appointment?.AppointmentDate.ToString(),
+                    ServiceName = appointment?.Service?.ServiceName,
+                    StatusId = appointment?.StatusId
+                };
 
-            switch (dto.StatusId) {
-                case 1:
-                    {
-                        await SendAppointmentNotificationDoctor(dto);
-                        await SendAppointmentNotificationClient(dto);
-                        break;
-                    }
+                switch (dto.StatusId)
+                {
+                    case 1:
+                        {
+                            await SendAppointmentNotificationDoctor(dto);
+                            await SendAppointmentNotificationClient(dto);
+                            break;
+                        }
 
-           }
+                }
+            }
         }
-        
+
 
         public async Task SendAppointmentNotificationDoctor(AppointmentEmailNotificationDto dto)
         {
@@ -94,15 +109,20 @@ namespace VetClinic.BLL.Services.Realizations
             }
         }
 
-        public async Task SendClientRegistrationNotification(User user)
+        public async Task SendClientRegistrationNotification(int clientId)
         {
-            string emailTo = user.Email;
-            if (emailTo != null)
+            Client client = await _clientService.GetClient(clientId);
+            User user = client?.User;
+            if (user != null)
             {
-                string subject = EmailHelper.RegistrationSubject;
-                string message = EmailHelper.RegistrationMessage(user.FirstName, user.LastName);
-                await SendEmailAsync(emailTo, subject,
-                message);
+                string emailTo = user.Email;
+                if (emailTo != null)
+                {
+                    string subject = EmailHelper.RegistrationSubject;
+                    string message = EmailHelper.RegistrationMessage(user.FirstName, user.LastName);
+                    await SendEmailAsync(emailTo, subject,
+                    message);
+                }
             }
         }
 
