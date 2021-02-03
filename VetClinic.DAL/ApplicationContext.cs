@@ -4,7 +4,7 @@ using VetClinic.DAL.Entities;
 
 namespace VetClinic.DAL
 {
-    public class ApplicationContext : IdentityDbContext
+    public class ApplicationContext : IdentityDbContext<User>
     {
         public virtual DbSet<Animal> Animals { get; set; }
         public virtual DbSet<AnimalType> AnimalTypes { get; set; }

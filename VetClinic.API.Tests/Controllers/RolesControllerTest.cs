@@ -13,7 +13,7 @@ using Xunit;
 
 namespace VetClinic.API.Tests.Controllers
 {
-    public class RoleControllerTest
+    public class RolesControllerTest
     {
         [Theory, AutoMoqData]
         public void Index_NoParams_ReturnOk(IQueryable<IdentityRole> roles,
@@ -23,7 +23,7 @@ namespace VetClinic.API.Tests.Controllers
             //Arrange
             roleManagerMock.SetupGet(c => c.Roles).Returns(roles);
 
-            var sut = new RoleController(roleManagerMock.Object, mapper.Object);
+            var sut = new RolesController(roleManagerMock.Object, mapper.Object);
 
             //Act
             var result = sut.Get();
@@ -47,7 +47,7 @@ namespace VetClinic.API.Tests.Controllers
 
             mapper.Setup(m => m.Map<IdentityRole, RoleDto>(role)).Returns(dto);
 
-            var sut = new RoleController(roleManagerMock.Object, mapper.Object);
+            var sut = new RolesController(roleManagerMock.Object, mapper.Object);
 
             //Act
             var result = await sut.GetAsync("test");
@@ -69,7 +69,7 @@ namespace VetClinic.API.Tests.Controllers
                 .Setup(c => c.FindByIdAsync(It.IsAny<string>()))
                 .ReturnsAsync(null as IdentityRole);
 
-            var sut = new RoleController(roleManagerMock.Object, mapper.Object);
+            var sut = new RolesController(roleManagerMock.Object, mapper.Object);
 
             //Act
             var result = await sut.GetAsync("test");
@@ -89,7 +89,7 @@ namespace VetClinic.API.Tests.Controllers
                 .Setup(c => c.CreateAsync(It.IsAny<IdentityRole>()))
                 .ReturnsAsync(IdentityResult.Success);
 
-            var sut = new RoleController(roleManagerMock.Object, mapper.Object);
+            var sut = new RolesController(roleManagerMock.Object, mapper.Object);
 
             //Act
             var result = await sut.PostAsync(dto);
@@ -113,7 +113,7 @@ namespace VetClinic.API.Tests.Controllers
 
             mapper.Setup(m => m.Map<CreateRoleDto, IdentityRole>(It.IsAny<CreateRoleDto>())).Returns(role);
 
-            var sut = new RoleController(roleManagerMock.Object, mapper.Object);
+            var sut = new RolesController(roleManagerMock.Object, mapper.Object);
 
             //Act
             var result = await sut.PutAsync(It.IsAny<string>(), dto);
@@ -137,7 +137,7 @@ namespace VetClinic.API.Tests.Controllers
 
             mapper.Setup(m => m.Map<CreateRoleDto, IdentityRole>(It.IsAny<CreateRoleDto>())).Returns(role);
 
-            var sut = new RoleController(roleManagerMock.Object, mapper.Object);
+            var sut = new RolesController(roleManagerMock.Object, mapper.Object);
 
             //Act
             var result = await sut.PutAsync(It.IsAny<string>(), dto);
@@ -155,7 +155,7 @@ namespace VetClinic.API.Tests.Controllers
             roleManagerMock.Setup(c => c.DeleteAsync(It.IsAny<IdentityRole>()))
                 .ReturnsAsync(IdentityResult.Success);
 
-            var sut = new RoleController(roleManagerMock.Object, mapper.Object);
+            var sut = new RolesController(roleManagerMock.Object, mapper.Object);
 
             //Act
             var result = await sut.DeleteAsync(It.IsAny<string>());

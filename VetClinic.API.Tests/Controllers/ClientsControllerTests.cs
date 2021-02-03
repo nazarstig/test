@@ -13,9 +13,9 @@ using Xunit;
 
 namespace VetClinic.API.Tests.Controllers
 {
-    public class ClientControllerTests
+    public class ClientsControllerTests
     {     
-            ClientController _clientController;
+            ClientsController _clientsController;
             Mock<IRepositoryWrapper> _repositoryWrapper;
             Mock<IClientRepository> _clientRepository;
             Mock<IClientService> _clientService;
@@ -23,7 +23,7 @@ namespace VetClinic.API.Tests.Controllers
             IMapper _mapper;
             Client _client;
 
-            public ClientControllerTests()
+            public ClientsControllerTests()
             {
                 _repositoryWrapper = new Mock<IRepositoryWrapper>();
                 _clientRepository = new Mock<IClientRepository>();
@@ -37,12 +37,26 @@ namespace VetClinic.API.Tests.Controllers
                 _mapper = mapperConfig.CreateMapper();
                 _clientService = new Mock<IClientService>();
                 _userService = new Mock<IUserService>();
-                _clientController = new ClientController(_clientService.Object, _mapper);
+                _clientsController = new ClientsController(_clientService.Object, _mapper);
                 _client = new Client
                 {
                     Id = 9,
                     UserId = "4"
                 };                          
+            }
+
+            [Fact]
+            public async Task GetAll_ReturnsResult()
+            {
+                //Arrange
+                ICollection<Client> collection = ClientsList();
+                _clientService.Setup(p => p.GetAllClients()).ReturnsAsync(collection);
+
+                //Action
+                var result = await _clientsController.GetAsync(null,null);
+
+                //Assert
+                Assert.True(result.Result is OkObjectResult);
             }
 
             [Fact]
@@ -52,7 +66,7 @@ namespace VetClinic.API.Tests.Controllers
                 _clientService.Setup(p => p.GetClient(9)).ReturnsAsync(_client);
              
                 //Action
-                var result = await _clientController.GetAsync(9);
+                var result = await _clientsController.GetAsync(9);
 
                 //Assert
                 Assert.True(result.Result is OkObjectResult);
@@ -65,7 +79,7 @@ namespace VetClinic.API.Tests.Controllers
                 _clientService.Setup(p => p.GetClient(9)).ReturnsAsync(_client);
 
                 //Action
-                var result = await _clientController.GetAsync(6);
+                var result = await _clientsController.GetAsync(6);
 
                 //Assert
                 Assert.True(result.Result is NotFoundResult);
@@ -80,7 +94,7 @@ namespace VetClinic.API.Tests.Controllers
                 _clientService.Setup(p => p.PutClient(user, _client)).ReturnsAsync(false);
 
                 //Action
-                var result = await _clientController.PutAsync(3, dto);
+                var result = await _clientsController.PutAsync(3, dto);
 
                 //Assert
                 Assert.False(result is null);
@@ -95,39 +109,13 @@ namespace VetClinic.API.Tests.Controllers
                 _clientService.Setup(p => p.PutClient(user, _client)).ReturnsAsync(false);
 
                 //Action
-                var result = await _clientController.PutAsync(3, dto);
+                var result = await _clientsController.PutAsync(3, dto);
 
                 //Assert
                 Assert.True(result is NotFoundResult);
             }
-
-        [Fact]
-        public async Task Delete_Failed()
-        {
-            //Arrange
-            _clientService.Setup(p => p.DeleteClient(3)).ReturnsAsync(false);
-
-            //Action
-            var result = await _clientController.DeleteAsync(3);
-
-            //Assert
-            Assert.True(result is NotFoundResult);
-        }
-
-        [Fact]
-        public async Task Delete_Succeded()
-        {
-            //Arrange
-            _clientService.Setup(p => p.DeleteClient(3)).ReturnsAsync(true);
-
-            //Action
-            var result = await _clientController.DeleteAsync(3);
-
-            //Assert
-            Assert.True(result is NoContentResult);
-        }
-
-        private ICollection<Client> ClientsList()
+            
+            private ICollection<Client> ClientsList()
             {
                return new List<Client>
                {
