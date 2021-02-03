@@ -18,13 +18,10 @@ namespace VetClinic.BLL.Services.Realizations
     {
         private readonly IRepositoryWrapper _repositoryWrapper;
         private readonly IUserService _userService;
-        private readonly IEmailNotificationService _emailNotificationService;
-        public ClientService(IRepositoryWrapper repositoryWrapper, IUserService userService,
-            IEmailNotificationService emailNotificationService)
+        public ClientService(IRepositoryWrapper repositoryWrapper, IUserService userService)
         {
             _repositoryWrapper = repositoryWrapper;
             _userService = userService;
-            _emailNotificationService = emailNotificationService;
         }
 
         public async Task<Client> AddClient(User user, Client client)
@@ -38,7 +35,6 @@ namespace VetClinic.BLL.Services.Realizations
                 client = new Client { UserId = userId };
                 _repositoryWrapper.ClientRepository.Add(client);
                 await _repositoryWrapper.SaveAsync();
-                await _emailNotificationService.SendClientRegistrationNotification(user);
             }
             return client;
         }
@@ -112,8 +108,14 @@ namespace VetClinic.BLL.Services.Realizations
 
             if (filter.UserId != null)
             {
-                Expression<Func<Client, bool>> statusFilter = a => a.UserId == filter.UserId;
-                expressionsList.Add(statusFilter);
+                Expression<Func<Client, bool>> idFilter = a => a.UserId == filter.UserId;
+                expressionsList.Add(idFilter);
+            }
+
+            if (filter.UserName != null)
+            {
+                Expression<Func<Client, bool>> usernameFilter = a => a.User.UserName == filter.UserName;
+                expressionsList.Add(usernameFilter);
             }
             Expression<Func<Client, bool>> expression = animal => true;
 

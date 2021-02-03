@@ -4,19 +4,21 @@ using System.Net;
 using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
+using VetClinic.BLL.Domain;
 using VetClinic.BLL.Helpers;
 using VetClinic.BLL.Services.Interfaces;
 using VetClinic.DAL.Entities;
+using System.Linq;
 
 namespace VetClinic.BLL.Services.Realizations
 {
     public class EmailNotificationService : IEmailNotificationService
     {
-        private readonly AppointmentService _appointmentService;
-        private readonly ClientService _clientService;
+        private readonly IAppointmentService _appointmentService;
+        private readonly IClientService _clientService;
 
-        public EmailNotificationService(AppointmentService appointmentService,
-            ClientService clientService)
+        public EmailNotificationService(IAppointmentService appointmentService,
+            IClientService clientService)
         {
             _appointmentService = appointmentService;
             _clientService = clientService;
@@ -56,6 +58,23 @@ namespace VetClinic.BLL.Services.Realizations
             Appointment appointment = await _appointmentService.GetAppointmentByIdAsync(appointmentId);
             if (appointment != null)
             {
+                AppointmentEmailNotificationDto dto = CreateAppointmentNotificationDto(appointment);
+                switch (dto.StatusId)
+                {
+                    case 1:
+                        {
+                            await SendAppointmentNotificationDoctor(dto);
+                            await SendAppointmentNotificationClient(dto);
+                            break;
+                        }
+                }
+            }
+        }
+
+        public AppointmentEmailNotificationDto CreateAppointmentNotificationDto(Appointment appointment)
+        {
+            if (appointment != null)
+            {
                 AppointmentEmailNotificationDto dto = new AppointmentEmailNotificationDto
                 {
                     DoctorEmail = appointment?.Doctor?.User?.Email,
@@ -70,20 +89,10 @@ namespace VetClinic.BLL.Services.Realizations
                     ServiceName = appointment?.Service?.ServiceName,
                     StatusId = appointment?.StatusId
                 };
-
-                switch (dto.StatusId)
-                {
-                    case 1:
-                        {
-                            await SendAppointmentNotificationDoctor(dto);
-                            await SendAppointmentNotificationClient(dto);
-                            break;
-                        }
-
-                }
+                return dto;
             }
+            else return null;
         }
-
 
         public async Task SendAppointmentNotificationDoctor(AppointmentEmailNotificationDto dto)
         {
@@ -109,9 +118,10 @@ namespace VetClinic.BLL.Services.Realizations
             }
         }
 
-        public async Task SendClientRegistrationNotification(int clientId)
+        public async Task SendClientRegistrationNotification(string username)
         {
-            Client client = await _clientService.GetClient(clientId);
+            ClientsFilter filter = new ClientsFilter { UserName = username };
+            Client client = _clientService.GetAllClients(filter).Result.FirstOrDefault();
             User user = client?.User;
             if (user != null)
             {

@@ -20,12 +20,10 @@ namespace VetClinic.BLL.Services.Realizations
     {
         private readonly IMapper _mapper;
         private readonly IRepositoryWrapper _repositoryWrapper;
-        private readonly IEmailNotificationService _emailNotificationService;
-        public AppointmentService(IMapper mapper, IRepositoryWrapper repositoryWrapper, IEmailNotificationService emailNotificationService)
+        public AppointmentService(IMapper mapper, IRepositoryWrapper repositoryWrapper)
         {
             _mapper = mapper;
             _repositoryWrapper = repositoryWrapper;
-            _emailNotificationService = emailNotificationService;
         }
 
         public async Task<ICollection<Appointment>> GetAllAppointmentsAsync(
@@ -80,8 +78,6 @@ namespace VetClinic.BLL.Services.Realizations
 
             _repositoryWrapper.AppointmentRepository.Update(appointmentToUpdate);
             await _repositoryWrapper.SaveAsync();
-
-            await _emailNotificationService.SendAppointmentNotifications(appointmentToUpdate);
 
             appointmentToUpdate = await GetAppointmentByIdAsync(id);
 

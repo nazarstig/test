@@ -39,8 +39,7 @@ namespace VetClinic.BLL.Tests.Services
             _mapper = mapperConfig.CreateMapper();
             _userService = new Mock<IUserService>();
             _emailNotificationService = new Mock<IEmailNotificationService>();
-            _clientService = new ClientService(_repositoryWrapper.Object, _userService.Object, 
-                _emailNotificationService.Object);
+            _clientService = new ClientService(_repositoryWrapper.Object, _userService.Object);
             _client = new Client { Id = 9, UserId = "id" };
             _user = new User { Id = "id" };
         }

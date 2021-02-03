@@ -22,9 +22,19 @@ namespace VetClinic.API.Controllers
             _emailNotificationService = emailNotificationService;
         }
 
-        public async Task SendAppointmentNotification(int appointmentId)
-        {
 
+        [HttpGet("{appointmentId}")]
+        public async Task<IActionResult> SendAppointmentNotification(int appointmentId)
+        {
+            await _emailNotificationService.SendAppointmentNotifications(appointmentId);
+            return NoContent();
+        }
+
+        [HttpGet("{username}")]
+        public async Task<IActionResult> SendRegistrationNotification(string username)
+        {
+            await _emailNotificationService.SendClientRegistrationNotification(username);
+            return NoContent();
         }
     }
 }
