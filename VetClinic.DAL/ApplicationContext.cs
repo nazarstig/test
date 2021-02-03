@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using VetClinic.DAL.Configurations;
 using VetClinic.DAL.Entities;
 
 namespace VetClinic.DAL
@@ -24,6 +25,8 @@ namespace VetClinic.DAL
             base.OnModelCreating(builder);
 
             builder.ApplyConfigurationsFromAssembly(typeof(ApplicationContext).Assembly);
+
+            DataSeeder.Seed(builder);
         }
     }
 }

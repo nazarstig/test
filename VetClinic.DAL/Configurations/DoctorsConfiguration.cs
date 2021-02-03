@@ -8,9 +8,16 @@ namespace VetClinic.DAL.Configurations
     {
         public void Configure(EntityTypeBuilder<Doctor> builder)
         {
+            builder.HasKey(d => d.Id);
+
+            builder.HasOne(d => d.User)
+                .WithOne(d => d.Doctor);
+
             builder.HasMany(d => d.Appointments)
                 .WithOne(d => d.Doctor)
+                .HasForeignKey(d => d.DoctorId)
                 .OnDelete(DeleteBehavior.NoAction);
+
             builder.HasOne(c => c.Position)
                 .WithMany(c => c.Doctors)
                 .HasForeignKey(c => c.PositionId)
@@ -18,14 +25,6 @@ namespace VetClinic.DAL.Configurations
 
             builder.Property(t => t.Education).HasMaxLength(100);
             builder.Property(t => t.Experience).HasMaxLength(200);
-            builder.HasData(
-                new Doctor[]
-                {
-                    new Doctor{ Id=1, UserId="1", Education="Gas and Oil", Experience="2", PositionId=1},
-                    new Doctor{ Id=2, UserId="2", Education="IfMedical", Experience="7", PositionId=3},
-                    new Doctor{ Id=3, UserId="3", Education="SelfEducation", Experience="3", PositionId=4},
-
-                });
         }
     }
 }
