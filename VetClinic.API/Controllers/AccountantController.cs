@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Globalization;
+using System.Threading.Tasks;
+using VetClinic.API.DTO.Accountant;
 using VetClinic.BLL.Services.Interfaces;
 using VetClinic.BLL.Services.Realizations;
-using System.Web;
-using VetClinic.API.DTO.Accountant;
-using System.Globalization;
 
 namespace VetClinic.API.Controllers
 {
@@ -26,7 +22,7 @@ namespace VetClinic.API.Controllers
         [HttpPost]
         public async Task<IActionResult> PostReport([FromBody] CreateReportDto createReportDto)
         {
-            var procedures = _reportService.GetPerformedProcedures(createReportDto.DateReport);  //new DateTime(2020, 1, 20)
+            var procedures = _reportService.GetPerformedProcedures(createReportDto.DateReport);
 
             MonthReportModel model = new MonthReportModel 
             {
