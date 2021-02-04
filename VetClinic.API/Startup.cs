@@ -11,6 +11,7 @@ using VetClinic.API.ExtensionMethods;
 using VetClinic.API.Filters;
 using VetClinic.API.Middlewares;
 using VetClinic.BLL;
+using VetClinic.BLL.Seeders;
 using VetClinic.DAL;
 using VetClinic.DAL.Repositories.Interfaces;
 using VetClinic.DAL.Repositories.Realizations;
@@ -76,6 +77,7 @@ namespace VetClinic.API
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                ApplicationDataSeeder.SeedData(app);
             }
 
             app.UseCors();
@@ -92,7 +94,7 @@ namespace VetClinic.API
 
             app.UseCustomSwaggerConfig();
 
-            ApplicationUserSeeder.SeedUsers(app);
+            ApplicationStaticDataSeeder.SeedStaticDataAsync(app);
         }
     }
 }

@@ -10,9 +10,9 @@ namespace VetClinic.API.Controllers
 {
     [Route("api/account")]
     [ApiController]
-    public class AccountController : ControllerBase
+    public class AccountsController : ControllerBase
     {
-        public AccountController(IUserService userService)
+        public AccountsController(IUserService userService)
         {
             UserService = userService;
         }

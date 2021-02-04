@@ -5,17 +5,18 @@ using VetClinic.DAL.Entities;
 using VetClinic.API.DTO.ProcedureDTO;
 using AutoMapper;
 using VetClinic.BLL.Services.Interfaces;
+using VetClinic.API.DTO.Responses;
 
 namespace VetClinic.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProcedureController : ControllerBase
+    public class ProceduresController : ControllerBase
     {
         private readonly IProcedureService _procedureService;
         private readonly IMapper _mapper; 
         
-        public ProcedureController(IProcedureService procedureService, IMapper mapper)
+        public ProceduresController(IProcedureService procedureService, IMapper mapper)
         {
             _procedureService = procedureService;
             _mapper = mapper;
@@ -26,7 +27,7 @@ namespace VetClinic.API.Controllers
         {
             Procedure procedure = _mapper.Map<CreateProcedureDto, Procedure>(procedureDTO);
             await _procedureService.AddProcedure(procedure);
-            return Created("/client/post", procedureDTO);
+            return Created(nameof(GetAsync), new Response<CreateProcedureDto>(procedureDTO));
         }
 
         [HttpPut("{id}")]
@@ -57,7 +58,8 @@ namespace VetClinic.API.Controllers
                 dto = _mapper.Map<ReadProcedureDto>(procedure);
                 readProcedures.Add(dto);
             }
-            return Ok(readProcedures);
+            var pagedResponse = new Response<ICollection<ReadProcedureDto>>(readProcedures); 
+            return Ok(pagedResponse);
         }
 
         [HttpGet("{id}")]
@@ -67,7 +69,7 @@ namespace VetClinic.API.Controllers
             if (result != null)
             {
                 ReadProcedureDto readDto = _mapper.Map<ReadProcedureDto>(result);
-                return Ok(readDto);
+                return Ok(new Response<ReadProcedureDto>(readDto));
             }
             else return NotFound();
         }

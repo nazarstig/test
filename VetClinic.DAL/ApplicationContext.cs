@@ -1,10 +1,11 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using VetClinic.DAL.Configurations;
 using VetClinic.DAL.Entities;
 
 namespace VetClinic.DAL
 {
-    public class ApplicationContext : IdentityDbContext
+    public class ApplicationContext : IdentityDbContext<User>
     {
         public virtual DbSet<Animal> Animals { get; set; }
         public virtual DbSet<AnimalType> AnimalTypes { get; set; }
@@ -24,6 +25,8 @@ namespace VetClinic.DAL
             base.OnModelCreating(builder);
 
             builder.ApplyConfigurationsFromAssembly(typeof(ApplicationContext).Assembly);
+
+            DataSeeder.Seed(builder);
         }
     }
 }
