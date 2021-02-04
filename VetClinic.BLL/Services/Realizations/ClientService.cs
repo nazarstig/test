@@ -112,6 +112,19 @@ namespace VetClinic.BLL.Services.Realizations
                 Expression<Func<Client, bool>> statusFilter = a => a.UserId == filter.UserId;
                 expressionsList.Add(statusFilter);
             }
+
+            if (filter.IsDeleted != null)
+            {
+                Expression<Func<Client, bool>> userFilter = a => a.User.IsDeleted == filter.IsDeleted.Value;
+                expressionsList.Add(userFilter);
+            }
+
+            if (filter.IsDeleted == null)
+            {
+                Expression<Func<Client, bool>> userFilter = a => !a.User.IsDeleted;
+                expressionsList.Add(userFilter);
+            }
+
             Expression<Func<Client, bool>> expression = animal => true;
 
             foreach (var exp in expressionsList)

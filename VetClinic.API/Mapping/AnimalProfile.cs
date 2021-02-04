@@ -28,6 +28,7 @@ namespace VetClinic.API.Mapping
                 .ForMember(d => d.Name, t => t.MapFrom(o => o.Name))
                 .ForMember(d => d.Age, t => t.MapFrom(o => o.Age))
                 .ForMember(d => d.Photo, t => t.MapFrom(o => o.Photo))
+                .ForMember(d => d.IsDeleted, t => t.MapFrom(o => o.IsDeleted))
                 .ForAllOtherMembers(d => d.Ignore());
 
             CreateMap<Animal, UpdateAnimalDto>()

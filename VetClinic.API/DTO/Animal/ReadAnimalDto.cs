@@ -8,5 +8,6 @@
         public string Photo { get; set; }
         public AnimalClientDto Client { get; set; }
         public string AnimalTypeName { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

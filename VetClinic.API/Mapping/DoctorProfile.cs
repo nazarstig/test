@@ -22,12 +22,14 @@ namespace VetClinic.API.Mapping
                 .ForMember(d => d.Email,
                 opt => opt.MapFrom(src => src.User.Email))
                 .ForMember(d => d.PhoneNumber,
-                opt => opt.MapFrom(src => src.User.PhoneNumber));
+                opt => opt.MapFrom(src => src.User.PhoneNumber))
+                .ForMember(d => d.IsDeleted,
+                opt => opt.MapFrom(src => src.User.IsDeleted));
 
             CreateMap<ReadDoctorDto, Position>()
                 .ForMember(x => x.PositionName, opt => opt.MapFrom(model => model.PositionName));
 
-            CreateMap<CreateDoctorDto, Doctor>(); 
+            CreateMap<CreateDoctorDto, Doctor>();
 
             CreateMap<CreateDoctorDto, User>()
                 .ForMember(d => d.UserName,
@@ -55,7 +57,9 @@ namespace VetClinic.API.Mapping
                 .ForMember(d => d.Email,
                 opt => opt.MapFrom(src => src.Email))
                 .ForMember(d => d.PhoneNumber,
-                opt => opt.MapFrom(src => src.PhoneNumber));  
+                opt => opt.MapFrom(src => src.PhoneNumber))
+                .ForMember(d => d.IsDeleted,
+                opt => opt.MapFrom(src => src.IsDeleted));
         }
     }
 }
