@@ -78,6 +78,7 @@ namespace VetClinic.API.Controllers
             animal.Name = updateAnimalDto.Name;
             animal.Age = updateAnimalDto.Age;
             animal.Photo = updateAnimalDto.Photo;
+            animal.IsDeleted = updateAnimalDto.IsDeleted;
             animal.AnimalTypeId = updateAnimalDto.AnimalTypeId;
 
             await _animalService.UpdateAnimal(animal);

@@ -8,5 +8,6 @@ namespace VetClinic.API.DTO.Queries
     public class ClientsFiltrationQuery
     {
         public string UserId { get; set; }
+        public bool? IsDeleted { get; set; }
     }
 }
