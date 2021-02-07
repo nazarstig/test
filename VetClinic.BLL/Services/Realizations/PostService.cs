@@ -8,7 +8,7 @@ using VetClinic.DAL.Repositories.Interfaces;
 
 namespace VetClinic.BLL.Services.Realizations
 {
-    class PostService : IPostService
+    public class PostService : IPostService
     {
         private readonly IRepositoryWrapper _repositoryWrapper;
 

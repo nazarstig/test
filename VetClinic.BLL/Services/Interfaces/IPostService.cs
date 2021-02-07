@@ -5,7 +5,7 @@ using VetClinic.DAL.Entities;
 
 namespace VetClinic.BLL.Services.Interfaces
 {
-    interface IPostService
+    public interface IPostService
     {
         Task<Post> CreatePost(Post post);
         Task<ICollection<Post>> GetAllAsync(PaginationFilter pagination = null);
