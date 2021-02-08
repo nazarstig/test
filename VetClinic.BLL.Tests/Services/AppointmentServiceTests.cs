@@ -35,7 +35,7 @@ namespace VetClinic.BLL.Tests.Services
         {
             // Arrange
             var appointments = _fixture.CreateMany<Appointment>().ToList();
-            
+
             _repositoryWrapper
                 .Setup(rw => rw.AppointmentRepository.GetAsync(It.IsAny<Expression<Func<Appointment, bool>>>(),
                     It.IsAny<Func<IQueryable<Appointment>, IIncludableQueryable<Appointment, object>>>(),
@@ -79,7 +79,7 @@ namespace VetClinic.BLL.Tests.Services
         {
             // Arrange
             int id = -1;
-            
+
             _repositoryWrapper
                 .Setup(rw => rw.AppointmentRepository.GetFirstOrDefaultAsync(
                     a => a.Id == id,
@@ -125,32 +125,6 @@ namespace VetClinic.BLL.Tests.Services
         }
 
         [Fact]
-        public async Task CreateAppointmentAsync_AppointmentModelIsInvalid_ThrowsException()
-        {
-            // Arrange
-            var appointment = _fixture.Create<Appointment>();
-            int id = appointment.Id;
-
-            _repositoryWrapper
-                .Setup(rw => rw.AnimalRepository.IsAnyAsync(a => a.Id == appointment.AnimalId))
-                .ReturnsAsync(false);
-            _repositoryWrapper
-                .Setup(rw => rw.ServiceRepository.IsAnyAsync(s => s.Id == appointment.ServiceId))
-                .ReturnsAsync(false);
-            _repositoryWrapper
-                .Setup(rw => rw.AppointmentRepository.GetFirstOrDefaultAsync(
-                    a => a.Id == id,
-                    It.IsAny<Func<IQueryable<Appointment>, IIncludableQueryable<Appointment, object>>>(),
-                    It.IsAny<bool>()))
-                .ReturnsAsync(appointment);
-
-            // Act & Assert
-            var ex = await Assert.ThrowsAsync<VetClinicException>(() => _appointmentService.CreateAppointmentAsync(appointment));
-            Assert.Equal($"Model is invalid", ex.Message);
-        }
-
-
-        [Fact]
         public async Task UpdateAppointmentAsync_AppointmentExists_ReturnsUpdatedAppointment()
         {
             // Arrange
@@ -175,7 +149,7 @@ namespace VetClinic.BLL.Tests.Services
             _repositoryWrapper
                 .Setup(rw => rw.DoctorRepository.IsAnyAsync(d => d.Id == appointment.DoctorId))
                 .ReturnsAsync(true);
-            
+
             // Act 
             var actual = await _appointmentService.UpdateAppointmentAsync(id, appointment);
 
@@ -202,34 +176,6 @@ namespace VetClinic.BLL.Tests.Services
                 _appointmentService.UpdateAppointmentAsync(id, appointment));
             Assert.Equal($"Appointment with id {id} doesn't exist", ex.Message);
         }
-
-        [Fact]
-        public async Task UpdateAppointmentAsync_AppointmentModelIsInvalid_ThrowsException()
-        {
-            // Arrange
-            var appointment = _fixture.Create<Appointment>();
-            int id = appointment.Id;
-
-            _repositoryWrapper.Setup(rw => rw.AnimalRepository.IsAnyAsync(a => a.Id == appointment.AnimalId))
-                .ReturnsAsync(false);
-            _repositoryWrapper.Setup(rw => rw.ServiceRepository.IsAnyAsync(s => s.Id == appointment.ServiceId))
-                .ReturnsAsync(false);
-            _repositoryWrapper.Setup(rw => rw.StatusRepository.IsAnyAsync(s => s.Id == appointment.StatusId))
-                .ReturnsAsync(false);
-            _repositoryWrapper.Setup(rw => rw.DoctorRepository.IsAnyAsync(d => d.Id == appointment.DoctorId))
-                .ReturnsAsync(false);
-            _repositoryWrapper.Setup(rw => rw.AppointmentRepository.GetFirstOrDefaultAsync(
-                    a => a.Id == id,
-                    It.IsAny<Func<IQueryable<Appointment>, IIncludableQueryable<Appointment, object>>>(),
-                    It.IsAny<bool>()))
-                .ReturnsAsync(appointment);
-
-            // Act & Assert
-            var ex = await Assert.ThrowsAsync<VetClinicException>(() =>
-                _appointmentService.UpdateAppointmentAsync(id, appointment));
-            Assert.Equal($"Model is invalid", ex.Message);
-        }
-
 
         [Fact]
         public async Task DeleteAppointmentAsync_AppointmentExists_ReturnsDeletedAppointment()
