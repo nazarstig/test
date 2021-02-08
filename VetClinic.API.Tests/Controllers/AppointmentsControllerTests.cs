@@ -9,6 +9,9 @@ using System.Net;
 using System.Threading.Tasks;
 using VetClinic.API.Controllers;
 using VetClinic.API.DTO.Appointments;
+using VetClinic.API.DTO.Queries;
+using VetClinic.API.DTO.Responses;
+using VetClinic.BLL.Domain;
 using VetClinic.BLL.Exceptions;
 using VetClinic.BLL.Services.Interfaces;
 using VetClinic.DAL.Entities;
@@ -37,22 +40,34 @@ namespace VetClinic.API.Tests.Controllers
         public async Task GetAsync_GetAllAppointments_ReturnsAllAppointments()
         {
             // Arrange
+            var paginationQuery = _fixture.Create<PaginationQuery>();
+            var paginationFilter = _fixture.Create<PaginationFilter>();
+            var filterQuery = _fixture.Create<AppointmentsFiltrationQuery>();
+            var filter = _fixture.Create<AppointmentsFilter>();
             var appointments = _fixture.CreateMany<Appointment>(5).ToList();
             var appointmentsDto = _fixture.CreateMany<AppointmentDto>(5).ToList();
 
+            _autoMapper
+                .Setup(m => m.Map<PaginationFilter>(paginationQuery))
+                .Returns(paginationFilter);
+            _autoMapper
+                .Setup(m => m.Map<AppointmentsFilter>(filterQuery))
+                .Returns(filter);
             _appointmentService
-                .Setup(a => a.GetAllAppointmentsAsync(null, null))
+                .Setup(a => a.GetAllAppointmentsAsync(filter, paginationFilter))
                 .ReturnsAsync(appointments);
             _autoMapper
                 .Setup(m => m.Map<IEnumerable<AppointmentDto>>(appointments))
                 .Returns(appointmentsDto);
 
             // Act
-            var actual = await _appointmentsController.GetAsync(null, null);
+            var actual = await _appointmentsController.GetAsync(
+                filterQuery,
+                paginationQuery);
 
             // Assert
             var okObjectResult = Assert.IsType<OkObjectResult>(actual);
-            Assert.Equal(appointmentsDto, okObjectResult.Value);
+            Assert.Equal(appointmentsDto, ((PagedResponse<AppointmentDto>) okObjectResult.Value).Data);
         }
 
 
@@ -76,7 +91,7 @@ namespace VetClinic.API.Tests.Controllers
 
             // Assert
             var okObjectResult = Assert.IsType<OkObjectResult>(actual);
-            Assert.Equal(appointmentDto, okObjectResult.Value);
+            Assert.Equal(appointmentDto, ((Response<AppointmentDto>) okObjectResult.Value).Data);
         }
 
         [Fact]
