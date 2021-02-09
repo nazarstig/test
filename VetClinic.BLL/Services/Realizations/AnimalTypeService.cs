@@ -39,9 +39,14 @@ namespace VetClinic.BLL.Services.Realizations
             return (await _repositoryWrapper.AnimalTypeRepository.GetAsync(x => x.Id == id)).FirstOrDefault();
         }
 
-        public async Task UpdateAnimalType(AnimalType animalType)
+        public async Task UpdateAnimalType(int id, AnimalType animalType)
         {
-            _repositoryWrapper.AnimalTypeRepository.Update(animalType);
+            var animalTypeToUpdate = (await _repositoryWrapper.AnimalTypeRepository.GetAsync(x => x.Id == id)).FirstOrDefault();
+
+            //update fields
+            animalTypeToUpdate.AnimalTypeName = animalType.AnimalTypeName;
+
+            _repositoryWrapper.AnimalTypeRepository.Update(animalTypeToUpdate);
             await _repositoryWrapper.SaveAsync();
         }
 

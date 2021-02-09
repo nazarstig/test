@@ -11,6 +11,6 @@ namespace VetClinic.BLL.Services.Interfaces
         Task<ICollection<Post>> GetAllAsync(PaginationFilter pagination = null);
         Task<Post> GetAsync(int id);
         Task RemovePost(Post post);
-        Task UpdatePost(Post post);
+        Task UpdatePost(int id, Post post);
     }
 }

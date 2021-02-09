@@ -66,11 +66,9 @@ namespace VetClinic.API.Controllers
             {
                 return NotFound();
             }
+            var updateAnimalType = _mapper.Map<AnimalType>(updateAnimalTypeDto);
 
-            //update fields
-            animalType.AnimalTypeName = updateAnimalTypeDto.AnimalTypeName;
-
-            await _animalTypeService.UpdateAnimalType(animalType);
+            await _animalTypeService.UpdateAnimalType(id, updateAnimalType);
 
             return NoContent();
         }

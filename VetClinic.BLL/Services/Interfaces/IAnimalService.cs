@@ -11,7 +11,7 @@ namespace VetClinic.BLL.Services.Interfaces
         Task<ICollection<Animal>> GetAllAsync(
             AnimalsFilter filter = null,
             PaginationFilter pagination = null);
-        Task UpdateAnimal(Animal animal);
+        Task UpdateAnimal(int id, Animal animal);
         Task<Animal> GetAsync(int id);
         Task RemoveAnimal(Animal animal);
     }

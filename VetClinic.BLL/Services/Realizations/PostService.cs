@@ -44,9 +44,17 @@ namespace VetClinic.BLL.Services.Realizations
             return (await _repositoryWrapper.PostRepository.GetAsync(x => x.Id == id)).FirstOrDefault();
         }
 
-        public async Task UpdatePost(Post post)
+        public async Task UpdatePost(int id, Post post)
         {
-            _repositoryWrapper.PostRepository.Update(post);
+            var postToUpdate = (await _repositoryWrapper.PostRepository.GetAsync(x => x.Id == id)).FirstOrDefault();
+
+            //update fields
+            postToUpdate.Title = post.Title;
+            postToUpdate.Subtitle = post.Subtitle;
+            postToUpdate.MainText = post.MainText;
+            postToUpdate.Photo = post.Photo;
+
+            _repositoryWrapper.PostRepository.Update(postToUpdate);
             await _repositoryWrapper.SaveAsync();
         }
 

@@ -30,15 +30,16 @@ namespace VetClinic.BLL.Tests.Services
 
         [Theory, AutoMoqData]
         public async Task UpdateAnimal_AnimalUpdated_UpdateSuccess(
-           [Frozen] Mock<IRepositoryWrapper> mockRepositoryWrapper)
+           [Frozen] Mock<IRepositoryWrapper> mockRepositoryWrapper,
+           [Frozen] Mock<Animal> animal)
         {
             //Arrange
+            int id = 0;
             mockRepositoryWrapper.Setup(x => x.AnimalRepository.Update(It.IsAny<Animal>()));
-            Animal animal = new Animal();
             var Sut = new AnimalService(mockRepositoryWrapper.Object);
 
             //Act
-            await Sut.UpdateAnimal(animal);
+            await Sut.UpdateAnimal(id, animal.Object);
 
             //Assert
             mockRepositoryWrapper.Verify(x => x.AnimalRepository.Update(It.IsAny<Animal>()));

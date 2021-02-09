@@ -28,7 +28,7 @@ namespace VetClinic.API.Controllers
         public async Task<IActionResult> PostAsync([FromBody] CreateAnimalDto createAnimalDto)
         {
             var animal = await _animalService.CreateAnimal(_mapper.Map<Animal>(createAnimalDto));
-            
+
             var readAnimalDto = _mapper.Map<ReadAnimalDto>(animal);
 
             return Created(nameof(GetAsync), new Response<ReadAnimalDto>(readAnimalDto));
@@ -73,15 +73,9 @@ namespace VetClinic.API.Controllers
             {
                 return NotFound();
             }
+            var updateAnimal = _mapper.Map<Animal>(updateAnimalDto);
 
-            //update fields
-            animal.Name = updateAnimalDto.Name;
-            animal.Age = updateAnimalDto.Age;
-            animal.Photo = updateAnimalDto.Photo;
-            animal.IsDeleted = updateAnimalDto.IsDeleted;
-            animal.AnimalTypeId = updateAnimalDto.AnimalTypeId;
-
-            await _animalService.UpdateAnimal(animal);
+            await _animalService.UpdateAnimal(id, updateAnimal);
 
             return NoContent();
         }

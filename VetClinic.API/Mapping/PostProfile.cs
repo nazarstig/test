@@ -21,6 +21,13 @@ namespace VetClinic.API.Mapping
                 .ForMember(d => d.MainText, t => t.MapFrom(o => o.MainText))
                 .ForMember(d => d.Photo, t => t.MapFrom(o => o.Photo))
                 .ReverseMap();
+
+            CreateMap<Post, UpdatePostDto>()
+               .ForMember(d => d.Title, t => t.MapFrom(o => o.Title))
+               .ForMember(d => d.Subtitle, t => t.MapFrom(o => o.Subtitle))
+               .ForMember(d => d.MainText, t => t.MapFrom(o => o.MainText))
+               .ForMember(d => d.Photo, t => t.MapFrom(o => o.Photo))
+               .ReverseMap();
         }
     }
 }

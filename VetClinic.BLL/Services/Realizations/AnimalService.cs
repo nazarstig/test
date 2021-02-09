@@ -26,7 +26,7 @@ namespace VetClinic.BLL.Services.Realizations
         {
             _repositoryWrapper.AnimalRepository.Add(animal);
             await _repositoryWrapper.SaveAsync();
-            
+
             var createdAnimal = await GetAsync(animal.Id);
 
 
@@ -59,12 +59,21 @@ namespace VetClinic.BLL.Services.Realizations
 
         public async Task<Animal> GetAsync(int id)
         {
-            return  (await _repositoryWrapper.AnimalRepository.GetAsync(x => x.Id == id,include:Include())).FirstOrDefault();
+            return (await _repositoryWrapper.AnimalRepository.GetAsync(x => x.Id == id, include: Include())).FirstOrDefault();
         }
 
-        public async Task UpdateAnimal(Animal animal)
+        public async Task UpdateAnimal(int id, Animal animal)
         {
-            _repositoryWrapper.AnimalRepository.Update(animal);
+            var animalToUpdate = (await _repositoryWrapper.AnimalRepository.GetAsync(x => x.Id == id)).FirstOrDefault();
+
+            //update fields
+            animalToUpdate.Name = animal.Name;
+            animalToUpdate.Photo = animal.Photo;
+            animalToUpdate.Age = animal.Age;
+            animalToUpdate.AnimalTypeId = animal.AnimalTypeId;
+            animalToUpdate.IsDeleted = animal.IsDeleted;
+
+            _repositoryWrapper.AnimalRepository.Update(animalToUpdate);
             await _repositoryWrapper.SaveAsync();
         }
 

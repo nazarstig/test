@@ -72,13 +72,9 @@ namespace VetClinic.API.Controllers
                 return NotFound();
             }
 
-            //update fields
-            post.Title = updatePostDto.Title;
-            post.Subtitle = updatePostDto.Subtitle;
-            post.MainText = updatePostDto.MainText;
-            post.Photo = updatePostDto.Photo;
+            var updatePost = _mapper.Map<Post>(updatePostDto);
 
-            await _postService.UpdatePost(post);
+            await _postService.UpdatePost(id, updatePost);
 
             return NoContent();
         }
