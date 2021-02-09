@@ -95,9 +95,9 @@ namespace VetClinic.BLL.Services.Realizations
             return appointment;
         }
 
-        public async Task<int> GetTotalCount()
+        public async Task<int> GetTotalCount(AppointmentsFilter filter = null)
         {
-           return await _repositoryWrapper.AppointmentRepository.CountAsync();
+           return await _repositoryWrapper.AppointmentRepository.CountAsync(Filter(filter));
         }
 
         private void UpdatePerformedProcedures(Appointment source, Appointment destination)

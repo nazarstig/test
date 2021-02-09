@@ -24,7 +24,7 @@ namespace VetClinic.DAL.Repositories.Interfaces
         void Add(TEntity entity);
         void Remove(TEntity entity);
         void Update(TEntity entity);
-        Task<int> CountAsync();
+        Task<int> CountAsync(Expression<Func<TEntity, bool>> filter = null);
         Task<bool> IsAnyAsync(Expression<Func<TEntity, bool>> filter = null);
     }
 }

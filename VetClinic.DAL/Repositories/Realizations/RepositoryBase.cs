@@ -60,9 +60,12 @@ namespace VetClinic.DAL.Repositories.Realizations
             Context.Set<TEntity>().Update(entity);
         }
 
-        public async Task<int> CountAsync()
+        public async Task<int> CountAsync(Expression<Func<TEntity, bool>> filter = null)
         {
-           return await Context.Set<TEntity>().CountAsync();
+            if (filter != null)
+                return await Context.Set<TEntity>().Where(filter).CountAsync();
+
+            return await Context.Set<TEntity>().CountAsync();
         }
 
         public async Task<bool> IsAnyAsync(Expression<Func<TEntity, bool>> filter = null)
