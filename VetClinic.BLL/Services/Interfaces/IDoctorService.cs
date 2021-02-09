@@ -15,5 +15,6 @@ namespace VetClinic.BLL.Services.Interfaces
         public Task<bool> RemoveDoctorAsync(int doctorId);
         public Task<bool> UpdateDoctorAsync(Doctor inputDoctor, User inputUser, int doctorId);
         public Task<bool> IsAnyDoctorAsync(int id);
+        public  Task<IEnumerable<string>> GetAllDoctorsEmails();
     }
 }

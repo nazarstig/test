@@ -44,6 +44,14 @@ namespace VetClinic.BLL.Services.Realizations
             return await _repositoryWrapper.ClientRepository.GetAsync(include: c => c.Include(c => c.User));
         }
 
+        public async Task<IEnumerable<string>> GetAllClientsEmails()
+        {
+            IEnumerable<string> emails;
+            var clients = await GetAllClients();
+            emails = clients.Select(client => client.User.Email);
+            return emails;
+        }
+
         public async Task<ICollection<Client>> GetAllClients(
             ClientsFilter filter = null,
             PaginationFilter pagination = null)

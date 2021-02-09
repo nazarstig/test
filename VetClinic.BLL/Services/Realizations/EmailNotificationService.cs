@@ -5,7 +5,7 @@ using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 using VetClinic.BLL.Domain;
-using VetClinic.BLL.Helpers;
+using VetClinic.BLL.Email;
 using VetClinic.BLL.Services.Interfaces;
 using VetClinic.DAL.Entities;
 using System.Linq;
@@ -16,18 +16,23 @@ namespace VetClinic.BLL.Services.Realizations
     {
         private readonly IAppointmentService _appointmentService;
         private readonly IClientService _clientService;
+        private readonly IDoctorService _doctorService;
+        private readonly IServiceService _serviceService;
 
         public EmailNotificationService(IAppointmentService appointmentService,
-            IClientService clientService)
+            IClientService clientService, IDoctorService doctorService,
+            IServiceService serviceService)
         {
             _appointmentService = appointmentService;
             _clientService = clientService;
+            _doctorService = doctorService;
+            _serviceService = serviceService;
         }
 
-        public async Task<bool> SendEmailAsync(string emailTo, string subject, string message)
+        public async Task<bool> SendEmailAsync(EmailModel emailModel)
         {
             bool isSend = false;
-            MailMessage mailMessage = CreateMailMessageObject(emailTo, subject, message);
+            MailMessage mailMessage = CreateMailMessageObject(emailModel);
             try
             {
                 await EmailHelper.smtp.SendMailAsync(mailMessage);
@@ -41,33 +46,42 @@ namespace VetClinic.BLL.Services.Realizations
             return isSend;
         }
 
-        public MailMessage CreateMailMessageObject(string emailTo, string subject, string message)
+        public MailMessage CreateMailMessageObject(EmailModel email)
         {
-            var body = message;
+            var body = email.Message;
             var mailMessage = new MailMessage();
-            mailMessage.To.Add(new MailAddress(emailTo));
+
+            foreach (string emailTo in email.EmailsTo)
+                mailMessage.To.Add(new MailAddress(emailTo));
+
             mailMessage.From = new MailAddress(EmailHelper.EmailInfo.EmailSender);
-            mailMessage.Subject = subject;
+            mailMessage.Subject = email.Subject;
             mailMessage.Body = body;
             mailMessage.IsBodyHtml = true;
+
+            if (email.FileNameAttachments != null)
+            {
+                mailMessage.AddAttachments(email.FileNameAttachments);
+            }
+
+            if (email.StreamAttachments != null)
+            {
+                mailMessage.AddAttachments(email.StreamAttachments);
+            }
+
             return mailMessage;
         }
 
+        //appointment
         public async Task SendAppointmentNotifications(int appointmentId)
         {
             Appointment appointment = await _appointmentService.GetAppointmentByIdAsync(appointmentId);
             if (appointment != null)
             {
                 AppointmentEmailNotificationDto dto = CreateAppointmentNotificationDto(appointment);
-                switch (dto.StatusId)
-                {
-                    case 1:
-                        {
-                            await SendAppointmentNotificationDoctor(dto);
-                            await SendAppointmentNotificationClient(dto);
-                            break;
-                        }
-                }
+
+                await SendAppointmentNotificationDoctor(dto);
+                await SendAppointmentNotificationClient(dto);
             }
         }
 
@@ -99,10 +113,13 @@ namespace VetClinic.BLL.Services.Realizations
             string emailTo = dto.DoctorEmail;
             if (emailTo != null)
             {
-                string subject = EmailHelper.AppointmentDoctorSubject;
-                string message = EmailHelper.AppointmentDoctorMessage(dto);
-                await SendEmailAsync(dto.DoctorEmail,
-                          subject, message);
+                EmailModel email = new EmailModel
+                {
+                    EmailsTo = new List<string> { emailTo },
+                    Subject = EmailHelper.AppointmentDoctorSubject,
+                    Message = EmailHelper.AppointmentDoctorMessage(dto)
+                };
+                await SendEmailAsync(email);
             }
         }
 
@@ -111,13 +128,40 @@ namespace VetClinic.BLL.Services.Realizations
             string emailTo = dto.ClientEmail;
             if (emailTo != null)
             {
-                string subject = EmailHelper.AppointmentClientSubject;
-                string message = EmailHelper.AppointmentClientMessage(dto);
-                await SendEmailAsync(emailTo,
-                    subject, message);
+                EmailModel email = new EmailModel
+                {
+                    EmailsTo = new List<string> { emailTo },
+                    Subject = EmailHelper.AppointmentClientSubject,
+                    Message = EmailHelper.AppointmentClientMessage(dto)
+                };
+                await SendEmailAsync(email);
             }
         }
 
+        public async Task SendClientAppointmentsReceipt(int clientId, int appointmentId)
+        {
+            Client client = await _clientService.GetClient(clientId);
+            if (client != null)
+            {
+                string clientEmail = client.User.Email;
+
+                //CreateStreamAttachment, depending on appointment
+                StreamAttachment streamAttach = new StreamAttachment();
+
+                EmailModel email = new EmailModel
+                {
+                    EmailsTo = new List<string> { clientEmail },
+                    Subject = EmailHelper.AppointmentReceiptSubject,
+                    Message = EmailHelper.AppointmentReceiptMessage(client.User.UserName),
+                    FileNameAttachments = new List<string> { @"C:\Users\Nazar Ivasyshyn\Desktop\IfYouCan.pdf"
+                     },
+                    //StreamAttachments = new List<StreamAttachment> { streamAttach }
+                };
+                await SendEmailAsync(email);
+            }
+        }
+
+        //registration
         public async Task SendClientRegistrationNotification(string username)
         {
             ClientsFilter filter = new ClientsFilter { UserName = username };
@@ -128,14 +172,59 @@ namespace VetClinic.BLL.Services.Realizations
                 string emailTo = user.Email;
                 if (emailTo != null)
                 {
-                    string subject = EmailHelper.RegistrationSubject;
-                    string message = EmailHelper.RegistrationMessage(user.FirstName, user.LastName);
-                    await SendEmailAsync(emailTo, subject,
-                    message);
+                    EmailModel email = new EmailModel
+                    {
+                        EmailsTo = new List<string> { emailTo },
+                        Subject = EmailHelper.RegistrationSubject,
+                        Message = EmailHelper.RegistrationMessage(user.FirstName, user.LastName)
+                    };
+                    await SendEmailAsync(email);
                 }
             }
         }
 
+        //service
+
+        public async Task SendNewServiceNotification(int serviceId)
+        {
+            Service service = await _serviceService.GetServiceByIdAsync(serviceId);
+            if (service != null)
+            {
+                EmailModel email = new EmailModel
+                {
+                    Subject = EmailHelper.ServiceSubject,
+                    Message = EmailHelper.ServiceMessage(service.ServiceName, service.Description)
+                };
+                await SendNotificationToAllClients(email);
+            }
+        }
+
+        //
+
+        //multiple sending
+        public async Task SendNotificationToAllClients(EmailModel email)
+        {
+            email.EmailsTo = await _clientService.GetAllClientsEmails();
+            await SendEmailAsync(email);
+        }
+
+        public async Task SendNotificationToAllDoctors(EmailModel email)
+        {
+            email.EmailsTo = await _doctorService.GetAllDoctorsEmails();
+            await SendEmailAsync(email);
+        }
+
+        public async Task SendNotificationToAllUsers(EmailModel email)
+        {
+            await SendNotificationToAllClients(email);
+            await SendNotificationToAllDoctors(email);
+        }
+
+        public async Task SendNotificationToUsers(IEnumerable<User> users, EmailModel email)
+        {
+            foreach (User user in users)
+                await SendEmailAsync(email);
+        }
     }
 }
 

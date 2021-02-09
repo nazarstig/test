@@ -6,6 +6,7 @@ using VetClinic.API.DTO.Animal;
 using VetClinic.API.DTO.Queries;
 using VetClinic.API.DTO.Responses;
 using VetClinic.BLL.Domain;
+using VetClinic.BLL.Email;
 using VetClinic.BLL.Services.Interfaces;
 using VetClinic.DAL.Entities;
 
@@ -23,10 +24,17 @@ namespace VetClinic.API.Controllers
         }
 
 
-        [HttpGet("appointment/{appointmentId}")]
+        [HttpGet("appointments/{appointmentId}")]
         public async Task<IActionResult> SendAppointmentNotification(int appointmentId)
         {
             await _emailNotificationService.SendAppointmentNotifications(appointmentId);
+            return NoContent();
+        }
+
+        [HttpPost("appointments/receipt")]
+        public async Task<IActionResult> SendAppointmentsReceipt(int clientId, int appointmentId)
+        {
+            await _emailNotificationService.SendClientAppointmentsReceipt(clientId, appointmentId);
             return NoContent();
         }
 
@@ -36,5 +44,25 @@ namespace VetClinic.API.Controllers
             await _emailNotificationService.SendClientRegistrationNotification(username);
             return NoContent();
         }
+
+        [HttpGet("services/{serviceId}")]
+        public async Task<IActionResult> SendNewServiceNotification(int serviceId)
+        {
+            await _emailNotificationService.SendNewServiceNotification(serviceId);
+            return NoContent();
+        }
+
+        [HttpGet("clientsNotification")]
+        public async Task<IActionResult> SendWrittenNotification(string subject, string message)
+        {
+            EmailModel email = new EmailModel
+            {
+                Subject = subject,
+                Message = message
+            };
+            await _emailNotificationService.SendNotificationToAllUsers(email);
+            return NoContent();
+        }
+
     }
 }
