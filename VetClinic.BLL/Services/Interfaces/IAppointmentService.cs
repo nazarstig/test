@@ -15,5 +15,6 @@ namespace VetClinic.BLL.Services.Interfaces
         public Task<Appointment> CreateAppointmentAsync(Appointment appointment);
         public Task<Appointment> UpdateAppointmentAsync(int id, Appointment appointment);
         public Task<Appointment> DeleteAppointmentAsync(int id);
+        public Task<int> GetTotalCount();
     }
 }

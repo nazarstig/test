@@ -36,7 +36,9 @@ namespace VetClinic.API.Controllers
 
             var appointmentsDto = _mapper.Map<IEnumerable<AppointmentDto>>(appointments);
 
-            var pagedResponse = new PagedResponse<AppointmentDto>(appointmentsDto, paginationQuery);
+            var totalCount = await _appointmentService.GetTotalCount();
+
+            var pagedResponse = new PagedResponse<AppointmentDto>(appointmentsDto, paginationQuery, totalCount);
 
             return Ok(pagedResponse);
         }

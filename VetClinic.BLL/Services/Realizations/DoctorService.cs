@@ -135,6 +135,7 @@ namespace VetClinic.BLL.Services.Realizations
                 doctor.User.LastName = inputUser.LastName;
                 doctor.User.Email = inputUser.Email;
                 doctor.User.PhoneNumber = inputUser.PhoneNumber;
+                doctor.User.IsDeleted = inputUser.IsDeleted;
 
                 _repositoryWrapper.DoctorRepository.Update(doctor);
                 await _userService.UpdateUserAsync(doctor.UserId, doctor.User, role);
@@ -174,6 +175,18 @@ namespace VetClinic.BLL.Services.Realizations
             if (filter.UserId != null)
             {
                 Expression<Func<Doctor, bool>> userFilter = a => a.UserId == filter.UserId;
+                expressionsList.Add(userFilter);
+            }
+
+            if (filter.IsDeleted!=null)
+            {
+                Expression<Func<Doctor, bool>> userFilter = a => a.User.IsDeleted == filter.IsDeleted.Value;
+                expressionsList.Add(userFilter);
+            }
+
+            if (filter.IsDeleted == null)
+            {
+                Expression<Func<Doctor, bool>> userFilter = a => !a.User.IsDeleted;
                 expressionsList.Add(userFilter);
             }
 

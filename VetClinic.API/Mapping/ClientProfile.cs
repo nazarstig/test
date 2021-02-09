@@ -22,7 +22,9 @@ namespace VetClinic.API.Mapping
                 ForMember(d => d.Email,
                 opt => opt.MapFrom(src => src.User.Email)).
                 ForMember(d => d.PhoneNumber,
-                opt => opt.MapFrom(src => src.User.PhoneNumber));
+                opt => opt.MapFrom(src => src.User.PhoneNumber))
+                .ForMember(d => d.IsDeleted,
+                opt => opt.MapFrom(src => src.User.IsDeleted));
         }
     }
 }
