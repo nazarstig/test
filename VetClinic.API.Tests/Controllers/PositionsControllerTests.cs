@@ -44,7 +44,7 @@ namespace VetClinic.API.Tests.Controllers
             mapper.Setup(m => m.Map<ICollection<PositionDto>>(positions))
                 .Returns(positionsDTO);
             mapper.Setup(m => m.Map<PaginationFilter>(paginationQuery))
-                .Returns(paginationFilter);
+                .Returns(paginationFilter);            
 
             // Act
             var actualResult = await positionController.GetAsync(paginationQuery);
