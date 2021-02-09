@@ -56,6 +56,7 @@ namespace VetClinic.BLL.Services.Realizations
                 user.LastName = inputUser.LastName;
                 user.Email = inputUser.Email;
                 user.PhoneNumber = inputUser.PhoneNumber;
+                user.IsDeleted = inputUser.IsDeleted;
 
                 //We need to pull roles explicitly because they are in a different table
                 var MyRoles = await UserManager.GetRolesAsync(user);

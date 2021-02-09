@@ -33,18 +33,18 @@ namespace VetClinic.BLL.Services.Realizations
         {
             if (pagination != null && filter != null)
             {
-                return await _repositoryWrapper.AppointmentRepository.GetAsync(filter: Filter(filter), include: Include(),
-                    pageNumber: pagination.PageNumber, pageSize: pagination.PageSize);
+                return await _repositoryWrapper.AppointmentRepository.GetAsync(Filter(filter), Include(), OrderBy(pagination),
+                    pagination.PageNumber, pagination.PageSize);
             }
 
             if (filter != null)
             {
-                return await _repositoryWrapper.AppointmentRepository.GetAsync(filter: Filter(filter), include: Include());
+                return await _repositoryWrapper.AppointmentRepository.GetAsync(Filter(filter), Include());
             }
 
             if (pagination != null)
             {
-                return await _repositoryWrapper.AppointmentRepository.GetAsync(include: Include(),
+                return await _repositoryWrapper.AppointmentRepository.GetAsync(include: Include(), orderBy: OrderBy(pagination),
                     pageNumber: pagination.PageNumber, pageSize: pagination.PageSize);
             }
 
@@ -93,6 +93,11 @@ namespace VetClinic.BLL.Services.Realizations
             await _repositoryWrapper.SaveAsync();
 
             return appointment;
+        }
+
+        public async Task<int> GetTotalCount(AppointmentsFilter filter = null)
+        {
+           return await _repositoryWrapper.AppointmentRepository.CountAsync(Filter(filter));
         }
 
         private void UpdatePerformedProcedures(Appointment source, Appointment destination)
@@ -162,6 +167,25 @@ namespace VetClinic.BLL.Services.Realizations
             }
 
             return expression;
+        }
+
+        private static Func<IQueryable<Appointment>, IOrderedQueryable<Appointment>> OrderBy(PaginationFilter filter)
+        {
+            Func<IQueryable<Appointment>, IOrderedQueryable<Appointment>> orderBy;
+            switch (filter.OrderBy)
+            {
+                case "date":
+                    orderBy = apps => apps.OrderBy(a => a.AppointmentDate);
+                    break;
+                case "date_desc":
+                    orderBy = apps => apps.OrderByDescending(a => a.AppointmentDate);
+                    break;
+                default:
+                    orderBy = apps => apps.OrderBy(a => a.Id);
+                    break;
+            }
+
+            return orderBy;
         }
     }
 }
