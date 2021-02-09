@@ -1,4 +1,4 @@
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using System;
@@ -20,6 +20,7 @@ namespace VetClinic.BLL.Services.Realizations
     {
         private readonly IMapper _mapper;
         private readonly IRepositoryWrapper _repositoryWrapper;
+
         public AppointmentService(IMapper mapper, IRepositoryWrapper repositoryWrapper)
         {
             _mapper = mapper;
@@ -94,9 +95,9 @@ namespace VetClinic.BLL.Services.Realizations
             return appointment;
         }
 
-        public async Task<int> GetTotalCount()
+        public async Task<int> GetTotalCount(AppointmentsFilter filter = null)
         {
-           return await _repositoryWrapper.AppointmentRepository.CountAsync();
+           return await _repositoryWrapper.AppointmentRepository.CountAsync(Filter(filter));
         }
 
         private void UpdatePerformedProcedures(Appointment source, Appointment destination)
