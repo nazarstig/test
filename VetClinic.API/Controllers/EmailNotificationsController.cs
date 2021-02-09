@@ -52,7 +52,7 @@ namespace VetClinic.API.Controllers
             return NoContent();
         }
 
-        [HttpGet("clientsNotification")]
+        [HttpPost]
         public async Task<IActionResult> SendWrittenNotification(string subject, string message)
         {
             EmailModel email = new EmailModel
