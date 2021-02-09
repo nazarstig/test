@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
-using VetClinic.BLL.Services.Realizations;
+using VetClinic.BLL.ReportModels;
 
 namespace VetClinic.BLL.Services.Interfaces
 {

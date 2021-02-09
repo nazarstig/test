@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
 using System.Threading.Tasks;
 using VetClinic.API.DTO.Accountant;
+using VetClinic.BLL.ReportModels;
 using VetClinic.BLL.Services.Interfaces;
-using VetClinic.BLL.Services.Realizations;
 
 namespace VetClinic.API.Controllers
 {

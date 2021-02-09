@@ -10,6 +10,7 @@
     <PackageReference Include="EPPlus" Version="5.5.2" />
     <PackageReference Include="IdentityModel" Version="4.5.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+    <PackageReference Include="sautinsoft.exceltopdf" Version="5.4.1.20" />
     <PackageReference Include="Serilog" Version="2.8.0" />
     <PackageReference Include="Serilog.Extensions.Logging" Version="3.0.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="3.1.0" />
