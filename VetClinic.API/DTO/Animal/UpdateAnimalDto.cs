@@ -6,5 +6,6 @@
         public int Age { get; set; }
         public string Photo { get; set; }
         public int AnimalTypeId { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

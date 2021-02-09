@@ -28,7 +28,7 @@ namespace VetClinic.DAL.Repositories.Realizations
             IQueryable<TEntity> query = GetQuery(filter, include, asNoTracking);
 
             if (orderBy != null)
-                return await orderBy(query).ToListAsync();
+                query = orderBy(query);
 
             if (pageNumber != null && pageSize != null)
                 query = query.Skip((pageNumber.Value - 1) * pageSize.Value).Take(pageSize.Value);
@@ -58,6 +58,14 @@ namespace VetClinic.DAL.Repositories.Realizations
         public void Update(TEntity entity)
         {
             Context.Set<TEntity>().Update(entity);
+        }
+
+        public async Task<int> CountAsync(Expression<Func<TEntity, bool>> filter = null)
+        {
+            if (filter != null)
+                return await Context.Set<TEntity>().Where(filter).CountAsync();
+
+            return await Context.Set<TEntity>().CountAsync();
         }
 
         public async Task<bool> IsAnyAsync(Expression<Func<TEntity, bool>> filter = null)

@@ -14,7 +14,7 @@ namespace VetClinic.BLL.Services.Interfaces
             ClientsFilter filter = null,
             PaginationFilter pagination = null);
 
-
+        public Task<IEnumerable<string>> GetAllClientsEmails();
         public Task<Client> GetClient(int id);
         public Task<bool> PutClient(User user, Client client);
         public Task<bool> DeleteClient(int id);
