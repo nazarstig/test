@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using VetClinic.BLL.Domain;
@@ -206,6 +207,14 @@ namespace VetClinic.BLL.Services.Realizations
             }
 
             return expression;
+        }
+
+        public async Task<IEnumerable<string>> GetAllDoctorsEmails()
+        {
+            IEnumerable<string> emails;
+            var doctors = await GetDoctorAsync();
+            emails = doctors.Select(d => d.User.Email);
+            return emails;
         }
     }
 }

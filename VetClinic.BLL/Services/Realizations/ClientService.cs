@@ -18,7 +18,6 @@ namespace VetClinic.BLL.Services.Realizations
     {
         private readonly IRepositoryWrapper _repositoryWrapper;
         private readonly IUserService _userService;
-
         public ClientService(IRepositoryWrapper repositoryWrapper, IUserService userService)
         {
             _repositoryWrapper = repositoryWrapper;
@@ -43,6 +42,14 @@ namespace VetClinic.BLL.Services.Realizations
         public async Task<ICollection<Client>> GetAllClients()
         {
             return await _repositoryWrapper.ClientRepository.GetAsync(include: c => c.Include(c => c.User));
+        }
+
+        public async Task<IEnumerable<string>> GetAllClientsEmails()
+        {
+            IEnumerable<string> emails;
+            var clients = await GetAllClients();
+            emails = clients.Select(client => client.User.Email);
+            return emails;
         }
 
         public async Task<ICollection<Client>> GetAllClients(
@@ -109,8 +116,14 @@ namespace VetClinic.BLL.Services.Realizations
 
             if (filter.UserId != null)
             {
-                Expression<Func<Client, bool>> statusFilter = a => a.UserId == filter.UserId;
-                expressionsList.Add(statusFilter);
+                Expression<Func<Client, bool>> idFilter = a => a.UserId == filter.UserId;
+                expressionsList.Add(idFilter);
+            }
+
+            if (filter.UserName != null)
+            {
+                Expression<Func<Client, bool>> usernameFilter = a => a.User.UserName == filter.UserName;
+                expressionsList.Add(usernameFilter);
             }
 
             if (filter.IsDeleted != null)
@@ -134,6 +147,8 @@ namespace VetClinic.BLL.Services.Realizations
 
             return expression;
         }
+
+       
 
     }
 }
