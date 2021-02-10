@@ -90,13 +90,13 @@ namespace VetClinic.BLL.Email
             return message;
         }
 
-        public static readonly string AppointmentReceiptSubject = "Receipt";
+        public static readonly string AppointmentInvoiceSubject = "Invoice";
 
-        public static string AppointmentReceiptMessage(string userName)
+        public static string AppointmentInvoiceMessage(string userName)
         {
             string message;
             message = string.Format("Dear {0} , <br/>" +
-                "Here is your receipt for all completed appointments.<br/>" +
+                "Here is your invoice for all completed procedures in appointment.<br/>" +
                 "Best regards, <br/>" +
                 "Clinic administration", userName);
             return message;

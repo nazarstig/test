@@ -61,6 +61,10 @@ namespace VetClinic.BLL.Seeders
                 data = new User { Id = "64", FirstName = "Gomer", LastName = "Sipmson", UserName = "donut", Email = "donut@gmail.com", PhoneNumber = "0456412644", PasswordHash = "Pass123$" };
                 doctorData = new Doctor { Id = 3, Education = "Nuke", Experience = "7", PositionId = 4 };
                 await MakeDoctor(data, doctorData, userManager, repositoryWrapper);
+
+                //accountants
+                data = new User { Id = "80", FirstName = "Maryland", LastName = "Smith", UserName = "mary", Email = "mary_vetclinic@gmail.com", PhoneNumber = "0995412723", PasswordHash = "Pass123$" };
+                await MakeAccountant(data, userManager);
             }
         }
 
@@ -150,6 +154,28 @@ namespace VetClinic.BLL.Seeders
                 if (!userManager.IsInRoleAsync(user, "admin").Result)
                 {
                     _ = userManager.AddToRoleAsync(user, "admin").Result;
+                }
+
+                Log.Debug($@"{userData.UserName} created");
+            }
+            else
+            {
+                Log.Debug($@"{userData.UserName} already exists");
+            }
+        }
+
+        private static async Task MakeAccountant(User userData, UserManager<User> userManager)
+        {
+            var user = userManager.FindByNameAsync(userData.UserName).Result;
+            if (user == null)
+            {
+                user = userData;
+
+                _ = await userManager.CreateAsync(user, "Pass123$");
+
+                if (!userManager.IsInRoleAsync(user, "accountant").Result)
+                {
+                    _ = userManager.AddToRoleAsync(user, "accountant").Result;
                 }
 
                 Log.Debug($@"{userData.UserName} created");

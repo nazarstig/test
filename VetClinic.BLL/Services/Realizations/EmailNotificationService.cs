@@ -138,7 +138,7 @@ namespace VetClinic.BLL.Services.Realizations
             }
         }
 
-        public async Task SendClientAppointmentsReceipt(int clientId, int appointmentId)
+        public async Task SendClientAppointmentsInvoice(int clientId, byte[] fileBytes)
         {
             Client client = await _clientService.GetClient(clientId);
             if (client != null)
@@ -147,15 +147,15 @@ namespace VetClinic.BLL.Services.Realizations
 
                 //CreateStreamAttachment, depending on appointment
                 StreamAttachment streamAttach = new StreamAttachment();
+                streamAttach.Stream = new System.IO.MemoryStream(fileBytes);
+                streamAttach.FileName = "Appointment_Invoice.pdf";
 
                 EmailModel email = new EmailModel
                 {
                     EmailsTo = new List<string> { clientEmail },
-                    Subject = EmailHelper.AppointmentReceiptSubject,
-                    Message = EmailHelper.AppointmentReceiptMessage(client.User.UserName),
-                    FileNameAttachments = new List<string> { @"C:\Users\Nazar Ivasyshyn\Desktop\IfYouCan.pdf"
-                     },
-                    //StreamAttachments = new List<StreamAttachment> { streamAttach }
+                    Subject = EmailHelper.AppointmentInvoiceSubject,
+                    Message = EmailHelper.AppointmentInvoiceMessage(client.User.UserName),
+                    StreamAttachments = new List<StreamAttachment> { streamAttach }
                 };
                 await SendEmailAsync(email);
             }
