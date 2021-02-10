@@ -33,9 +33,15 @@ namespace VetClinic.BLL.Seeders
                 var userManager = scope.ServiceProvider.GetService<UserManager<User>>();
                 var roleMamager = scope.ServiceProvider.GetService<RoleManager<IdentityRole>>();
 
+                //admin
 
-                var data = new User { UserName = "admin", FirstName = "Admin", LastName = "Admin", Email = "Admin@email.com", PhoneNumber = "12345678910" };
-                await MakeAdmin(data, userManager);
+                var admin = new User { UserName = "admin", FirstName = "Admin", LastName = "Admin", Email = "Admin@email.com", PhoneNumber = "12345678910" };
+                await MakeAdmin(admin, userManager);
+
+                //accountant
+
+                var accountant = new User { UserName = "accountant", FirstName = "Accountant", LastName = "Accountant", Email = "Accountant@email.com", PhoneNumber = "12345678910" };
+                await MakeAccountant(accountant, userManager);
 
                 //statuses
 
@@ -83,7 +89,7 @@ namespace VetClinic.BLL.Seeders
                 await CreateRoles(roles, roleMamager);
                 await RemoveNotSeededRoles(roles, roleMamager);
             }
-        }
+        }        
 
         private static async Task CreateStatuces(List<Status> statusesData, IRepositoryWrapper repositoryWrapper)
         {
@@ -226,16 +232,38 @@ namespace VetClinic.BLL.Seeders
 
         private static async Task MakeAdmin(User userData, UserManager<User> userManager)
         {
-            var user = userManager.FindByNameAsync(userData.UserName).Result;
+            var user = await userManager.FindByNameAsync(userData.UserName);
             if (user == null)
             {
                 user = userData;
 
                 _ = await userManager.CreateAsync(user, "Pass123$");
 
-                if (!userManager.IsInRoleAsync(user, "admin").Result)
+                if (!await userManager.IsInRoleAsync(user, "admin"))
                 {
-                    _ = userManager.AddToRoleAsync(user, "admin").Result;
+                    _ = await userManager.AddToRoleAsync(user, "admin");
+                }
+
+                Log.Debug($@"{userData.UserName} created");
+            }
+            else
+            {
+                Log.Debug($@"{userData.UserName} already exists");
+            }
+        }
+
+        private static async Task MakeAccountant(User userData, UserManager<User> userManager)
+        {
+            var user = await userManager.FindByNameAsync(userData.UserName);
+            if (user == null)
+            {
+                user = userData;
+
+                _ = await userManager.CreateAsync(user, "Pass123$");
+
+                if (!await userManager.IsInRoleAsync(user, "accountant"))
+                {
+                    _ = await userManager.AddToRoleAsync(user, "accountant");
                 }
 
                 Log.Debug($@"{userData.UserName} created");
