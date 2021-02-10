@@ -14,6 +14,7 @@ namespace VetClinic.BLL.Services.Interfaces
         public Task<Doctor> AddDoctorAsync(Doctor doctor, User user);
         public Task<bool> RemoveDoctorAsync(int doctorId);
         public Task<bool> UpdateDoctorAsync(Doctor inputDoctor, User inputUser, int doctorId);
+        public Task<int> GetTotalCount(DoctorsFilter filter = null);
         public Task<bool> IsAnyDoctorAsync(int id);
     }
 }

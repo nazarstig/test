@@ -107,37 +107,20 @@ namespace VetClinic.BLL.Services.Realizations
 
         public async Task<bool> UpdateDoctorAsync(Doctor inputDoctor, User inputUser, int doctorId)
         {
-            var role = await this.DoctorRoleExistAsync();
-
-            var doctor = await _repositoryWrapper
-                .DoctorRepository
-                .GetFirstOrDefaultAsync(
-                filter: c => c.Id == doctorId,
-                include: c => c.Include(d => d.User));
-
-            if (doctor == null)
-                return false;
+            var role = await this.DoctorRoleExistAsync();            
 
             if (inputDoctor == null)
                 return false;
 
+            if (inputUser == null)
+                return false;
+
             else
             {
-                doctor.Education = inputDoctor.Education;
-                doctor.Biography = inputDoctor.Biography;
-                doctor.Experience = inputDoctor.Experience;
-                doctor.Photo = inputDoctor.Photo;
-                doctor.PositionId = inputDoctor.PositionId;
+                inputDoctor.Id = doctorId;
 
-                doctor.User.UserName = inputUser.UserName;
-                doctor.User.FirstName = inputUser.FirstName;
-                doctor.User.LastName = inputUser.LastName;
-                doctor.User.Email = inputUser.Email;
-                doctor.User.PhoneNumber = inputUser.PhoneNumber;
-                doctor.User.IsDeleted = inputUser.IsDeleted;
-
-                _repositoryWrapper.DoctorRepository.Update(doctor);
-                await _userService.UpdateUserAsync(doctor.UserId, doctor.User, role);
+                await _userService.UpdateUserAsync(inputDoctor.UserId, inputUser, role);
+                _repositoryWrapper.DoctorRepository.Update(inputDoctor);                
 
                 await _repositoryWrapper.SaveAsync();
                 return true;
@@ -147,6 +130,11 @@ namespace VetClinic.BLL.Services.Realizations
         public Task<bool> IsAnyDoctorAsync(int id)
         {
             return _repositoryWrapper.DoctorRepository.IsAnyAsync(d => d.Id == id);
+        }
+
+        public async Task<int> GetTotalCount(DoctorsFilter filter = null)
+        {
+            return await _repositoryWrapper.DoctorRepository.CountAsync(Filter(filter));
         }
 
         private async Task<IdentityRole> DoctorRoleExistAsync()

@@ -5,8 +5,10 @@ using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using VetClinic.API.Tests;
+using VetClinic.BLL.Domain;
 using VetClinic.BLL.Services.Interfaces;
 using VetClinic.BLL.Services.Realizations;
 using VetClinic.DAL.Entities;
@@ -25,7 +27,7 @@ namespace VetClinic.BLL.Tests.Services
         {
             // Arrange
             _repositoryMock.Setup(x => x.DoctorRepository
-             .GetAsync(null, It.IsAny<Func<IQueryable<Doctor>, IIncludableQueryable<Doctor, object>>>(), null, null,null, false))
+             .GetAsync(null, It.IsAny<Func<IQueryable<Doctor>, IIncludableQueryable<Doctor, object>>>(), null, null, null, false))
                .ReturnsAsync(doctors);
             var _doctorService = new DoctorService(_repositoryMock.Object, _userServiceMock.Object, _roleManagerMock.Object);
 
@@ -183,29 +185,24 @@ namespace VetClinic.BLL.Tests.Services
 
 
         [Theory, AutoMoqData]
-        public async Task Update_DoctorUserDoctorId_ReturnFalce(Doctor doctor,
-            User user,
+        public async Task Update_DoctorUserDoctorId_ReturnFalce(
+            IdentityRole role,
             [Frozen] Mock<IUserService> _userServiceMock,
             [Frozen] Mock<IRepositoryWrapper> _repositoryMock,
             [Frozen] Mock<RoleManager<IdentityRole>> _roleManagerMock)
         {
             // Arrange
-            int doctorid = doctor.Id;
-
-            _repositoryMock.Setup(x => x.DoctorRepository
-            .GetFirstOrDefaultAsync(
-                p => p.Id == doctorid,
-                It.IsAny<Func<IQueryable<Doctor>, IIncludableQueryable<Doctor, object>>>(),
-                false))
-                .ReturnsAsync(null as Doctor);
+            Doctor doctor = null;
+            User user = null;
 
             var _doctorService = new DoctorService(_repositoryMock.Object, _userServiceMock.Object, _roleManagerMock.Object);
 
             // Act    
-            var actual = await _doctorService.UpdateDoctorAsync(doctor, user, doctorid);
+            var actual = await _doctorService.UpdateDoctorAsync(doctor, user, It.IsAny<int>());
 
             // Assert            
             Assert.False(actual);
+            _repositoryMock.Verify(m => m.DoctorRepository.Update(doctor), Times.Never);           
         }
 
 
@@ -268,6 +265,73 @@ namespace VetClinic.BLL.Tests.Services
             Assert.True(actual);
             _repositoryMock.Verify(c => c.DoctorRepository.Update(doctor), Times.Once);
             _repositoryMock.Verify(c => c.SaveAsync(), Times.Once);
+        }
+
+        [Theory, AutoMoqData]
+        public async Task GetTotalCount_EqualCount([Frozen] List<Doctor> doctors,
+            DoctorsFilter filter,
+            [Frozen] Mock<IUserService> _userServiceMock,
+            [Frozen] Mock<IRepositoryWrapper> _repositoryMock,
+            [Frozen] Mock<RoleManager<IdentityRole>> _roleManagerMock)
+        {
+            // Arrange
+            _repositoryMock.Setup(x => x.DoctorRepository
+             .CountAsync(It.IsAny<Expression<Func<Doctor, bool>>>()))
+                .ReturnsAsync(doctors.Count);
+            var _doctorService = new DoctorService(_repositoryMock.Object, _userServiceMock.Object, _roleManagerMock.Object);
+
+            // Act
+            var actual = await _doctorService.GetTotalCount(filter);
+
+            // Assert
+            Assert.Equal(doctors.Count, actual);
+            _repositoryMock.Verify(m => m.DoctorRepository
+                .CountAsync(It.IsAny<Expression<Func<Doctor, bool>>>()),
+                Times.Once);
+        }
+
+        [Theory, AutoMoqData]
+        public async Task IsAnyDoctorExist_EqualTrue(           
+            [Frozen] Mock<IUserService> _userServiceMock,
+            [Frozen] Mock<IRepositoryWrapper> _repositoryMock,
+            [Frozen] Mock<RoleManager<IdentityRole>> _roleManagerMock)
+        {
+            // Arrange
+            _repositoryMock.Setup(x => x.DoctorRepository
+             .IsAnyAsync(It.IsAny<Expression<Func<Doctor, bool>>>()))
+                .ReturnsAsync(true);
+            var _doctorService = new DoctorService(_repositoryMock.Object, _userServiceMock.Object, _roleManagerMock.Object);
+
+            // Act
+            var actual = await _doctorService.IsAnyDoctorAsync(It.IsAny<int>());
+
+            // Assert
+            Assert.True(actual);
+            _repositoryMock.Verify(m => m.DoctorRepository
+                .IsAnyAsync(It.IsAny<Expression<Func<Doctor, bool>>>()),
+                Times.Once);
+        }
+
+        [Theory, AutoMoqData]
+        public async Task IsAnyDoctorExist_EqualFalse(
+            [Frozen] Mock<IUserService> _userServiceMock,
+            [Frozen] Mock<IRepositoryWrapper> _repositoryMock,
+            [Frozen] Mock<RoleManager<IdentityRole>> _roleManagerMock)
+        {
+            // Arrange
+            _repositoryMock.Setup(x => x.DoctorRepository
+             .IsAnyAsync(It.IsAny<Expression<Func<Doctor, bool>>>()))
+                .ReturnsAsync(false);
+            var _doctorService = new DoctorService(_repositoryMock.Object, _userServiceMock.Object, _roleManagerMock.Object);
+
+            // Act
+            var actual = await _doctorService.IsAnyDoctorAsync(It.IsAny<int>());
+
+            // Assert
+            Assert.False(actual);
+            _repositoryMock.Verify(m => m.DoctorRepository
+                .IsAnyAsync(It.IsAny<Expression<Func<Doctor, bool>>>()),
+                Times.Once);
         }
     }
 }
