@@ -31,16 +31,16 @@ namespace VetClinic.BLL.Services.Realizations
                 workSheet.Cells["A1"].Value = "VETERINARY CLINIC";
                 workSheet.Cells["A1:D1"].Merge = true;
                 workSheet.Row(1).Style.Font.Bold = true;
-                workSheet.Row(1).Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                workSheet.Row(1).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
                 workSheet.Cells["A2"].Value = "Income statement";
                 workSheet.Cells["A2:D2"].Merge = true;
-                workSheet.Row(2).Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                workSheet.Row(2).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
                 workSheet.Cells["A3"].Value = $"For the month ended {model.Month} , {model.Year}";
                 workSheet.Cells["A3:D3"].Merge = true;
-                workSheet.Row(3).Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-                workSheet.Cells["A3:D3"].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                workSheet.Row(3).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                workSheet.Cells["A3:D3"].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
 
                 workSheet.Cells["A4"].Value = "Revenues";
                 workSheet.Cells["A4:D4"].Merge = true;
@@ -119,10 +119,10 @@ namespace VetClinic.BLL.Services.Realizations
                 workSheet.Cells["A" + (12 + totalCount).ToString()].Style.Font.Bold = true;
                 workSheet.Cells["D" + (12 + totalCount).ToString()].Formula = "=D" + (5 + proceduresCount).ToString() + "-D" + (11 + totalCount).ToString();
                 workSheet.Cells["D" + (12 + totalCount).ToString()].Style.Font.Bold = true;
-                workSheet.Cells["D" + (12 + totalCount).ToString()].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                workSheet.Cells["D" + (12 + totalCount).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
                 ExcelRange rg = workSheet.Cells[1, 1, workSheet.Dimension.End.Row, workSheet.Dimension.End.Column];
-                rg.Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thick);
+                rg.Style.Border.BorderAround(ExcelBorderStyle.Thick);
 
                 double minimumSize = 12;
                 workSheet.Cells[workSheet.Dimension.Address].AutoFitColumns(minimumSize);
@@ -193,11 +193,11 @@ namespace VetClinic.BLL.Services.Realizations
                 workSheet.Cells["F" + (14 + procedureCount).ToString()].Value = (model.Procedures != null && model.Procedures.Count > 0) ? model.Procedures.Sum(p => p.Price) : 0;
                 workSheet.Cells["F" + (14 + procedureCount).ToString()].Style.Font.Bold = true;
 
-                workSheet.Cells["F1:F" + (14 + procedureCount).ToString()].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Right;
+                workSheet.Cells["F1:F" + (14 + procedureCount).ToString()].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 
 
                 ExcelRange excelRange = workSheet.Cells[1, 1, workSheet.Dimension.End.Row, workSheet.Dimension.End.Column];
-                excelRange.Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thick);
+                excelRange.Style.Border.BorderAround(ExcelBorderStyle.Thick);
 
                 double minimumSize = 7;
                 workSheet.Cells[workSheet.Dimension.Address].AutoFitColumns(minimumSize);
