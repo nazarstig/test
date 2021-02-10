@@ -206,7 +206,7 @@ namespace VetClinic.BLL.Services.Realizations
                 workSheet.Column(4).Style.WrapText = true;
 
                 byte[] excelFile = await package.GetAsByteArrayAsync();
-                SautinSoft.ExcelToPdf x = new SautinSoft.ExcelToPdf();
+                SautinSoft.ExcelToPdf x = new SautinSoft.ExcelToPdf();               
                 return x.ConvertBytes(excelFile);
             }
         }
@@ -226,10 +226,6 @@ namespace VetClinic.BLL.Services.Realizations
                        Price = ap.Procedure.Price
                     }).ToList();
 
-            //var performedProcedure = await _repositoryWrapper.AppointmentProceduresRepository
-            //    .GetAsync(include: app => app.Include(a => a.Appointment)
-            //    .Include(a => a.Procedure), filter: app => app.AppointmentId == appointmentId);
-
             return new InvoiceReportModel
             {
                 FirstName = client.User.FirstName,
@@ -245,7 +241,8 @@ namespace VetClinic.BLL.Services.Realizations
 
         public async Task<List<DoctorReportModel>> GetDoctors()
         {
-            var doctors = await _repositoryWrapper.DoctorRepository.GetAsync(include: doc => doc.Include(d => d.User).Include(d => d.Position));
+            var doctors = await _repositoryWrapper.DoctorRepository.GetAsync(include: doc => doc.Include(d => d.User).Include(d => d.Position), 
+                filter: doc => !doc.User.IsDeleted);
 
             var doctorsReportModels = doctors.Select(u => new DoctorReportModel
                         {
@@ -266,15 +263,6 @@ namespace VetClinic.BLL.Services.Realizations
             var result = filteredAppProc.GroupBy(u => u.Procedure)
                 .Select(g => new PerformedProceduresReportModel { ProcedureName = g.Key.ProcedureName, Price = g.Key.Price, Count = g.Count()}).ToList();
 
-            //var filteredAppointments = await _repositoryWrapper.AppointmentRepository
-            //    .GetAsync(filter: app => app.AppointmentDate.Month == date.Month && app.StatusId == 4,
-            //    include: app => app.Include(a => a.AppointmentProcedures).ThenInclude(ap => ap.Procedure));
-            //var procedures = await _repositoryWrapper.ProcedureRepository.GetAsync(include: proc => proc.Include(p => p.AppointmentProcedures).ThenInclude( ap => ap.Appointment));
-
-            //var res = filteredAppointments.GroupBy(u => u.AppointmentProcedures).Select(g => g.Key);
-
-            //var result = filteredAppointments.Select(u => u.AppointmentProcedures
-            //            .GroupBy(ap => ap.Procedure)).Select(g => new PerformedProceduresReportModel {ProcedureName = g. })
             return result;
         }
 

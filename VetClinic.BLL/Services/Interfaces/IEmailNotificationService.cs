@@ -18,7 +18,7 @@ namespace VetClinic.BLL.Services.Interfaces
 
         public Task SendNewServiceNotification(int serviceId);
 
-        public Task SendClientAppointmentsReceipt(int clientId, int appointmentId);
+        public Task SendClientAppointmentsInvoice(int clientId, byte[] fileBytes);
 
     }
 }

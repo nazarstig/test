@@ -21,14 +21,12 @@ namespace VetClinic.API.Controllers
 
         [HttpPost]
         public async Task<IActionResult> PostReport([FromBody] CreateReportDto createReportDto)
-        {
-            var procedures = _reportService.GetPerformedProcedures(createReportDto.DateReport);
-
+        {       
             MonthReportModel model = new MonthReportModel 
             {
                 Month = createReportDto.DateReport.ToString("MMMM", CultureInfo.CreateSpecificCulture("en-US")),
                 Year = createReportDto.DateReport.Year.ToString(), 
-                Procedures = await procedures, 
+                Procedures = await _reportService.GetPerformedProcedures(createReportDto.DateReport),
                 Doctors = await _reportService.GetDoctors(), 
                 RentExpense = createReportDto.RentExpense,
                 AdvertisingExpense = createReportDto.AdvertisingExpense,

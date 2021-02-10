@@ -12,5 +12,9 @@ namespace VetClinic.BLL.Services.Interfaces
         public Task<byte[]> SaveExcelReportFile(MonthReportModel model);
 
         public Task<List<PerformedProceduresReportModel>> GetPerformedProcedures(DateTime date);
+
+        public Task<InvoiceReportModel> CreateInvoiceReportModel(int clientId, int appointmentId);
+
+        public Task<byte[]> GenerateInvoice(InvoiceReportModel model);
     }
 }
