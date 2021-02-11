@@ -16,6 +16,7 @@ namespace VetClinic.DAL.Repositories.Realizations
         private IProcedureRepository _procedureRepository;
         private IServiceRepository _serviceRepository;
         private IStatusRepository _statusRepository;
+        private IPostRepository _postRepository;
 
         public RepositoryWrapper(ApplicationContext context)
         {
@@ -71,6 +72,11 @@ namespace VetClinic.DAL.Repositories.Realizations
         public IStatusRepository StatusRepository
         {
             get { return _statusRepository ??= new StatusRepository(_context); }
+        }
+
+        public IPostRepository PostRepository
+        {
+            get { return _postRepository ??= new PostRepository(_context); }
         }
 
         public async Task SaveAsync()
