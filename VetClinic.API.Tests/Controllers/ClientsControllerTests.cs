@@ -30,13 +30,8 @@ namespace VetClinic.API.Tests.Controllers
             _repositoryWrapper = new Mock<IRepositoryWrapper>();
             _clientRepository = new Mock<IClientRepository>();
             _repositoryWrapper.Setup(r => r.ClientRepository).Returns(_clientRepository.Object);
-            var mapperConfig = new MapperConfiguration(m =>
-            {
-                m.AddProfile(new ClientProfile());
-                m.AddProfile(new UserProfile());
-            }
-            );
-            _mapper = new Mock<IMapper>();//(mapperConfig.CreateMapper());
+           
+            _mapper = new Mock<IMapper>();
             _clientService = new Mock<IClientService>();
             _userService = new Mock<IUserService>();
             _clientsController = new ClientsController(_clientService.Object, _mapper.Object);
