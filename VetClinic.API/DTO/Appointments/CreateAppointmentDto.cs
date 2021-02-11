@@ -6,7 +6,7 @@ namespace VetClinic.API.DTO.Appointments
     {
         public int AnimalId { get; set; }
         public int ServiceId { get; set; }
-        public DateTime AppointmentDate { get; set; }
+        public DateTimeOffset AppointmentDate { get; set; }
         public string Complaints { get; set; }
     }
 }

@@ -29,7 +29,7 @@ namespace VetClinic.API.Controllers
         {
             var services = await _serviceService.GetAllServicesAsync();
             var servicesDTO = _mapper.Map<ICollection<ServiceDto>>(services);
-            var response = new Response<IEnumerable<ServiceDto>>(servicesDTO);
+            var response = new Response<ICollection<ServiceDto>>(servicesDTO);
             return Ok(response);
         }
 
@@ -55,7 +55,7 @@ namespace VetClinic.API.Controllers
             var service = _mapper.Map<Service>(serviceCreateDTO);
             var insertedService  =  await _serviceService.AddAsync(service);
             var insertedServiceDTO = _mapper.Map<ServiceDto>(insertedService);
-            return Created(nameof(GetAsync), new Response<ServiceDto>(insertedServiceDTO));
+            return CreatedAtAction(nameof(GetAsync), new Response<ServiceDto>(insertedServiceDTO));
         }
 
         // PUT api/service/id

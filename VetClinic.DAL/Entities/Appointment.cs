@@ -6,7 +6,7 @@ namespace VetClinic.DAL.Entities
     public class Appointment
     {
         public int Id { get; set; }
-        public DateTime AppointmentDate { get; set; }
+        public DateTimeOffset AppointmentDate { get; set; }
         public string Complaints { get; set; }
         public string TreatmentDescription { get; set; }
 

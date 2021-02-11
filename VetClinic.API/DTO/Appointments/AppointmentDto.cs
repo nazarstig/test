@@ -12,7 +12,7 @@ namespace VetClinic.API.DTO.Appointments
         public StatusDto Status { get; set; }
         public DoctorDto Doctor { get; set; }
         public IEnumerable<ProcedureDto> PerformedProcedures { get; set; }
-        public DateTime AppointmentDate { get; set; }
+        public DateTimeOffset AppointmentDate { get; set; }
         public string Complaints { get; set; }
         public string TreatmentDescription { get; set; }
     }
