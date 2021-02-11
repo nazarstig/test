@@ -202,7 +202,7 @@ namespace VetClinic.BLL.Tests.Services
 
             // Assert            
             Assert.False(actual);
-            _repositoryMock.Verify(m => m.DoctorRepository.Update(doctor), Times.Never);           
+            _repositoryMock.Verify(m => m.DoctorRepository.Update(doctor), Times.Never);
         }
 
 
@@ -291,7 +291,7 @@ namespace VetClinic.BLL.Tests.Services
         }
 
         [Theory, AutoMoqData]
-        public async Task IsAnyDoctorExist_EqualTrue(           
+        public async Task IsAnyDoctorExist_EqualTrue(
             [Frozen] Mock<IUserService> _userServiceMock,
             [Frozen] Mock<IRepositoryWrapper> _repositoryMock,
             [Frozen] Mock<RoleManager<IdentityRole>> _roleManagerMock)

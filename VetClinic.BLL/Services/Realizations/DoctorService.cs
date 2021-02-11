@@ -107,7 +107,7 @@ namespace VetClinic.BLL.Services.Realizations
 
         public async Task<bool> UpdateDoctorAsync(Doctor inputDoctor, User inputUser, int doctorId)
         {
-            var role = await this.DoctorRoleExistAsync();            
+            var role = await this.DoctorRoleExistAsync();
 
             if (inputDoctor == null)
                 return false;
@@ -120,7 +120,7 @@ namespace VetClinic.BLL.Services.Realizations
                 inputDoctor.Id = doctorId;
 
                 await _userService.UpdateUserAsync(inputDoctor.UserId, inputUser, role);
-                _repositoryWrapper.DoctorRepository.Update(inputDoctor);                
+                _repositoryWrapper.DoctorRepository.Update(inputDoctor);
 
                 await _repositoryWrapper.SaveAsync();
                 return true;
@@ -165,7 +165,7 @@ namespace VetClinic.BLL.Services.Realizations
                 expressionsList.Add(userFilter);
             }
 
-            if (filter.IsDeleted!=null)
+            if (filter.IsDeleted != null)
             {
                 Expression<Func<Doctor, bool>> userFilter = a => a.User.IsDeleted == filter.IsDeleted.Value;
                 expressionsList.Add(userFilter);

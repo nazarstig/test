@@ -89,7 +89,7 @@ namespace VetClinic.BLL.Seeders
                 await CreateRoles(roles, roleMamager);
                 await RemoveNotSeededRoles(roles, roleMamager);
             }
-        }        
+        }
 
         private static async Task CreateStatuces(List<Status> statusesData, IRepositoryWrapper repositoryWrapper)
         {
