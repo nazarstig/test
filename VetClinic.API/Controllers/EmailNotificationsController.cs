@@ -1,14 +1,8 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
-using System.Linq;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using VetClinic.API.DTO.Animal;
-using VetClinic.API.DTO.Queries;
-using VetClinic.API.DTO.Responses;
-using VetClinic.BLL.Domain;
+using VetClinic.API.DTO.Accountant;
 using VetClinic.BLL.Email;
 using VetClinic.BLL.Services.Interfaces;
-using VetClinic.DAL.Entities;
 
 namespace VetClinic.API.Controllers
 {
@@ -17,10 +11,12 @@ namespace VetClinic.API.Controllers
     public class EmailNotificationsController : ControllerBase
     {
         private readonly IEmailNotificationService _emailNotificationService;
+        private readonly IFinancialReportService _financialReportService;
 
-        public EmailNotificationsController(IEmailNotificationService emailNotificationService)
+        public EmailNotificationsController(IEmailNotificationService emailNotificationService, IFinancialReportService financialReportService)
         {
             _emailNotificationService = emailNotificationService;
+            _financialReportService = financialReportService;
         }
 
 
@@ -31,10 +27,14 @@ namespace VetClinic.API.Controllers
             return NoContent();
         }
 
-        [HttpPost("appointments/receipt")]
-        public async Task<IActionResult> SendAppointmentsReceipt(int clientId, int appointmentId)
+        [HttpPost("appointments/invoice")]
+        public async Task<IActionResult> SendAppointmentsInvoice([FromBody] CreateInvoiceDto invoiceDto)
         {
-            await _emailNotificationService.SendClientAppointmentsReceipt(clientId, appointmentId);
+            var invoiceModel = await _financialReportService.CreateInvoiceReportModel(invoiceDto.ClientId, invoiceDto.AppointmentId);
+
+            byte[] invoiceReport = await _financialReportService.GenerateInvoice(invoiceModel);
+
+            await _emailNotificationService.SendClientAppointmentsInvoice(invoiceDto.ClientId, invoiceReport);
             return NoContent();
         }
 

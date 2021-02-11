@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using VetClinic.API.Controllers;
 using VetClinic.API.DTO;
+using VetClinic.API.DTO.Responses;
 using VetClinic.API.DTO.Service;
 using VetClinic.API.Mapping;
 using VetClinic.BLL.Services.Interfaces;
@@ -36,7 +37,7 @@ namespace VetClinic.API.Tests.Controllers
         }
 
         [Theory, AutoMoqData]
-        public async Task Get_WhenCalled_ReturnsOkResult(
+        public async Task GetAsync_WhenCalled_ReturnsOkResult(
             [Frozen] List<Service> services)
         {
             // Arrange
@@ -50,8 +51,8 @@ namespace VetClinic.API.Tests.Controllers
         }
 
         [Theory, AutoMoqData]
-        public async Task Get_WhenCalled_ReturnsAllItemsAsync(
-            [Frozen] List<Service> services)
+        public async Task GetAsync_WhenCalled_ReturnsAllItemsAsync(
+            [Frozen] ICollection<Service> services)
         {
             // Arrange          
             var testItemCount = services.Count;
@@ -63,12 +64,12 @@ namespace VetClinic.API.Tests.Controllers
 
             // Assert
             Assert.IsType<OkObjectResult>(okResult);
-            var items = Assert.IsType<List<ServiceDto>>(okResult.Value);
-            Assert.Equal(testItemCount, items.Count);           
+            var items = Assert.IsType<Response<ICollection<ServiceDto>>>(okResult.Value);
+            Assert.Equal(testItemCount, items.Data.Count);           
         }
 
         [Theory, AutoMoqData]
-        public async Task GetById_UnknownIdPassed_ReturnsNotFoundResult(
+        public async Task GetAsyncById_UnknownIdPassed_ReturnsNotFoundResult(
             [Frozen] Service testService)
         {
             // Arrange
@@ -83,7 +84,7 @@ namespace VetClinic.API.Tests.Controllers
         }
 
         [Theory, AutoMoqData]
-        public async Task GetById_ExistingIdPassed_ReturnsOkResult(
+        public async Task GetAsyncById_ExistingIdPassed_ReturnsOkResult(
             [Frozen] Service testService)
         {
             // Arrange
@@ -97,7 +98,7 @@ namespace VetClinic.API.Tests.Controllers
         }
 
         [Theory, AutoMoqData]
-        public async Task GetById_ExistingIdPassed_ReturnsRightItem(
+        public async Task GetAsyncById_ExistingIdPassed_ReturnsRightItem(
             [Frozen] Service testService)
         {
             // Arrange
@@ -108,13 +109,13 @@ namespace VetClinic.API.Tests.Controllers
             var okResult = result.Result as OkObjectResult;
             
             // Assert
-            Assert.IsType<ServiceDto>(okResult.Value);
-            Assert.Equal(testService.Id, (okResult.Value as ServiceDto).Id);
-            Assert.Equal(testService.ServiceName, (okResult.Value as ServiceDto).ServiceName);
+            Assert.IsType<Response<ServiceDto>>(okResult.Value);
+            Assert.Equal(testService.Id, (okResult.Value as Response<ServiceDto>).Data.Id);
+            Assert.Equal(testService.ServiceName, (okResult.Value as Response<ServiceDto>).Data.ServiceName);
         }
 
         [Theory, AutoMoqData]
-        public async Task Create_ValidObjectPassed_ReturnsCreatedResponse(
+        public async Task PostAsync_ValidObjectPassed_ReturnsCreatedResponse(
             [Frozen] Service testService)
         {
             // Arrange
@@ -128,7 +129,7 @@ namespace VetClinic.API.Tests.Controllers
         }
 
         [Theory, AutoMoqData]
-        public async Task Create_ValidObjectPassed_ReturnedResponseHasCreatedItem(
+        public async Task PostAsync_ValidObjectPassed_ReturnedResponseHasCreatedItem(
             [Frozen] Service testService)
         {
             // Arrange
@@ -136,15 +137,15 @@ namespace VetClinic.API.Tests.Controllers
             
             // Act
             var createdAtActionResult = await _controller.PostAsync(It.IsAny<ServiceCreateDto>());
-            var result = (ServiceDto)((CreatedAtActionResult)createdAtActionResult.Result).Value;
+            var result = (Response<ServiceDto>)((CreatedAtActionResult)createdAtActionResult.Result).Value;
             
             // Assert
-            Assert.IsType<ServiceDto>(result);
-            Assert.Equal(testService.ServiceName, result.ServiceName);
+            Assert.IsType<ServiceDto>(result.Data);
+            Assert.Equal(testService.ServiceName, result.Data.ServiceName);
         }
 
         [Fact]
-        public async Task DeleteService_ServiceDoesNotExist_ReturnsNotFoundResult()
+        public async Task DeleteAsync_ServiceDoesNotExist_ReturnsNotFoundResult()
         {
             // Arrange
             _service.Setup(s => s.RemoveAsync(It.IsAny<int>())).ReturnsAsync(false);
@@ -157,7 +158,7 @@ namespace VetClinic.API.Tests.Controllers
         }
 
         [Fact]
-        public async Task DeleteService_ServiceExists_ReturnsNoContent()
+        public async Task DeleteAsync_ServiceExists_ReturnsNoContent()
         {
             // Arrange
             _service.Setup(s => s.RemoveAsync(It.IsAny<int>())).ReturnsAsync(true);
@@ -170,7 +171,7 @@ namespace VetClinic.API.Tests.Controllers
         }
 
         [Fact]
-        public async Task UpdateService_ServiceExists_ReturnsNoContent()
+        public async Task PutAsync_ServiceExists_ReturnsNoContent()
         {   
             // Arrange
             _service.Setup(s => s.UpdateAsync(It.IsAny<int>(),It.IsAny<Service>())).ReturnsAsync(true);
@@ -183,7 +184,7 @@ namespace VetClinic.API.Tests.Controllers
         }
 
         [Fact]
-        public async Task UpdateService_ServiceDoesNotExist_ReturnNotFound()
+        public async Task PutAsync_ServiceDoesNotExist_ReturnNotFound()
         {
             // Arrange
             _service.Setup(s => s.UpdateAsync(It.IsAny<int>(),It.IsAny<Service>())).ReturnsAsync(false);

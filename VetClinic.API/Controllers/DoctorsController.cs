@@ -33,7 +33,8 @@ namespace VetClinic.API.Controllers
             var filter = _mapper.Map<DoctorsFilter>(query);
             var doctors = await _doctorService.GetDoctorAsync(filter, pagination);
             var doctorsDto = _mapper.Map<ICollection<ReadDoctorDto>>(doctors);
-            var pagedResponse = new PagedResponse<ReadDoctorDto>(doctorsDto, paginationQuery);
+            var totalCount = await _doctorService.GetTotalCount(filter);
+            var pagedResponse = new PagedResponse<ReadDoctorDto>(doctorsDto, paginationQuery, totalCount);
             return Ok(pagedResponse);
         }
 
