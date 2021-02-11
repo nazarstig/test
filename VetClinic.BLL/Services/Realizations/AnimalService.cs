@@ -64,7 +64,8 @@ namespace VetClinic.BLL.Services.Realizations
 
         public async Task UpdateAnimal(int id, Animal animal)
         {
-            var animalToUpdate = (await _repositoryWrapper.AnimalRepository.GetAsync(x => x.Id == id)).FirstOrDefault();
+            var animals = await _repositoryWrapper.AnimalRepository.GetAsync(x => x.Id == id);
+            var animalToUpdate = animals.First();
 
             //update fields
             animalToUpdate.Name = animal.Name;
