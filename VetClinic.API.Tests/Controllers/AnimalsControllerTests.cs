@@ -22,7 +22,7 @@ namespace VetClinic.API.Tests.Controllers
             _mapper = new Mock<IMapper>();
         }
 
-        [Theory,AutoMoqData]
+        [Theory, AutoMoqData]
         public async Task GetAsync_WhenCalled_ReturnsOkObjectResult(
             [Frozen] Mock<IAnimalService> _animalService,
             [Frozen] Mock<PaginationQuery> paginationQuery)
@@ -58,11 +58,11 @@ namespace VetClinic.API.Tests.Controllers
 
         [Theory, AutoMoqData]
         public async Task PostAsync_CreateAnimalDto_ReturnsCreateAnimalDto(
-            [Frozen] Mock<IAnimalService> _animalService)
+            [Frozen] Mock<IAnimalService> _animalService,
+            [Frozen] Mock<CreateAnimalDto> animalDto)
         {
             //Arrange
             _mapper.Setup(x => x.Map<CreateAnimalDto>(It.IsAny<Animal>()));
-            var animalDto = new Mock<CreateAnimalDto>();
             var Sut = new AnimalsController(_animalService.Object, _mapper.Object);
 
             //Act
@@ -76,19 +76,19 @@ namespace VetClinic.API.Tests.Controllers
 
         [Theory, AutoMoqData]
         public async Task PutAsync_UpdateAnimalDto_PutSuccessReturnsNoContent(
-            [Frozen] Mock<IAnimalService> _animalService)
+            [Frozen] Mock<IAnimalService> _animalService,
+            [Frozen] Mock<UpdateAnimalDto> animalDto)
         {
             //Arrange
-            _mapper.Setup(x => x.Map<UpdateAnimalDto>(It.IsAny<Animal>()));
             int id = 1;
-            var animalDto = new Mock<UpdateAnimalDto>();
+            _mapper.Setup(x => x.Map<UpdateAnimalDto>(It.IsAny<Animal>()));
             var Sut = new AnimalsController(_animalService.Object, _mapper.Object);
 
             //Act
             var actual = await Sut.PutAsync(id, animalDto.Object);
 
             //Assert
-            _animalService.Verify(x => x.UpdateAnimal(It.IsAny<Animal>()));
+            _animalService.Verify(x => x.UpdateAnimal(id, It.IsAny<Animal>()));
             Assert.NotNull(actual);
             Assert.IsType<NoContentResult>(actual);
         }

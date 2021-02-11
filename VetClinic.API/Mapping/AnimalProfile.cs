@@ -37,6 +37,7 @@ namespace VetClinic.API.Mapping
                 .ForMember(d => d.Age, t => t.MapFrom(o => o.Age))
                 .ForMember(d => d.Photo, t => t.MapFrom(o => o.Photo))
                 .ForMember(d => d.AnimalTypeId, t => t.MapFrom(o => o.AnimalTypeId))
+                .ForMember(d => d.IsDeleted, t => t.MapFrom(o => o.IsDeleted))
                 .ReverseMap();
         }
     }

@@ -1,5 +1,9 @@
 ﻿using AutoFixture.Xunit2;
+using Microsoft.EntityFrameworkCore.Query;
 using Moq;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using VetClinic.API.Tests;
 using VetClinic.BLL.Services.Realizations;
@@ -29,33 +33,36 @@ namespace VetClinic.BLL.Tests.Services
         }
 
         [Theory, AutoMoqData]
-        public async Task UpdateAnimal_AnimalUpdated_UpdateSuccess(
-           [Frozen] Mock<IRepositoryWrapper> mockRepositoryWrapper)
+        public async Task GetAll_GetSuccess(
+           [Frozen] Mock<IRepositoryWrapper> mockRepositoryWrapper,
+           [Frozen] ICollection<Animal> animals)
         {
             //Arrange
-            mockRepositoryWrapper.Setup(x => x.AnimalRepository.Update(It.IsAny<Animal>()));
-            Animal animal = new Animal();
+            mockRepositoryWrapper.Setup(x=>x.AnimalRepository
+            .GetAsync(null, It.IsAny<Func<IQueryable<Animal>, IIncludableQueryable<Animal, object>>>(), null, null, null, false))
+               .ReturnsAsync(animals);
+
             var Sut = new AnimalService(mockRepositoryWrapper.Object);
 
             //Act
-            await Sut.UpdateAnimal(animal);
+            var actual = await Sut.GetAllAsync();
 
             //Assert
-            mockRepositoryWrapper.Verify(x => x.AnimalRepository.Update(It.IsAny<Animal>()));
-            mockRepositoryWrapper.Verify(x => x.SaveAsync());
+            Assert.IsType<List<Animal>>(actual);
+            mockRepositoryWrapper.Verify(x => x.AnimalRepository.GetAsync(null, It.IsAny<Func<IQueryable<Animal>, IIncludableQueryable<Animal, object>>>(), null, null, null, false));
         }
 
         [Theory, AutoMoqData]
         public async Task RemoveAnimal_AnimalRemoved_RemoveSuccess(
-           [Frozen] Mock<IRepositoryWrapper> mockRepositoryWrapper)
+           [Frozen] Mock<IRepositoryWrapper> mockRepositoryWrapper,
+           [Frozen] Mock<Animal> animal)
         {
             //Arrange
             mockRepositoryWrapper.Setup(x => x.AnimalRepository.Remove(It.IsAny<Animal>()));
-            Animal animal = new Animal();
             var Sut = new AnimalService(mockRepositoryWrapper.Object);
 
             //Act
-            await Sut.RemoveAnimal(animal);
+            await Sut.RemoveAnimal(animal.Object);
 
             //Assert
             mockRepositoryWrapper.Verify(x => x.AnimalRepository.Remove(It.IsAny<Animal>()));

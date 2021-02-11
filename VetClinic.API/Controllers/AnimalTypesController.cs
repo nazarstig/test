@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using VetClinic.API.DTO.AnimalType;
@@ -66,11 +65,9 @@ namespace VetClinic.API.Controllers
             {
                 return NotFound();
             }
+            var updateAnimalType = _mapper.Map<AnimalType>(updateAnimalTypeDto);
 
-            //update fields
-            animalType.AnimalTypeName = updateAnimalTypeDto.AnimalTypeName;
-
-            await _animalTypeService.UpdateAnimalType(animalType);
+            await _animalTypeService.UpdateAnimalType(id, updateAnimalType);
 
             return NoContent();
         }
