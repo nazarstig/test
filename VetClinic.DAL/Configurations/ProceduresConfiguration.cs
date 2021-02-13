@@ -8,7 +8,9 @@ namespace VetClinic.DAL.Configurations
     {
         public void Configure(EntityTypeBuilder<Procedure> builder)
         {
-            builder.Property(t => t.ProcedureName).HasMaxLength(100);
+            builder.HasKey(p => p.Id);
+            builder.Property(p => p.ProcedureName).HasMaxLength(100);
+            builder.Property(p => p.Description).HasMaxLength(3000);
         }
     }
 }
