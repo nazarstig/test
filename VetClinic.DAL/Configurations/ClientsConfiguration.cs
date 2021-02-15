@@ -10,9 +10,13 @@ namespace VetClinic.DAL.Configurations
         {
             builder.HasKey(c => c.Id);
 
+            builder.HasOne(c => c.User)
+                .WithOne(u => u.Client);
+
             builder.HasMany(c => c.Animals)
-                .WithOne(c => c.Client)
-                .HasForeignKey(c => c.ClientId);
+                .WithOne(a => a.Client)
+                .HasForeignKey(a => a.ClientId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }
