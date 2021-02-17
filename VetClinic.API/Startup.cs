@@ -82,7 +82,7 @@ namespace VetClinic.API
 
             app.UseCors();
 
-            app.UseMiddleware<ExceptionMiddleware>();
+            // app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseRouting();          
 
