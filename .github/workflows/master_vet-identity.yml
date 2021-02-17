@@ -21,7 +21,7 @@ jobs:
       with:
         dotnet-version: '3.1.301'
 
-     name: Build with dotnet
+    - name: Build with dotnet
       run: dotnet build IdentityServerRoles/IdentityServerRoles.csproj --configuration Release
 
     - name: dotnet publish
