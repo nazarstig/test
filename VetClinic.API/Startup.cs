@@ -76,11 +76,11 @@ namespace VetClinic.API
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
                 ApplicationDataSeeder.SeedData(app);
             }
 
             app.UseCors();
+            app.UseDeveloperExceptionPage();
 
             // app.UseMiddleware<ExceptionMiddleware>();
 
