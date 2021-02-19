@@ -82,6 +82,7 @@ namespace VetClinic.BLL.Services.Realizations
                 );
         }
 
+       
         public async Task<bool> PutClient(User user, Client client)
         {
             IdentityRole role = new IdentityRole { Name = "client" };
@@ -147,7 +148,11 @@ namespace VetClinic.BLL.Services.Realizations
             return expression;
         }
 
-       
+        public Client CreateClientObject()
+        {
+            Client client = new Client();
+            return client;
+        }
 
     }
 }

@@ -18,5 +18,6 @@ namespace VetClinic.BLL.Services.Interfaces
         public Task<Client> GetClient(int id);
         public Task<bool> PutClient(User user, Client client);
         public Task<bool> DeleteClient(int id);
+        public Client CreateClientObject();
     }
 }

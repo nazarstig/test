@@ -29,7 +29,7 @@ namespace VetClinic.API.Controllers
         public async Task<IActionResult> PostAsync(CreateClientDto dto)
         {
             User user =  _mapper.Map<CreateClientDto, User>(dto);
-            Client client = new Client();
+            Client client = _clientService.CreateClientObject();
             client = await _clientService.AddClient(user, client);
             ReadClientDto readDto = _mapper.Map<ReadClientDto>(client);
             return Created(nameof(GetAsync), new Response<ReadClientDto>(readDto));
