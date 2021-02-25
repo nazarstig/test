@@ -40,8 +40,9 @@ namespace VetClinic.BLL.Tests.Services
 
         [Fact]
         public async Task GetProcedure_ReturnsResult()
-        {   
+        {
             //Arrange
+            int id = 134;
             _repositoryWrapper.Setup(r => r.ProcedureRepository.GetFirstOrDefaultAsync(
                 It.IsAny<Expression<Func<Procedure, bool>>>(),
                 It.IsAny<Func<IQueryable<Procedure>, IIncludableQueryable<Procedure, object>>>(), 
@@ -49,7 +50,7 @@ namespace VetClinic.BLL.Tests.Services
                 )).ReturnsAsync(_procedure);
            
             //Action
-            var result = await _procedureService.GetProcedure(134);
+            var result = await _procedureService.GetProcedure(id);
 
             //Assert
             Assert.Equal(result.Price, _procedure.Price);
