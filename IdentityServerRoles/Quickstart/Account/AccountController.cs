@@ -206,7 +206,10 @@ namespace IdentityServerHost.Quickstart.UI
                 // this triggers a redirect to the external provider for sign-out
                 return SignOut(new AuthenticationProperties { RedirectUri = url }, vm.ExternalAuthenticationScheme);
             }
-            return Redirect(vm.PostLogoutRedirectUri);
+            if (vm.PostLogoutRedirectUri != null)
+                return Redirect(vm.PostLogoutRedirectUri);
+            else
+                return Redirect("login");
         }
 
         [HttpGet]
