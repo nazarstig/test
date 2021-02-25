@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
-
-namespace VetClinic.API.DTO.Responses
+﻿namespace VetClinic.API.DTO.Responses
 {
     public class Response<T>
     {
