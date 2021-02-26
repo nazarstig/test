@@ -28,11 +28,10 @@ namespace VetClinic.BLL.Services.Realizations
         {
             IdentityRole role = new IdentityRole { Name = "client" };
             var (res, id) = await _userService.CreateUserAsync(user, role);
-            string userId;
+            
             if (res)
             {
-                userId = id;
-                client = new Client { UserId = userId };
+                client = new Client { UserId = id };
                 _repositoryWrapper.ClientRepository.Add(client);
                 await _repositoryWrapper.SaveAsync();
             }
@@ -83,6 +82,7 @@ namespace VetClinic.BLL.Services.Realizations
                 );
         }
 
+       
         public async Task<bool> PutClient(User user, Client client)
         {
             IdentityRole role = new IdentityRole { Name = "client" };
@@ -148,7 +148,11 @@ namespace VetClinic.BLL.Services.Realizations
             return expression;
         }
 
-       
+        public Client CreateClientObject()
+        {
+            Client client = new Client();
+            return client;
+        }
 
     }
 }

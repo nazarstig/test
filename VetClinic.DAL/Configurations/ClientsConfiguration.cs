@@ -8,7 +8,15 @@ namespace VetClinic.DAL.Configurations
     {
         public void Configure(EntityTypeBuilder<Client> builder)
         {
+            builder.HasKey(c => c.Id);
 
+            builder.HasOne(c => c.User)
+                .WithOne(u => u.Client);
+
+            builder.HasMany(c => c.Animals)
+                .WithOne(a => a.Client)
+                .HasForeignKey(a => a.ClientId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

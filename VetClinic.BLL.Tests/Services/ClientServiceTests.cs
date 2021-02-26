@@ -12,6 +12,9 @@ using VetClinic.BLL.Services.Realizations;
 using VetClinic.DAL.Entities;
 using VetClinic.DAL.Repositories.Interfaces;
 using Xunit;
+using AutoFixture;
+using AutoFixture.Xunit2;
+using Microsoft.AspNetCore.Identity;
 
 namespace VetClinic.BLL.Tests.Services
 {
@@ -44,21 +47,41 @@ namespace VetClinic.BLL.Tests.Services
             _user = new User { Id = "id" };
         }
 
+
         [Fact]
-        public async void GetClient_ReturnsResult()
+        public async void GetClient_Succeded()
         {
             //Arrange
+            int id = _client.Id;
             _repositoryWrapper.Setup(r => r.ClientRepository.GetFirstOrDefaultAsync(
-                It.IsAny<Expression<Func<Client, bool>>>(),
+                c => c.Id == id,
                 It.IsAny<Func<IQueryable<Client>, IIncludableQueryable<Client, object>>>(),
                 It.IsAny<bool>()
                 )).ReturnsAsync(_client);
 
             //Action
-            var result = await _clientService.GetClient(134);
+            var result = await _clientService.GetClient(id);
 
             //Assert
-            Assert.Equal(_client.Id, result.Id);
+            Assert.Equal(_client, result);
+        }
+
+        [Fact]
+        public async void GetClient_Failed()
+        {
+            //Arrange
+            int id = _client.Id;
+            _repositoryWrapper.Setup(r => r.ClientRepository.GetFirstOrDefaultAsync(
+                c => c.Id == id,
+                It.IsAny<Func<IQueryable<Client>, IIncludableQueryable<Client, object>>>(),
+                It.IsAny<bool>()
+                )).ReturnsAsync((Client)null);
+
+            //Action
+            var result = await _clientService.GetClient(id);
+
+            //Assert
+            Assert.True(result is null);
         }
 
         [Fact]
@@ -93,20 +116,7 @@ namespace VetClinic.BLL.Tests.Services
             //Assert
             Assert.NotNull(result);
         }
-      
-        [Fact]
-        public async void DeleteOperation_ReturnsResult()
-        {
-            //Arrange
-            _clientRepository.Setup(repo => repo.Remove(_client));
-            Client delClient = new Client { Id = 9, UserId = _user.Id };
 
-            //Action
-            var result = await _clientService.DeleteClient(9);
-
-            //Assert
-            Assert.NotNull(result);
-        }
 
         [Fact]
         public async Task DeleteOperation_Succeded()
@@ -123,6 +133,22 @@ namespace VetClinic.BLL.Tests.Services
 
             //Assert
             Assert.Equal(res, true);
+        }
+
+        [Fact]
+        public async Task DeleteOperation_Failed()
+        {
+            //Arrange
+            _repositoryWrapper.Setup(r => r.ClientRepository.GetFirstOrDefaultAsync(It.IsAny<Expression<Func<Client, bool>>>(),
+               It.IsAny<Func<IQueryable<Client>, IIncludableQueryable<Client, object>>>(),
+               It.IsAny<bool>()
+               )).ReturnsAsync((Client)null);
+
+            //Action
+            var res = await _clientService.DeleteClient(_client.Id);
+
+            //Assert
+            Assert.Equal(res, false);
         }
 
         private ICollection<Client> ClientsList()
