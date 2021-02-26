@@ -75,6 +75,7 @@ namespace IdentityServerRoles
             app.UseAuthorization();
             
 
+            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();
