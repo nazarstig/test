@@ -20,19 +20,28 @@ namespace VetClinic.API
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
             Configuration = configuration;
+            Environment = environment;
         }
 
         private IConfiguration Configuration { get; }
+        private IWebHostEnvironment Environment { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
+            
+            string authority = "https://localhost:5005";
+            if (Environment.IsProduction())
+            {
+                authority = "https://vet-identity.azurewebsites.net";
+            }
+
             services.AddAuthentication("RefAndJWTToken")
                 .AddIdentityServerAuthentication("RefAndJWTToken", options =>
                 {
-                    options.Authority = "https://vet-identity.azurewebsites.net";
+                    options.Authority = authority;
                     options.ApiName = "VetClinicApi";
                     options.ApiSecret = "angular_secret";
                 });
@@ -56,12 +65,13 @@ namespace VetClinic.API
             services.AddSwaggerGen();
 
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
-           
+
             services.AddServices();
 
             services.AddCors(options =>
             {
-                options.AddDefaultPolicy( builder => {
+                options.AddDefaultPolicy(builder =>
+                {
                     builder.AllowAnyOrigin();
                     builder.AllowAnyMethod();
                     builder.AllowAnyHeader();
@@ -84,7 +94,7 @@ namespace VetClinic.API
 
             app.UseMiddleware<ExceptionMiddleware>();
 
-            app.UseRouting();          
+            app.UseRouting();
 
             app.UseAuthentication();
 
