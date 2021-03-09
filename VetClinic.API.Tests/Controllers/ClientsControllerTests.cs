@@ -167,6 +167,5 @@ namespace VetClinic.API.Tests.Controllers
             //Assert
             Assert.True(result is NotFoundResult);
         }
-
     }
 }
